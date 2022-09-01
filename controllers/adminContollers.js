@@ -63,10 +63,25 @@ const getlogout = (req, res) => {
 /*                             get Admindashboard                             */
 /* -------------------------------------------------------------------------- */
 
-const admindashboard = (req, res) => {
+const admindashboard = async (req, res) => {
+  let data= await adminhelper.doNutchartData()
+ let year = await adminhelper.yearlyChart()
+ let a=data[0]._id
+let x=data[0].count
+let b=data[1]._id
+let y=data[1].count
+let c=data[2]._id
+let z=data[2].count
 
-    res.render('admin/Admin-dashboard')
-}
+
+res.render('admin/Admin-dashboard',{a,x,b,y,c,z,year})
+
+ }   
+
+
+       
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  get Users                                 */
@@ -341,9 +356,86 @@ const viewOrders=(req,res)=>{
 
 
 
+/* -------------------------------------------------------------------------- */
+/*                           donut Chart of Payment                           */
+/* -------------------------------------------------------------------------- */
+
+
+const donutChartData= async(req,res)=>{
+
+    let data = await adminhelper.doNutchartData()
+
+    console.log("baha");
+
+    console.log(data);
+
+    res.json(data)
+
+}
+
+
+const getSalesReport= async(req,res)=>{
+
+   
+
+    res.render('admin/salesReport')
+}
+
+
+
+const dailysales = async(req,res)=>{
+ day= req.body.day   
+let dailysalePro = await adminhelper.getDailySalespro(day)    
+// let dailysale= await adminhelper.getDailySales()
+
+// let sum=0;
+// for (var i=dailysale.count;i<7;i++){
+
+//     sum=sum+i;
+    
+// }
+
+// let sum=0;
+
+// for(var i=0;i<dailysale.length;i++){
+//     sum=sum+dailysale[i].total
+// }
+
+// let sum2=0;
+
+// for(var i=0;i<dailysale.length;i++){
+//     sum2=sum2+dailysale[i].count
+// }
+
+
+// console.log("njkda");
+// console.log(sum2);
+console.log('kjkjhd');
+console.log(dailysalePro[0].name);
+
+
+
+ res.render('admin/dailySales',{dailysale:true,dailysalePro})
+}
+
+const monthlysales = async(req,res)=>{
+    let monthly= await adminhelper.getMonthlySales()
+
+    res.render('admin/dailySales',{monthly:true,monthly})
+}
+
+const yearlysales = async(req,res)=>{
+    let yearly = await adminhelper.getyearlySales()
+
+    res.render('admin/dailySales',{yearly:true,yearly})
+}
+
+
+
 module.exports = {
     admindashboard, getproducts, getUsers,
     getLogin, getaddproducts, postLogin, getlogout, getCategory, postCategory,
     blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys,
-    getupdateproduct, postupdateproduct, postaddproducts, getBanner, addBanner, postaddBanner, deleteBanner,viewOrders
+    getupdateproduct, postupdateproduct, postaddproducts, getBanner, addBanner,
+     postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales
 };

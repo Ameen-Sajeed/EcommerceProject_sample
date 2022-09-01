@@ -194,7 +194,9 @@ const getcheckout = async (req, res) => {
 
     let total = await userhelper.getTotalAmount(req.session.user._id)
 
-    res.render('user/checkout', { total, user: req.session.user })
+    let address = await userhelper.viewAddress(req.session.user._id)
+
+    res.render('user/checkout', { total, user, address })
 }
 
 
@@ -289,8 +291,9 @@ const postconfirmOtp = (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const getProfile = async(req, res) => {
-   let orders= await userhelper.viewOrders(req.session.user._id)
-        res.render('user/userProfile',{orders,user})
+   let orders= await userhelper.getUserOrders(req.session.user._id)
+   let details= await userhelper.viewAddress(req.session.user._id)
+        res.render('user/userProfile',{orders,user,details})
 
     }
 
@@ -346,6 +349,12 @@ const orderplaced=(req,res)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                              Verfiying Payment                             */
+/* -------------------------------------------------------------------------- */
+
+
+
 const verifyPayment=(req,res)=>{
     console.log(req.body);
     userhelper.verifyPayment(req.body).then(()=>{
@@ -359,8 +368,104 @@ const verifyPayment=(req,res)=>{
     })
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Address Page                                */
+/* -------------------------------------------------------------------------- */
+
+const addressPage = (req,res)=>{
+    res.render('user/AddUserAddress')
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                        get Checkout add address                            */
+/* -------------------------------------------------------------------------- */
+
+const getCheckoutAddress = (req,res)=>{
+
+    res.render('user/postcheckadd')
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                        Post Checkout add Address                           */
+/* -------------------------------------------------------------------------- */
+
+
+const PostCheckoutAddress = (req,res)=>{
+
+    userhelper.addAddress(req.session.user._id,req.body).then((data)=>{
+        res.redirect('/checkout')
+    })
+    
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Post  Add address                                */
+/* -------------------------------------------------------------------------- */
+
+const postAddressAdd=(req,res)=>{
+
+    userhelper.addAddress(req.session.user._id,req.body).then((data)=>{
+        res.redirect('/profile')
+    })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Edit Address                                */
+/* -------------------------------------------------------------------------- */
+
+const getEditAddress=(req,res)=>{
+
+    let id= req.params.id
+    
+    userhelper.getAddressEdit(id,req.session.user._id).then((data)=>{
+
+        res.render('user/editAddress',{data})
+    })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Post Edit Address                             */
+/* -------------------------------------------------------------------------- */
+
+
+const postEditAddress=(req,res)=>{
+
+    let userId=req.body.user;
+
+    let Id= req.body.id
+
+    userhelper.postAddressEdit(req.body,userId,Id).then((response)=>{
+
+        res.redirect('/profile')
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Delete Address                               */
+/* -------------------------------------------------------------------------- */
+
+
+const addressdelete=(req,res)=>{
+
+    let id= req.params.id
+
+    userhelper.deleteAddress(req.session.user._id,id).then((response)=>{
+
+        res.redirect('/profile')
+    })
+}
+
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
-    changeproductquantity, vegetables, postcheckout, deleteCart,orderplaced,verifyPayment,orderProducts
+    changeproductquantity, vegetables, postcheckout, deleteCart,orderplaced,verifyPayment,orderProducts,
+    addressPage,postAddressAdd, getEditAddress,postEditAddress,addressdelete,PostCheckoutAddress,getCheckoutAddress
 }

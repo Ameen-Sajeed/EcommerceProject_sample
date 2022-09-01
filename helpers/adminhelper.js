@@ -262,4 +262,255 @@ viewOrders: (order) => {
 },
 
 
+
+/* -------------------------------------------------------------------------- */
+/*                         DonutChartData for Payments                        */
+/* -------------------------------------------------------------------------- */
+
+
+doNutchartData:()=>{
+
+return new Promise (async(resolve,reject)=>{
+  
+  let order =await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+
+    { 
+      $group:{
+        _id:"$paymentMethod",
+        count: {
+          $sum: 1
+      }
+      }
+    },
+    // {
+    //   $project:{
+
+    //   }
+    // }
+
+  ]).toArray()
+  console.log(order)
+  resolve(order)
+})
+
+},
+
+
+
+yearlyChart: () => {
+  return new Promise(async (resolve, reject) => {
+
+    let yearChart = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+     {
+
+        $project:{
+
+          year:{
+            $year:'$date'
+          },
+          totalAmount:1
+        }
+      },{
+        $group: {
+            _id: "$year",
+            totalAmount: {
+                $sum: "$totalAmount"
+            }
+        }
+    }, {
+
+      $sort: {
+          _id: 1
+      }
+
+  },
+  {
+
+      $limit: 10
+  }
+ 
+
+
+    ]).toArray()
+    console.log(yearChart);
+    resolve(yearChart)
+  }) 
+ 
+
+
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                               get Daily Sales                              */
+/* -------------------------------------------------------------------------- */
+
+
+
+
+getDailySales: () => {
+  return new Promise(async (resolve, reject) => {
+
+    let dailysales = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+      {
+        $match: {
+          "status": { $nin: ['cancelled'] }
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%d-%m-%Y", date: "$date" } },
+          total: { $sum: '$totalAmount' },
+          count: { $sum: 1 },
+        }
+      },
+      {
+        $sort: { _id: 1 },
+      }
+    ]).toArray()
+    resolve(dailysales)
+    console.log(",akjs");
+    console.log(dailysales);
+  })
+},
+
+
+
+
+getDailySalespro: (day) => {
+  return new Promise(async (resolve, reject) => {
+
+    let dailysales = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+      {
+        $match: {
+          "status": { $nin: ['cancelled'] }
+        }
+      },
+      {
+        $unwind:'$products'
+      },
+      {
+        $project:{
+          totalAmount:1,
+          date:1,
+          status:1,
+          _id:1,
+          item:'$products.item',
+          quantity:'$products.quantity'
+
+        }
+      },{
+        $lookup:{
+          from: collection.PRODUCTCOLLECTION,
+          localField:'item',
+          foreignField:'_id',
+          as:'product'
+        }
+      },
+      {
+        $project:{
+          date:{ $dateToString:{format:"%Y-%m-%d",date:'$date'}},totalAmount:1,paymentMethod:1,item:1,product:{$arrayElemAt:['$product',0]},quantity:1
+        }
+      },
+{
+  $match:{date:day}
+},
+      {
+        $group: {
+          _id: '$item',
+          quantity:{$sum:'$quantity'},
+          totalAmount:{$sum:{$multiply:[{$toInt:'$quantity'},{$toInt:'$product.price'}]}},
+          name:{$first:'$product.name'},
+          date: { $first: '$date' },
+          price: { $first: '$product.price' },
+        }
+      },
+      {
+        $sort: { _id: 1 },
+      }
+    ]).toArray()
+    resolve(dailysales)
+    console.log(",akjs");
+    console.log(dailysales);
+  })
+},
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                              get Monthly Sales                             */
+/* -------------------------------------------------------------------------- */
+
+
+
+getMonthlySales:()=>{
+
+  return new Promise(async (resolve, reject) => {
+
+    let monthlysale = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+      {
+        $match: {
+          "status": { $nin: ['cancelled'] }
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%m", date: "$date" } },
+          total: { $sum: '$totalAmount' },
+          count: { $sum: 1 },
+        }
+      },
+      {
+        $sort: { _id: 1 },
+      }
+    ]).toArray()
+    resolve(monthlysale)
+    console.log("akjhd");
+    console.log(monthlysale);
+  })
+
+
+
+
+
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                              get yearly sales                              */
+/* -------------------------------------------------------------------------- */
+
+
+
+getyearlySales:()=>{
+
+  return new Promise(async (resolve, reject) => {
+
+    let sale = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+      {
+        $match: {
+          "status": { $nin: ['cancelled'] }
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y", date: "$date" } },
+          total: { $sum: '$totalAmount' },
+          count: { $sum: 1 },
+        }
+      },
+      {
+        $sort: { _id: 1 },
+      }
+    ]).toArray()
+    resolve(sale)
+    console.log(sale);
+  })
+
+
+
+
+
+},
+
 }

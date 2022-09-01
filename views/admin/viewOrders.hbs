@@ -327,7 +327,7 @@
                     <li class="active">
                         <a href="/admindashboard"><i class="mdi mdi-gauge"></i> <span>Dashboard</span></a>
                     </li>
-                    <li class="menu-lists"><a href=""><i class="mdi mdi-buffer"></i> <span>Sales Report</span></a>
+                    <li class="menu-lists"><a href="/admin-sales"><i class="mdi mdi-buffer"></i> <span>Sales Report</span></a>
                         <!-- <ul class="child-list">
                                 <li><a href="ui-typography.html"> Typography</a></li>
                                 <li><a href="ui-buttons.html"> Buttons</a></li>
@@ -530,9 +530,16 @@
                                                 class="material-icons">&#xE5C8;</i></a></td> --}}
 
                                     <td>
-                                        <a href=""><button type="button" class="btn btn-danger text-white">
+                                        {{!-- <a href=""><button type="button" class="btn btn-danger text-white">
                                                 Cancel</button>
-                                        </a>
+                                        </a> --}}
+                                        <select name="" id="">
+                                        <option selected>Delivered</option>
+                                        <option >Cancelled</option>
+                                        <option >shipped</option> 
+                                            </option>
+
+                                        </select>
                                     </td>
                                 </tr>
                                 {{/each}}

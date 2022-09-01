@@ -1,5 +1,5 @@
 const express = require('express');
-const { admindashboard, getproducts, getUsers, getLogin, getaddproducts, postLogin, getlogout, postaddproducts, getCategory, postCategory, blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys, updateproduct, getupdateproduct, postupdateproduct, getBanner, addBanner, postaddBanner, deleteBanner, viewOrders } = require('../controllers/adminContollers');
+const { admindashboard, getproducts, getUsers, getLogin, getaddproducts, postLogin, getlogout, postaddproducts, getCategory, postCategory, blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys, updateproduct, getupdateproduct, postupdateproduct, getBanner, addBanner, postaddBanner, deleteBanner, viewOrders, donutChartData, getSalesReport, dailysales, monthlysales, yearlysales } = require('../controllers/adminContollers');
 const adminhelper = require('../helpers/adminhelper')
 const router = express.Router();
 const multer = require('../helpers/multer')
@@ -74,6 +74,21 @@ router.post('/admin-addbanner', multer.array('image'), postaddBanner)
 
 
 router.get('/admin-orders',viewOrders)
+
+
+
+router.post('/loadDonutChart',donutChartData)
+
+
+router.get('/admin-sales',getSalesReport)
+
+
+router.post('/admin-dailysales',dailysales)
+
+router.get('/admin-monthlysales',monthlysales)
+
+router.get('/admin-yearlysales',yearlysales)
+
 
 module.exports = router;
 

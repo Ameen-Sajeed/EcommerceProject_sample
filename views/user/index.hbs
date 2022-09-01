@@ -58,7 +58,7 @@
 
 
 <body>
-    <div class="main-wrapper main-wrapper-2 " >
+    <div class="main-wrapper main-wrapper-2 ">
         <div class="header-top d-none d-lg-block bg-gray">
             <div class="container">
                 <div class="row align-items-center">
@@ -110,13 +110,13 @@
                     </div>
                 </div>
             </div>
-            <div class="header-bottom sticky-bar bg-dark text-white ">
+            <div class="header-bottom sticky-bar bg-light text-white ">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-6 col-6">
                             <div class="logo">
-                                <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"  alt="logo"
-                                        height="170"></a>
+                                <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"
+                                        alt="logo" height="170"></a>
                             </div>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
@@ -168,11 +168,17 @@
                                 </div>
                                 <div class="header-action-style d-flex gap-3 dropdown">
 
+                                    {{#if user}}
 
-                                    <a title="Login Register" href="/login-register"><i class="pe-7s-user"></i></a>
+
+
+                                    <a title="Login Register" href="/profile"><i class="pe-7s-user"></i></a>
+                                    {{else}}
+                                    <a title="Login Register" href="/login"><i class="pe-7s-user"></i></a>
+
                                 </div>
 
-
+                                {{/if}}
 
 
 
@@ -209,7 +215,7 @@
                             </div>
                             <div class="cart-title">
                                 <h4><a href="#">Products</a></h4>
-                                <span>  </span>
+                                <span> </span>
                             </div>
                             <div class="cart-delete">
                                 <a href="#">×</a>
@@ -256,14 +262,17 @@
                                     <div class="col-12 hm2-slider-animation ">
                                         <div
                                             class="slider-content-2 slider-content-2-wrap slider-animated-2 bg-transparent">
-                                            <h4 class="animated text-success "><center>{{this.description1}}</center></h3>
+                                            <h4 class="animated text-success ">
+                                                <center>{{this.description1}}</center>
+                                                </h3>
                                                 <h1 class="animated text-danger text-center">{{this.description2}}!</h1>
                                                 <h1 class="animated text-success text-center">{{this.description3}}</h2>
 
                                                     <div class="slider-btn-2 btn-hover text-center ">
                                                         <a href="product-details.html"
-                                                            class="btn hover-border-radius theme-color animated text-danger "><center> Shop Now</center>
-                                                           
+                                                            class="btn hover-border-radius theme-color animated text-danger ">
+                                                            <center> Shop Now</center>
+
                                                         </a>
                                                     </div>
                                                     <!-- <img class="animated" src="assets/images/icon-img/chair.png" alt=""> -->

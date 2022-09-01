@@ -51,7 +51,7 @@
 
 <body>
     <div class="main-wrapper main-wrapper-2">
-         <div class="header-top d-none d-lg-block bg-gray">
+        <div class="header-top d-none d-lg-block bg-gray">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-6">
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-      <header class="header-area header-responsive-padding header-height-1">
+        <header class="header-area header-responsive-padding header-height-1">
             <div class="header-top d-none d-lg-block bg-gray-5">
                 <div class="container">
                     <div class="row align-items-center">
@@ -107,8 +107,8 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-6 col-6">
                             <div class="logo">
-                                <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"  alt="logo"
-                                        height="170"></a>
+                                <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"
+                                        alt="logo" height="170"></a>
                             </div>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
@@ -251,85 +251,133 @@
             </div>
         </div>
         <div class="checkout-main-area pb-100 pt-100">
-            <div class="container">
+            <div class="container ">
                 <form method="" id="checkout-form">
 
-                    <div class="checkout-wrap pt-30">
+                    <div class="checkout-wrap pt-30 ">
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="billing-info-wrap">
-                                    <h3>Billing Details</h3>
+                                    <h3>Delivery Address</h3>
                                     <div class="row">
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="billing-info mb-20">
-                                                <label>First Name <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input type="text" name="name">
-                                            </div>
-                                        </div>
-                                        <input type="text" name="userId" value="{{user._id}}" hidden>
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="billing-info mb-20">
-                                                <label>Last Name <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input type="text" name="Lname">
-                                            </div>
-                                        </div>
+                                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#panelsStayOpen-collapseOne"
+                                                        aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                                        Existing Address
+                                                    </button>
+                                                </h2>
+                                                <div id="panelsStayOpen-collapseOne"
+                                                    class="accordion-collapse collapse show"
+                                                    aria-labelledby="panelsStayOpen-headingOne">
+                                                    <div class="accordion-body">
 
-                                        <div class="col-lg-12">
-                                            <div class="billing-select select-style mb-20">
-                                                <label>State <abbr class="required" title="required">*</abbr></label>
-                                                <select class="select-two-active" name="state">
-                                                    <option>Select a State</option>
-                                                    <option>Kerala</option>
-                                                    <option>Karnataka</option>
-                                                    <option>TamilNadu</option>
-                                                    <option>Goa</option>
-                                                    <option>Delhi</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="billing-info mb-20">
-                                                <label>Street Address <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input class="billing-address" name="address"
-                                                    placeholder="House number and street name" type="text">
-                                                <input placeholder="Apartment, suite, unit etc." type="text"
-                                                    name="Street Address">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="billing-info mb-20">
-                                                <label>Town / City <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input type="text" name="Town/city">
-                                            </div>
-                                        </div>
 
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="billing-info mb-20">
-                                                <label>Postcode / ZIP <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input type="text" name="pincode">
+                                                        {{#each address}}
+                                                        <div class="form-check">
+                                                            <label class="form-check-label" for="flexRadioDefault1"
+                                                                data-bs-toggle="collapse"> </label>
+                                                            <input class="form-check-input" type="radio"
+                                                                name="payment-address" value="{{this._id}}" /><span class="text-dark"><strong>Address: {{inc @index}}</strong> </span> <br>
+
+                                                            <span>
+                                                               
+                                                                {{this.name}} <br>
+                                                                {{this.number}} <br>
+                                                                {{this.address}}
+                                                                {{this.pincode}}
+                                                                {{this.state}}
+                                                                {{this.city}}
+
+                                                            </span>
+
+                                                        </div>
+                                                        {{/each}}
+                                                    </div>
+                                                </div>
+                                            </div> <br> <br>
+                                            {{!-- {{#each address}}
+                                            <div class="form-check">
+                                                <label class="form-check-label" for="flexRadioDefault1"
+                                                    data-bs-toggle="collapse"> </label>
+                                                <input class="form-check-input" type="radio" name="payment-address"
+                                                    value="{{this._id}}" />
+
+                                                <span>
+                                                    Address-{{inc @index}}<br>
+                                                    {{this.name}} <br>
+                                                    {{this.number}} <br>
+
+                                                    {{this.address}}
+                                                    {{this.pincode}}
+                                                    {{this.state}}
+                                                    {{this.city}}
+                                                    {{this.number}}
+
+                                                </span>
+
                                             </div>
-                                        </div>
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="billing-info mb-20">
-                                                <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                                <input type="text" name="phone">
+                                            {{/each}} --}}
+
+                                            <divclass="Place-order btn-hover text-center">
+                                                <a href="/addcheck-address" class="btn-sm btn-outline-dark mb-3"
+                                                    style="float:center;">Add Address</a>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="billing-info mb-20">
-                                                <label>Email Address <abbr class="required"
-                                                        title="required">*</abbr></label>
-                                                <input type="text" name="email">
+                                            {{!-- <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-20">
+
+                                                    <input type="text" name="name" placeholder="Full Name">
+                                                </div>
+                                            </div> --}}
+                                            <input type="text" name="userId" value="{{user._id}}" hidden>
+
+                                            {{!-- <div class="col-lg-12">
+                                                <div class="billing-select select-style mb-20">
+
+                                                    <select class="select-two-active" name="state" placeholder="State">
+                                                        <option>Select a State</option>
+                                                        <option>Kerala</option>
+                                                        <option>Karnataka</option>
+                                                        <option>TamilNadu</option>
+                                                        <option>Goa</option>
+                                                        <option>Delhi</option>
+                                                    </select>
+                                                </div>
+                                            </div> --}}
+                                            {{!-- <div class="col-lg-12">
+                                                <div class="billing-info mb-20">
+
+                                                    <input class="billing-address" name="address" placeholder="Address"
+                                                        type="text">
+
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="Place-order btn-hover text-center">
-                                            <button type="submit " class="btn"> Place Order </button>
-                                        </div>
+                                            --}}
+
+                                            {{!-- <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info mb-20">
+
+                                                    <input type="text" name="pincode" placeholder="pincode">
+                                                </div>
+                                            </div> --}}
+                                            {{!-- <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info mb-20">
+
+                                                    <input type="text" name="phone" placeholder="Contact-No:">
+                                                </div>
+                                            </div> --}}
+                                            {{!-- <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info mb-20">
+
+                                                    <input type="text" name="email" placeholder="Email ID">
+                                                </div>
+                                            </div> --}}
+                                            <div class="Place-order btn-hover text-center">
+                                                <button type="submit " class="btn"> Place Order </button>
+                                            </div>
                 </form>
             </div>
 
@@ -338,7 +386,7 @@
     <div class="col-lg-5">
         <div class="your-order-area">
             <h3>Your order</h3>
-            <div class="your-order-wrap gray-bg-4">
+            <div class="your-order-wrap gray-bg-4 ">
                 <div class="your-order-info-wrap">
                     <div class="your-order-info">
                         <ul>
@@ -414,12 +462,14 @@
 
                 <!-- Default checked radio -->
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment-method" id="RAZORPAY" value="RAZORPAY" checked />
+                    <input class="form-check-input" type="radio" name="payment-method" id="RAZORPAY" value="RAZORPAY"
+                        checked />
                     <label class="form-check-label" for="flexRadioDefault2"> RazorPay </label>
                 </div>
 
-                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment-method" id="PAYPAL" value="PAYPAL" checked />
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="payment-method" id="PAYPAL" value="PAYPAL"
+                        checked />
                     <label class="form-check-label" for="flexRadioDefault2"> PayPal </label>
                 </div>
 

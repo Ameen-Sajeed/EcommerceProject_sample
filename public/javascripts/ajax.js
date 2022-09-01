@@ -244,3 +244,42 @@ function verifyPayment(payment,order) {
     })
 
 }
+
+
+
+/* ----------------------------- delete address ----------------------------- */
+function deleteAddress(id){
+
+    swal({
+        title: "Delete Address",
+        text: "Once Deleted, the address get cancelled",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: '/delete-address/' + id,
+                method: 'get',
+                success: (response) => {
+                   
+                    if(response){
+                        // document.getElementById(proId).innerHTML = "cancelled"
+                        swal("address cancelled", "sucessfully", "success");
+                      
+                        location.reload()
+                    
+                    }
+                       
+        
+                
+                    
+                    
+                }
+            })
+        } else {
+          swal("Your address id safe");
+        }
+      })
+}

@@ -9,6 +9,9 @@ const { ObjectId } = require('mongodb')
 const client = require('twilio')(otp.accountSID, otp.authToken)
 const Razorpay = require('Razorpay')
 const paypal = require('paypal-rest-sdk')
+const moment = require("moment")
+const { resolve } = require('path')
+// const { resolve } = require('path')
 
 var instance = new Razorpay({
     key_id: process.env.KEY_ID,
@@ -443,14 +446,8 @@ module.exports = {
             // console.log(order,products,total);
             let status = order['payment-method'] == 'COD' ? 'placed' : 'pending'
             let orderObj = {
-                deliveryDetails: {
-                    name: order.name,
-                    mobile: order.phone,
-                    email: order.email,
-                    address: order.address,
-                    pincode: order.pincode
+                deliveryDetails: objectId(order['payment-address']),
 
-                },
                 userId: objectId(order.userId),
                 paymentMethod: order['payment-method'],
                 products: products,
@@ -850,7 +847,172 @@ module.exports = {
             
             
         })
-    }
+    },
+
+    /* -------------------------------------------------------------------------- */
+    /*                              View Users order                              */
+    /* -------------------------------------------------------------------------- */
+
+    getUserOrders:(userId)=>{
+
+        return new Promise(async(resolve,reject)=>{
+            let orders = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+                {
+                    $match:{ userId:objectId(userId)}
+                },
+                {
+                    $lookup:{
+                        from: collection.ADDRESSCOLLECTION,
+                        localField:'deliveryDetails',
+                        foreignField:'_id',
+                        as:'address'
+                    }
+                },
+                {
+                    $unwind:'$address'
+                }
+            ]).toArray()
+
+            resolve(orders)
+        })
+    },
+
+/* -------------------------------------------------------------------------- */
+/*                           Add address of the User                          */
+/* -------------------------------------------------------------------------- */
+
+    addAddress:(userId,details)=>{
+        return new Promise((resolve,reject)=>{
+            let tempId= moment().format().toString()
+
+            tempId.replace(/\s+/g, ' ').trim()
+
+            let date = new Date()
+
+
+            let address = db.get().collection(collection.ADDRESSCOLLECTION).insertOne({
+
+                user: objectId(userId),
+                name: details.name,
+
+                address: details.address,
+
+                pincode: details.pincode,
+
+                number: details.number,
+
+                state: details.state,
+
+                city: details.city,
+
+                country:details.country,
+                
+                landMark: details.landMark,
+
+                id: tempId
+            })
+
+            resolve(address)
+
+        })
+    },
+
+
+/* -------------------------------------------------------------------------- */
+/*                           View Addres of the user                          */
+/* -------------------------------------------------------------------------- */
+
+
+viewAddress:(userId)=>{
+    return new Promise(async(resolve,reject)=>{
+
+        let address = await db.get().collection(collection.ADDRESSCOLLECTION).find({user:objectId(userId)}).toArray()
+
+        resolve(address)
+    })
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                             View Update Address                            */
+/* -------------------------------------------------------------------------- */
+
+getAddressEdit:(Id,userId)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+        let data = await db.get().collection(collection.ADDRESSCOLLECTION).findOne({$and:[{user:objectId(userId)},{id:Id}]})
+
+        resolve(data)
+    })
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                              Post user Address                             */
+/* -------------------------------------------------------------------------- */
+
+postAddressEdit:(details,userId,id)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+        try{
+
+            let data = await db.get().collection(collection.ADDRESSCOLLECTION).updateOne({user:objectId(userId),id:id},
+            
+            {
+            $set: 
+            {
+
+                name: details.name,
+
+                address: details.address,
+
+                pincode: details.pincode,
+
+                number: details.number,
+
+                country: details.country,
+
+                state: details.state,
+
+                city: details.city,
+
+                landMark: details.landMark,
+            }
+
+
+         })
+        
+
+        resolve(data)
+
+     } catch(error){
+            console.log(error);
+        }
+    })
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                               delete Address                               */
+/* -------------------------------------------------------------------------- */
+
+deleteAddress:(userId,Id)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+        await db.get().collection(collection.ADDRESSCOLLECTION).deleteOne({user:objectId(userId),id:Id})
+
+        .then((data)=>{
+
+            resolve(data)
+        })
+    })
+},
+
+
+
 
 
 
