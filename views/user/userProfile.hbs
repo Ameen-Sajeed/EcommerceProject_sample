@@ -310,20 +310,24 @@
                                                                     <th>Total</th>
                                                                     <th>Payment Method</th>
                                                                     <th>Action</th>
+                                                                    <th>Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {{#each orders}}
                                                                 <tr>
                                                                     <td>{{inc @index}}</td>
-                                                                    <td>{{this.deliveryDetails.name}}</td>
+                                                                    <td>{{this.name}}</td>
                                                                     <td class="d-inline-block text-truncate"
                                                                         style="max-width: 150px;">{{this.date}}</td>
-                                                                    <td>{{this.status}}</td>
+                                                                    <td><span id="{{this._id}}">{{this.status}}</span></td>
                                                                     <td>{{this.totalAmount}}</td>
                                                                     <td>{{this.paymentMethod}}</td>
                                                                     <td><a href="/viewOrderProducts/{{this._id}}"
                                                                             class="check-btn sqr-btn ">View</a></td>
+                                                                            <td>
+                                                                                <button class="btn-sm  btn-danger" onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
+                                                                            </td>
                                                                 </tr>
                                                                 {{/each}}
 
@@ -678,7 +682,7 @@
     <script src="/user/js/plugins/easyzoom.js"></script>
     <script src="/user/js/plugins/slinky.min.js"></script>
     <script src="/user/js/plugins/ajax-mail.js"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Main JS -->
     <script src="/user/js/main.js"></script>

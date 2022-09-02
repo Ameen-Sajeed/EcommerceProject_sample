@@ -85,9 +85,9 @@ router.get('/admin-sales',getSalesReport)
 
 router.post('/admin-dailysales',dailysales)
 
-router.get('/admin-monthlysales',monthlysales)
+router.post('/admin-monthlysales',monthlysales)
 
-router.get('/admin-yearlysales',yearlysales)
+router.post('/admin-yearlysales',yearlysales)
 
 
 module.exports = router;

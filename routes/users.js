@@ -1,6 +1,6 @@
 var express = require('express');
 const { getlogout } = require('../controllers/adminContollers');
-const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress } = require('../controllers/userContollers');
+const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel } = require('../controllers/userContollers');
 const { addAddress } = require('../helpers/userhelper');
 const { verifyLogin } = require('../middlewares/verify');
 const verify = require('../middlewares/verify');
@@ -79,6 +79,8 @@ router.get('/addcheck-address',getCheckoutAddress)
 
 
 router.post('/addcheck-address',PostCheckoutAddress)
+
+router.get('/order-cancel/:id',orderCancel)
 
 
 

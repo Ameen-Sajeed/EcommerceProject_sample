@@ -386,49 +386,70 @@ const getSalesReport= async(req,res)=>{
 const dailysales = async(req,res)=>{
  day= req.body.day   
 let dailysalePro = await adminhelper.getDailySalespro(day)    
-// let dailysale= await adminhelper.getDailySales()
 
-// let sum=0;
-// for (var i=dailysale.count;i<7;i++){
+let sum=0;
+for(var i=0;i<dailysalePro.length;i++){
+    sum=sum+dailysalePro[i].quantity
+}
 
-//     sum=sum+i;
-    
-// }
+let sum2=0;
+for(var i=0;i<dailysalePro.length;i++){
+    sum2=sum2+dailysalePro[i].totalAmount
+}
 
-// let sum=0;
+let dailysale = await adminhelper.getDailySales(day)
 
-// for(var i=0;i<dailysale.length;i++){
-//     sum=sum+dailysale[i].total
-// }
-
-// let sum2=0;
-
-// for(var i=0;i<dailysale.length;i++){
-//     sum2=sum2+dailysale[i].count
-// }
-
-
-// console.log("njkda");
-// console.log(sum2);
-console.log('kjkjhd');
-console.log(dailysalePro[0].name);
-
-
-
- res.render('admin/dailySales',{dailysale:true,dailysalePro})
+ res.render('admin/dailySales',{dailysale:true,dailysalePro,sum,sum2,dailysale})
 }
 
 const monthlysales = async(req,res)=>{
-    let monthly= await adminhelper.getMonthlySales()
+  let day=req.body.year+"-"+req.body.month
+  console.log(day);
+  let monthly = await adminhelper.getMonthlySalesPro(day)
 
-    res.render('admin/dailySales',{monthly:true,monthly})
+  let sum=0
+  for(var i=0;i<monthly.length;i++){
+    sum=sum+monthly[i].count
+  }
+  
+  let sum2=0
+  for(var i=0;i<monthly.length;i++){
+    sum2=sum2+monthly[i].totalAmount
+  }
+ 
+  console.log("sjdkkdj");
+  console.log(monthly);
+
+  res.render('admin/dailySales',{monthlysales:true,sum,sum2,monthly})
+
 }
+
+
 
 const yearlysales = async(req,res)=>{
-    let yearly = await adminhelper.getyearlySales()
 
-    res.render('admin/dailySales',{yearly:true,yearly})
-}
+    let day=req.body.year
+    console.log(day);
+    let yearly = await adminhelper.getYearlySalesPro(day)
+  
+    let sum=0
+    for(var i=0;i<yearly.length;i++){
+      sum=sum+yearly[i].count
+    }
+    
+    let sum2=0
+    for(var i=0;i<yearly.length;i++){
+      sum2=sum2+yearly[i].totalAmount
+    }
+   
+    console.log("sjdkkdj");
+    console.log(yearly);
+  
+    res.render('admin/dailySales',{yearlysales:true,sum,sum2,yearly})
+  
+  }
+   
+
 
 
 

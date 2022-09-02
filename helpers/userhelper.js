@@ -834,15 +834,17 @@ module.exports = {
         return new Promise (async(resolve,reject)=>{
 
             db.get().collection(collection.ORDERCOLLECTION).updateOne({
-                _id: objectId(orderId.orderId)
+                _id: objectId(orderId)
 
 
             },
             {
                 $set: {
-                    status:"cancelled",
-                    cancellation: true
+                    status:"cancelled"
+                    
                 }
+            }).then((data)=>{
+                resolve(data)
             })
             
             

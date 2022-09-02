@@ -463,9 +463,17 @@ const addressdelete=(req,res)=>{
     })
 }
 
+
+const orderCancel=(req,res)=>{
+    userhelper.cancelOrder(req.params.id).then((response)=>{
+
+        res.json(response)
+    })
+}
+
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
     changeproductquantity, vegetables, postcheckout, deleteCart,orderplaced,verifyPayment,orderProducts,
-    addressPage,postAddressAdd, getEditAddress,postEditAddress,addressdelete,PostCheckoutAddress,getCheckoutAddress
+    addressPage,postAddressAdd, getEditAddress,postEditAddress,addressdelete,PostCheckoutAddress,getCheckoutAddress,orderCancel
 }

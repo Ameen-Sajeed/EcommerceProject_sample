@@ -283,3 +283,48 @@ function deleteAddress(id){
         }
       })
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Cancel Order                                */
+/* -------------------------------------------------------------------------- */
+
+
+function cancelOrderUser(proId) {
+    // event.preventDefault
+    
+   
+    swal({
+        title: "Order cancel",
+        text: "Once cancel, the order get cancelled",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: '/order-cancel/' + proId,
+                method: 'get',
+                success: (response) => {
+                   
+                    if(response){
+                        document.getElementById(proId).innerHTML = "cancelled"
+                        swal("order cancelled", "sucessfully", "success");
+                      
+                        // location.reload()
+                    
+                    }
+                       
+        
+                
+                    
+                    
+                }
+            })
+        } else {
+          swal("Your order safe");
+        }
+      })
+
+}

@@ -22,7 +22,7 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    
+
 </head>
 
 <style>
@@ -358,15 +358,7 @@
             <div class="container-fluid">
                 <div class="page-head d-flex justify-content-between">
                     <h4 class="mt-2 mb-2 text-white"> Sales Report </h4>
-                    <div>
-                        <a href="/admin-dailysales"> <button
-                                class="btn-sm btn-outline-primary  text-white">Daily</button></a>
-                        <a href="/admin-monthlysales"><button
-                                class="btn-sm btn-outline-warning text-white">Monthly</button></a>
-                        <a href="/admin-yearlysales"><button
-                                class="btn-sm btn-outline-success text-white">Yearly</button></a>
 
-                    </div>
 
                 </div>
                 <div class="edit-table">
@@ -388,40 +380,47 @@
 
                                                     <th style="text-align:center">S-No:</th>
                                                     <th style="text-align:center">Date</th>
-                                                     <th style="text-align:center">Name of Product</th>
+                                                    <th style="text-align:center">Name of Product</th>
+                                                    <th style="text-align:center">Price Of Product</th>
                                                     <th style="text-align:center">Quantity</th>
-                                                    <th style="text-align:center">Price of Product</th>
                                                     <th style="text-align:center">Daily Sales</th>
 
 
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
-                                               {{#each dailysalePro}}
+
+                                                {{#each dailysalePro}}
 
                                                 <tr>
 
                                                     <td style="text-align:center ;">{{inc @index}}</td>
                                                     <td style="text-align:center ;">{{this.date}}</td>
-                                                   <td style="text-align:center ;"> {{this.name}}</td>
-                                                    <td style="text-align:center ;">{{this.quantity}}</td>
+                                                    <td style="text-align:center ;"> {{this.name}}</td>
                                                     <td style="text-align:center ;">{{this.price}}</td>
+                                                    <td style="text-align:center ;">{{this.quantity}}</td>
                                                     <td style="text-align:center ;">{{this.totalAmount}}</td>
-                                                {{/each}}
+                                                    {{/each}}
 
                                                 </tr>
-                                                {{!-- <tfoot id="total">Total
-                                                </tfoot> --}}
+                                                <tr>
+                                                    <td>
+                                                        {{#each dailysale}}
+                                                        <p style="color:#00ff73"><i>Total Orders:</i>
+                                                            <strong>{{this.date}}</strong></p>
+                                                        {{/each}}
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);">
+                                                        <i>Total-Quantity:</i><strong>{{sum}}</td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);"><i>Total
+                                                            Sales:</i><strong>{{sum2}}</strong> </td>
+
+                                                </tr>
+
                                             </tbody>
-                                           <tfoot>
-	    	<th></th>
-	    	<th></th>
-	    	<th style="text-align:center">Total Orders : </th>
-	    	<th style="text-align:center"> Total Sale :</th>
-	    	<th></th>
-	    	<th></th>
-	    </tfoot>
                                         </table>
 
 
@@ -435,7 +434,7 @@
                                                 <tr>
 
                                                     <th style="text-align:center">S-No:</th>
-                                                    <th style="text-align:center">Month</th>
+                                                    <th style="text-align:center">Date</th>
                                                     <th style="text-align:center">No: of Orders</th>
                                                     <th style="text-align:center">Monthly Sales</th>
 
@@ -449,10 +448,20 @@
                                                     <td style="text-align:center ;">{{inc @index}}</td>
                                                     <td style="text-align:center ;">{{this._id}}</td>
                                                     <td style="text-align:center ;">{{this.count}}</td>
-                                                    <td style="text-align:center ;">{{this.total}}</td>
+                                                    <td style="text-align:center ;">{{this.totalAmount}}</td>
 
                                                 </tr>
                                                 {{/each}}
+
+                                                <tr>
+
+                                                    <td>Total</td>
+                                                    <td></td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);">
+                                                        <i>Total-Orders:</i><strong>{{sum}}</td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);"><i>Total
+                                                            Sales:</i><strong>{{sum2}}</strong> </td>
+                                                </tr>
 
                                         </table>
 
@@ -481,10 +490,20 @@
                                                     <td style="text-align:center ;">{{inc @index}}</td>
                                                     <td style="text-align:center ;">{{this._id}}</td>
                                                     <td style="text-align:center ;">{{this.count}}</td>
-                                                    <td style="text-align:center ;">{{this.total}}</td>
+                                                    <td style="text-align:center ;">{{this.totalAmount}}</td>
 
                                                 </tr>
                                                 {{/each}}
+                                                <tr>
+
+                                                    <td>Total</td>
+                                                    <td></td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);">
+                                                        <i>Total-Orders:</i><strong>{{sum}}</td>
+                                                    <td style="text-align:center ; color: rgb(234, 0, 0);"><i>Total
+                                                            Sales:</i><strong>{{sum2}}</strong> </td>
+                                                </tr>
+
 
                                         </table>
                                         {{/if}}
@@ -535,12 +554,12 @@
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
-        
-        
+
+
         });
 
-        
-        
+
+
     });
 </script>
 
