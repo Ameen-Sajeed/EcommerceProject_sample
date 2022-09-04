@@ -349,9 +349,14 @@ const deleteBanner = (req, res) => {
 
 const viewOrders=(req,res)=>{
     adminhelper.viewOrders().then((orders)=>{
+
         res.render('admin/viewOrders',{orders})
 
     })
+
+    // userhelper.getUserOrders().then((orders)=>{
+    //     res.render('admin/viewOrders',{orders})
+    // })
 }
 
 
@@ -449,6 +454,26 @@ const yearlysales = async(req,res)=>{
   
   }
    
+  const orderCanceladmin=(req,res)=>{
+    adminhelper.cancelOrder(req.params.id).then((response)=>{
+
+        res.json(response)
+    })
+}
+
+const orderShipadmin=(req,res)=>{
+    adminhelper.shippedOrder(req.params.id).then((response)=>{
+
+        res.json(response)
+    })
+}
+
+const orderDeliveradmin=(req,res)=>{
+    adminhelper.deliveredOrder(req.params.id).then((response)=>{
+
+        res.json(response)
+    })
+}
 
 
 
@@ -458,5 +483,6 @@ module.exports = {
     getLogin, getaddproducts, postLogin, getlogout, getCategory, postCategory,
     blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys,
     getupdateproduct, postupdateproduct, postaddproducts, getBanner, addBanner,
-     postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales
+     postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales,orderCanceladmin,orderDeliveradmin,
+     orderShipadmin
 };

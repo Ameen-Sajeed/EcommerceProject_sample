@@ -1,5 +1,5 @@
 const express = require('express');
-const { admindashboard, getproducts, getUsers, getLogin, getaddproducts, postLogin, getlogout, postaddproducts, getCategory, postCategory, blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys, updateproduct, getupdateproduct, postupdateproduct, getBanner, addBanner, postaddBanner, deleteBanner, viewOrders, donutChartData, getSalesReport, dailysales, monthlysales, yearlysales } = require('../controllers/adminContollers');
+const { admindashboard, getproducts, getUsers, getLogin, getaddproducts, postLogin, getlogout, postaddproducts, getCategory, postCategory, blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys, updateproduct, getupdateproduct, postupdateproduct, getBanner, addBanner, postaddBanner, deleteBanner, viewOrders, donutChartData, getSalesReport, dailysales, monthlysales, yearlysales, orderCanceladmin, orderShipadmin, orderDeliveradmin } = require('../controllers/adminContollers');
 const adminhelper = require('../helpers/adminhelper')
 const router = express.Router();
 const multer = require('../helpers/multer')
@@ -88,6 +88,12 @@ router.post('/admin-dailysales',dailysales)
 router.post('/admin-monthlysales',monthlysales)
 
 router.post('/admin-yearlysales',yearlysales)
+
+router.get('/order-canceladmin/:id',orderCanceladmin)
+
+router.get('/order-shipped/:id',orderShipadmin)
+
+router.get('/order-deliver/:id',orderDeliveradmin)
 
 
 module.exports = router;

@@ -39,61 +39,147 @@ function blockUser(userId) {
  
 }
 
-
-// /* -------------------------------------------------------------------------- */
-// /*                           Donutchart for Payments                          */
-// /* -------------------------------------------------------------------------- */
-
-
-// function loadDonutChart(){
-//     event.preventDefault
+/* -------------------------------------------------------------------------- */
+/*                                Cancel Order                                */
+/* -------------------------------------------------------------------------- */
 
 
-//     alert('hai')
+function cancelOrderUser(proId) {
+    event.preventDefault
+    
+   
+    swal({
+        title: "Order cancel",
+        text: "Once cancel, the order get cancelled",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: '/order-canceladmin/' + proId,
+                method: 'get',
+                success: (response) => {
+                   
+                    if(response){
+                        document.getElementById(proId).innerHTML = "Cancelled"
+                        swal("Order Cancelled", "Sucessfully", "success",{
+                            icon: "success",
+                          });
+                      
+                        // location.reload()
+                    
+                    }
+                       
+        
+                
+                    
+                    
+                }
+            })
+        } else {
+          swal("Your order  is safe");
+        }
+      })
 
-//    $.ajax({
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                            order shipping status                           */
+/* -------------------------------------------------------------------------- */
 
 
 
-//     url:'/loadDonutChart',
-//     method:'post',
-//     success:(data)=>{
 
-//         if(data){
+function shipOrderUser(proId) {
+    event.preventDefault
+    
+   
+    swal({
+        title: "Order Shipped",
+        text: "Once shipped, the order get Shipped",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: '/order-shipped/' + proId,
+                method: 'get',
+                success: (response) => {
+                   
+                    if(response){
+                        document.getElementById(proId).innerHTML = "Shipped"
+                        swal("Order Shipped", "Sucessfully", "Success",{
+                            icon: "success",
+                          });
+                        
+                      
+                        // location.reload()
+                    
+                    }
+                       
+        
+                
+                    
+                    
+                }
+            })
+        } else {
+          swal("Your order is not Shipped");
+        }
+      })
 
-//             google.charts.load('current', {packages: ['corechart']});
-//             google.charts.setOnLoadCallback(drawChart);
-
-//             let x=parseInt(data[0].count)
-//             let y=parseInt(data[1].count)
-//             let z=parseInt(data[2].count)
+}
 
 
-//             function drawChart() {
-//                 // Define the chart to be drawn.
-//                 var data = new google.visualization.arrayToDataTable([
-//                 ['Payment Method', 'Nos.'],
-//                 ['COD', x],
-//                 ['PAYPAL',y],
-//                 ['RAZORPAY',z],
-//                 ]);
+/* -------------------------------------------------------------------------- */
+/*                           order delivered status                           */
+/* -------------------------------------------------------------------------- */
 
-//                 var options ={
-//                     title:'Payment Method Chart',
-//                     piehole:0.4,
-//                 }
+function deliverOrderUser(proId) {
+    event.preventDefault
+    
+   
+    swal({
+        title: "Order Delivered",
+        text: "Once delivered, the order get Delivered",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: '/order-deliver/' + proId,
+                method: 'get',
+                success: (response) => {
+                   
+                    if(response){
+                        document.getElementById(proId).innerHTML = "Delivered"
+                        swal("Order Delivered", "Sucessfully", "Success",{
+                            icon: "success",
+                          });
+                      
+                        // location.reload()
+                    
+                    }
+                       
+        
+                
+                    
+                    
+                }
+            })
+        } else {
+          swal("Your order is not Delivered");
+        }
+      })
 
-//                 var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-//                 chart.draw(data, options);      
-//               }
-//     }
-// }
-//    })
-// }
+}
 
 
-// function ameen(){
 
-//     alert('hai gyus')
-
-// }

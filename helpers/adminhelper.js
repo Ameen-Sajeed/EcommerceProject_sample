@@ -255,11 +255,110 @@ module.exports = {
 
 viewOrders: (order) => {
   return new Promise(async (resolve, reject) => {
-    let order = await db.get().collection(collection.ORDERCOLLECTION).find().toArray()
-    resolve(order)
-    console.log(order)
+  let orders = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+    {
+        $lookup: {
+            from: collection.ADDRESSCOLLECTION,
+            localField: 'deliveryDetails',
+            foreignField: '_id',
+            as: 'address'
+        }
+    },
+
+    {
+        $unwind: '$address'
+    },{
+        $project:{
+            date: { $dateToString: { format: "%d-%m-%Y", date: "$date" } },totalAmount:1,products:1,paymentMethod:1,address:1,status:1
+        }
+    }
+]).toArray()
+console.log("csdajndj");
+console.log(orders);
+resolve(orders)
+
+})
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                                cancel Orders                               */
+/* -------------------------------------------------------------------------- */
+
+
+
+cancelOrder:(orderId)=>{
+  return new Promise (async(resolve,reject)=>{
+
+      db.get().collection(collection.ORDERCOLLECTION).updateOne({
+          _id: objectId(orderId)
+
+
+      },
+      {
+          $set: {
+              status:"Cancelled"
+              
+          }
+      }).then((data)=>{
+          resolve(data)
+      })
+      
+      
   })
 },
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Shipped Orders                               */
+/* -------------------------------------------------------------------------- */
+
+shippedOrder:(orderId)=>{
+  return new Promise (async(resolve,reject)=>{
+
+      db.get().collection(collection.ORDERCOLLECTION).updateOne({
+          _id: objectId(orderId)
+
+
+      },
+      {
+          $set: {
+              status:"Shipped"
+              
+          }
+      }).then((data)=>{
+          resolve(data)
+      })
+      
+      
+  })
+},
+
+/* -------------------------------------------------------------------------- */
+/*                              Delivered Orders                              */
+/* -------------------------------------------------------------------------- */
+
+deliveredOrder:(orderId)=>{
+  return new Promise (async(resolve,reject)=>{
+
+      db.get().collection(collection.ORDERCOLLECTION).updateOne({
+          _id: objectId(orderId)
+
+
+      },
+      {
+          $set: {
+              status:"Delivered"
+              
+          }
+      }).then((data)=>{
+          resolve(data)
+      })
+      
+      
+  })
+},
+
 
 
 
@@ -481,6 +580,9 @@ getMonthlySalesPro: (day) => {
   })
 
 },
+  
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                              get Monthly Sales                             */
