@@ -1,7 +1,8 @@
-const { addproduct } = require("../helpers/adminhelper")
+const { addproduct, addCoupen } = require("../helpers/adminhelper")
 const adminhelper = require("../helpers/adminhelper")
 const userhelper = require("../helpers/userhelper")
 const sharp =require('sharp')
+const { response } = require("express")
 
 
 const admin = {
@@ -65,16 +66,11 @@ const getlogout = (req, res) => {
 
 const admindashboard = async (req, res) => {
   let data= await adminhelper.doNutchartData()
- let year = await adminhelper.yearlyChart()
- let a=data[0]._id
-let x=data[0].count
-let b=data[1]._id
-let y=data[1].count
-let c=data[2]._id
-let z=data[2].count
+    let year = await adminhelper.yearlyChart()
 
 
-res.render('admin/Admin-dashboard',{a,x,b,y,c,z,year})
+
+res.render('admin/Admin-dashboard',{data,year})
 
  }   
 
@@ -88,6 +84,7 @@ res.render('admin/Admin-dashboard',{a,x,b,y,c,z,year})
 /* -------------------------------------------------------------------------- */
 
 const getUsers = (req, res) => {
+
     adminhelper.viewUsers().then((data) => {
         console.log(data)
         res.render('admin/User', { data })
@@ -171,28 +168,7 @@ const postaddproducts = (req, res) => {
     })
 }
 
-// const postaddproducts = (req, res) => {
-//     const filename = req.files.map(function (file) {
-//         return file.filename
-//     })
-//     req.body.image = filename
 
-//     sharp(req.body.image)
-//     .resize({width:250, height:350})
-
-
-//     adminhelper.addproduct(req.body).then((response) => {
-//         if (response.status) {
-//             res.redirect('/admin-addproduct')
-//         } else {
-//             // res.send('product added')
-//             res.redirect('/admin-products')
-
-
-//         }
-
-//     })
-// }
 
 
 /* -------------------------------------------------------------------------- */
@@ -347,6 +323,10 @@ const deleteBanner = (req, res) => {
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                               Display orders                               */
+/* -------------------------------------------------------------------------- */
+
 const viewOrders=(req,res)=>{
     adminhelper.viewOrders().then((orders)=>{
 
@@ -354,9 +334,7 @@ const viewOrders=(req,res)=>{
 
     })
 
-    // userhelper.getUserOrders().then((orders)=>{
-    //     res.render('admin/viewOrders',{orders})
-    // })
+  
 }
 
 
@@ -380,13 +358,12 @@ const donutChartData= async(req,res)=>{
 
 
 const getSalesReport= async(req,res)=>{
-
-   
-
     res.render('admin/salesReport')
 }
 
-
+/* -------------------------------------------------------------------------- */
+/*                             daily sales report                             */
+/* -------------------------------------------------------------------------- */
 
 const dailysales = async(req,res)=>{
  day= req.body.day   
@@ -406,6 +383,10 @@ let dailysale = await adminhelper.getDailySales(day)
 
  res.render('admin/dailySales',{dailysale:true,dailysalePro,sum,sum2,dailysale})
 }
+
+/* -------------------------------------------------------------------------- */
+/*                            monthly sales report                            */
+/* -------------------------------------------------------------------------- */
 
 const monthlysales = async(req,res)=>{
   let day=req.body.year+"-"+req.body.month
@@ -429,7 +410,9 @@ const monthlysales = async(req,res)=>{
 
 }
 
-
+/* -------------------------------------------------------------------------- */
+/*                             yearly Sales Report                            */
+/* -------------------------------------------------------------------------- */
 
 const yearlysales = async(req,res)=>{
 
@@ -476,6 +459,46 @@ const orderDeliveradmin=(req,res)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                                 View Coupon                                */
+/* -------------------------------------------------------------------------- */
+
+
+const getCoupens = (req, res) => {
+    adminhelper.viewCoupens().then((coupen) => {
+        // console.log(product)
+        res.render('admin/ViewCoupons',{coupen})
+    })
+
+    // res.send('hai')
+}
+
+
+const getAddCoupen = (req,res)=>{
+
+    res.render('admin/addCoupens')
+}
+
+
+const postAddCoupon = (req,res)=>{
+
+//    req.body.user = user = [];
+     
+    adminhelper.addCoupon(req.body).then((response) => {
+        if (response.status) {
+            res.redirect('/admin-addcoupen')
+        } else {
+            // res.send('product added')
+            res.redirect('/admin-viewcoupen')
+
+
+        }
+
+    })
+
+}
+
+
 
 
 module.exports = {
@@ -484,5 +507,5 @@ module.exports = {
     blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys,
     getupdateproduct, postupdateproduct, postaddproducts, getBanner, addBanner,
      postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales,orderCanceladmin,orderDeliveradmin,
-     orderShipadmin
+     orderShipadmin,getCoupens,getAddCoupen,postAddCoupon
 };

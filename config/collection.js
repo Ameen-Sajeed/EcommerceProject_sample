@@ -11,5 +11,7 @@ module.exports={
 
     ORDERCOLLECTION:"order",
 
-    ADDRESSCOLLECTION:"address"
+    ADDRESSCOLLECTION:"address",
+
+    COUPENCOLLECTION:"coupen"
 }

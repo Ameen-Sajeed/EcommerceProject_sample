@@ -20,12 +20,15 @@
 
 
     <!-- Theme Css -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="/admin/css/slidebars.min.css" rel="stylesheet">
     <link href="/admin/css/icons.css" rel="stylesheet">
     <link href="/admin/css/menu.css" rel="stylesheet" type="text/css">
     <link href="/admin/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/stylePage.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://kit.fontawesome.com/dd7cba467d.js" crossorigin="anonymous"></script>
 
 
 </head>
@@ -60,7 +63,7 @@
                     <li>
                         <!-- <h3 class="navigation-title">Navigation</h3> -->
                     </li>
-                    <li class="active">
+                    <li class="menu-list">
                         <a href="/admindashboard"><i class="mdi mdi-gauge"></i> <span>Dashboard</span></a>
                     </li>
                     <li class="menu-lists"><a href="/admin-sales"><i class="mdi mdi-buffer"></i> <span>Sales Report</span></a>
@@ -79,7 +82,7 @@
                     <li>
                         <!-- <h3 class="navigation-title">Components</h3> -->
                     </li>
-                    <li class="menu-lists"><a href="/admin-users"><i class="fa fa-user-circle"></i> <span>Users <span
+                    <li class="active"><a href="/admin-users"><i class="fa fa-user-circle"></i> <span>Users <span
                                     class="badge badge-primary noti-arrow pull-right"></span> </span></a>
                         {{!-- <ul class="child-list">
                             <li><a href="/admin-users"> View Users </a></li>
@@ -109,19 +112,19 @@
                                 <li><a href="tables-responsive.html"> Responsive Table </a></li>
                             </ul> -->
                     </li>
-                    <li class="menu-lists"><a href=""><i class="mdi mdi-google-earth"></i> <span> Offers & Coupons
+                         <li class="menu-list"><a href="/admin-viewcoupen"><i class="mdi mdi-google-earth"></i> <span> Offers & Coupons
                             </span></a>
-                        <!-- <ul class="child-list">
-                                <li><a href="form-elements.html">General Elements</a></li>
-                                <li><a href="form-validation.html">Form Validation</a></li>
-                                <li><a href="form-advanced.html">Advanced Form</a></li>
+                         <ul class="child-list">
+                                <li><a href="/admin-addcoupen">Add Coupons</a></li>
+                                <li><a href="/admin-viewcoupen">View Coupons</a></li> 
+                                {{!-- <li><a href="form-advanced.html">Advanced Form</a></li>
                                 <li><a href="form-wizard.html">Form Wizard</a></li>
                                 <li><a href="form-editor.html">WYSIWYG Editor</a></li>
                                 <li><a href="form-uploads.html">Multiple File Upload</a></li>
                                 <li><a href="form-imagecrop.html">Image Crop</a></li>
                                 <li><a href="form-xeditable.html">X-Editable</a></li>
-                                <li><a href="form-summernote.html">Summernote</a></li>
-                            </ul> -->
+                                <li><a href="form-summernote.html">Summernote</a></li> --}} --}}
+                            </ul>
                     </li>
                     <li class="menu-list"><a href=""><i class="mdi mdi-chart-arc"></i> <span> Category</span></a>
                         <ul class="child-list">
@@ -146,7 +149,7 @@
         </div><!-- sidebar left end-->
 
         <!-- body content start-->
-        <div class="body-content bg-dark">
+        <div class="body-content bg-light">
             <!-- header section start-->
             <div class="header-section">
                 <!--logo and logo icon start-->
@@ -174,7 +177,7 @@
 
             <div class="container-fluid">
                 <div class="page-head">
-                    <h4 class="mt-2 mb-2 text-white">User Details</h4>
+                    <h4 class="mt-2 mb-2 text-info">User Details</h4>
                 </div>
                 <div class="data-table">
 
@@ -186,8 +189,21 @@
                                 <div class="card-body table-responsive">
 
                                     <div class="">
-                                        <table id="datatable2" class="table">
+                                        {{!-- <h6>Select Number of Rows</h6>
+                                        <div class="form-group">
+                                            <select name="state" id="maxRows" class="form-control" style="width: 150px;">
+                                                <option value="5">Show All</option>
+                                                <option value="5">5</option>
+                                                <option value="5">10</option>
+                                                <option value="5">15</option>
+                                                <option value="5">20</option>
+                                                <option value="5">50</option>
+                                                <option value="5">75</option>
+                                                <option value="5">100</option>
 
+                                            </select>
+                                        </div> --}}
+                                   <table id="example" class="display" style="width:100%">
                                             <thead>
 
                                                 <tr>
@@ -209,28 +225,7 @@
                                                     <td style="text-align:center ;">{{this.phone}}</td>
                                                     <td style="text-align:center ;">{{this.state}}</td>
                                                     <td>
-                                                        {{!-- {{#if this.state}} --}}
-
-                                                        {{!-- <div class="btn-group">
-                                                            <a href="/admin-users/{{this._id}}"
-                                                                class="btn btn-outline-danger btn-rounded text-center waves-effect waves-light mt-0 tooltips   "
-                                                                data-placement="top" data-toggle="tooltip"
-                                                                data-original-title="BLOCK">
-                                                                <p class="block">
-                                                                    <center>Block</center>
-                                                                </p>
-                                                            </a>
-                                                            {{else }}
-                                                            <a href="/admin-user/{{this._id}}"
-                                                                class="btn btn-outline-info btn-rounded waves-effect waves-light mt-0 tooltips "
-                                                                data-placement="top" data-toggle="tooltip"
-                                                                data-original-title="UNBLOCK">
-                                                                <p class="unblock">
-                                                                    <center>Unblock</center>
-                                                                </p>
-                                                            </a>
-                                                        </div>
-                                                        {{/if}} --}}
+                                                
 
                                                         <button onclick="blockUser('{{this._id}}')"
                                                             class="btn btn-primary shadow btn-md sharp mr-1"
@@ -250,6 +245,13 @@
                                             </tbody>
                                             {{/each}}
                                         </table>
+                                        <div class="pagination-container">
+                                            <nav>
+                                                <ul class="pagination">
+
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -261,320 +263,15 @@
             </div>
             <!--end container-->
 
-            <!--footer section start-->
-            <footer class="footer">
-                2018 &copy; Syntra.
-            </footer>
-            <!--footer section end-->
 
-
-            <!-- Right Slidebar start -->
-            <div class="sb-slidebar sb-right sb-style-overlay">
-                <div class="right-bar slimscroll">
-                    <span class="r-close-btn sb-close"><i class="fa fa-times"></i></span>
-
-                    <ul class="nav nav-tabs nav-justified-">
-                        <li class="">
-                            <a href="#chat" class="active" data-toggle="tab">Chat</a>
-                        </li>
-                        <li class="">
-                            <a href="#activity" data-toggle="tab">Activity</a>
-                        </li>
-                        <li class="">
-                            <a href="#settings" data-toggle="tab">Settings</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="chat">
-                            <div class="online-chat">
-                                <div class="online-chat-container">
-                                    <div class="chat-list">
-                                        <form class="search-content" action="index.html" method="post">
-                                            <input type="text" class="form-control" name="keyword"
-                                                placeholder="Search...">
-                                            <span class="search-button"><i class="ti ti-search"></i></span>
-                                        </form>
-                                    </div>
-                                    <div class="side-title-alt">
-                                        <h2>online</h2>
-                                    </div>
-
-                                    <ul class="team-list chat-list-side">
-                                        <li>
-                                            <a href="#" class="ml-3">
-                                                <span class="thumb-small">
-                                                    <img class="rounded-circle" src="assets/images/users/avatar-1.jpg"
-                                                        alt="">
-                                                    <i class="online dot"></i>
-                                                </span>
-                                                <div class="inline">
-                                                    <span class="name">Alison Jones</span>
-                                                    <small class="text-muted">Start exploring</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="ml-3">
-                                                <span class="thumb-small">
-                                                    <img class="rounded-circle" src="assets/images/users/avatar-3.jpg"
-                                                        alt="">
-                                                    <i class="online dot"></i>
-                                                </span>
-                                                <div class="inline">
-                                                    <span class="name">Jonathan Smith</span>
-                                                    <small class="text-muted">Alien Inside</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="ml-3">
-                                                <span class="thumb-small">
-                                                    <img class="rounded-circle" src="assets/images/users/avatar-4.jpg"
-                                                        alt="">
-                                                    <i class="away dot"></i>
-                                                </span>
-                                                <div class="inline">
-                                                    <span class="name">Anjelina Doe</span>
-                                                    <small class="text-muted">Screaming...</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="ml-3">
-                                                <span class="thumb-small">
-                                                    <img class="rounded-circle" src="assets/images/users/avatar-5.jpg"
-                                                        alt="">
-                                                    <i class="busy dot"></i>
-                                                </span>
-                                                <div class="inline">
-                                                    <span class="name">Franklin Adam</span>
-                                                    <small class="text-muted">Don't lose the hope</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="ml-3">
-                                                <span class="thumb-small">
-                                                    <img class="rounded-circle" src="assets/images/users/avatar-6.jpg"
-                                                        alt="">
-                                                    <i class="online dot"></i>
-                                                </span>
-                                                <div class="inline">
-                                                    <span class="name">Jeff Crowford </span>
-                                                    <small class="text-muted">Just flying</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <div class="side-title-alt mb-3">
-                                        <h2>Friends</h2>
-                                    </div>
-                                    <ul class="list-unstyled friends">
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-7.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-8.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-9.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-10.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-2.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-1.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-3.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="rounded-circle" src="assets/images/users/avatar-4.jpg"
-                                                    alt="">
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane " id="activity">
-
-                            <div class="aside-widget">
-                                <div class="side-title-alt">
-                                    <h2>Recent Activity</h2>
-                                </div>
-                                <ul class="team-list chat-list-side info">
-                                    <li>
-                                        <span class="thumb-small">
-                                            <i class="fa fa-pencil"></i>
-                                        </span>
-                                        <div class="inline">
-                                            <span class="name">Mary Brown open a new company</span>
-                                            <span class="time">just now</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="thumb-small">
-                                            <i class="fa fa-user-plus"></i>
-                                        </span>
-                                        <div class="inline">
-                                            <span class="name">Mary Brown send a new message </span>
-                                            <span class="time">50 min ago</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="thumb-small">
-                                            <i class="fa fa-wrench"></i>
-                                        </span>
-                                        <div class="inline">
-                                            <span class="name">Holly Cobb Uploaded 6 new photos.</span>
-                                            <span class="time">3 Week Ago</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="thumb-small">
-                                            <i class="fa fa-users"></i>
-                                        </span>
-                                        <div class="inline">
-                                            <span class="name">Mary Brown open a new company.</span>
-                                            <span class="time">1 Month Ago</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="aside-widget">
-
-                                <div class="side-title-alt">
-                                    <h2>Events</h2>
-                                </div>
-                                <ul class="team-list chat-list-side info statistics border-less-list">
-                                    <li>
-                                        <div class="inline">
-                                            <p class="mb-1">Jamie Miller</p>
-                                            <span class="name">Contrary to popular belief, Lorem Ipsum is not simply
-                                                random text.</span>
-                                            <span class="time text-muted">2 Week Ago</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="inline">
-                                            <p class="mb-1">Robert Jones</p>
-                                            <span class="name">Lorem Ipsum is simply dummy text of the printing and
-                                                typesetting .</span>
-                                            <span class="time text-muted">1 Month Ago</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane " id="settings">
-                            <div class="side-title-alt">
-                                <h6 class="mb-0">Account Setting</h6>
-                            </div>
-                            <ul class="team-list chat-list-side info statistics border-less-list setting-list">
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Auto updates</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Show offline Contacts</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Location Permission</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-                            </ul>
-
-                            <div class="side-title-alt">
-                                <h6 class="mb-0">General Setting</h6>
-                            </div>
-                            <ul class="team-list chat-list-side info statistics border-less-list setting-list">
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Show me Online</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Status visible to all</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-
-                                <li>
-                                    <div class="inline">
-                                        <span class="name">Notifications</span>
-                                    </div>
-                                    <span class="thumb-small">
-                                        <input type="checkbox" checked data-plugin="switchery" data-color="#079c9e"
-                                            data-size="small" />
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end Right Slidebar-->
         </div>
         <!--end body content-->
     </section>
 
 
+ 
 
+  
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/javascripts/ajaxAdmin.js"></script>
@@ -585,26 +282,33 @@
     <script src="/admin/js/modernizr.min.js"></script>
     <script src="/admin/js/jquery.slimscroll.min.js"></script>
     <script src="/admin/js/slidebars.min.js"></script>
+    {{!-- <script src="/javascripts/pagination.js"></script> --}}
+  
+ 
+
+
 
 
     <!-- Responsive and datatable js -->
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/admin/plugins/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="/admin/plugins/datatables/dataTables.responsive.min.js"></script>
     <script src="/admin/plugins/datatables/responsive.bootstrap4.min.js"></script>
 
     <!--app js-->
-
-
-
     <script src="/admin/js/jquery.app.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#datatable').DataTable(),
-                $('#datatable2').DataTable();
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+ 
+ 
 
 </body>
+
+     <script>
+        $(document).ready(function () {
+    $('#example').DataTable();
+});
+    </script>
 
 </html>

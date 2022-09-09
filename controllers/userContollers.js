@@ -137,8 +137,8 @@ const nodata = (req, res) => {
 const getcart = async (req, res, next) => {
     let subtotal;
     let products = await userhelper.viewCartProducts(req.session.user._id)
-    let totalValue=0;
-    if(products.length>0){
+    let totalValue = 0;
+    if (products.length > 0) {
         totalValue = await userhelper.getTotalAmount(req.session.user._id)
 
     }
@@ -196,6 +196,10 @@ const getcheckout = async (req, res) => {
 
     let address = await userhelper.viewAddress(req.session.user._id)
 
+    user = req.session.user
+
+    console.log(total,'fghjkl');
+
     res.render('user/checkout', { total, user, address })
 }
 
@@ -206,36 +210,74 @@ const getcheckout = async (req, res) => {
 
 const postcheckout = async (req, res) => {
     let products = await userhelper.getCartProductList(req.body.userId)
-
     let totalPrice = await userhelper.getTotalAmount(req.body.userId)
     console.log(products);
 
-    userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+    // let couponVerify = await adminhelper.couponVerify(req.session.user._id)
+    // console.log("*****************************");
+    // console.log(couponVerify.couponDet.couponid, "coupon verify");
+    // if (couponVerify.couponDet.couponid == req.body.couponcode) {
 
-        if(req.body['payment-method']==='COD'){
-            res.json({codSuccess:true})
-
-        } else if(req.body['payment-method']==='RAZORPAY') {
-            userhelper.generateRazorpay(orderId,totalPrice).then((response)=>{
-                response.razorPay = true;
-                res.json(response)
-            })
-        }
-
-        else if(req.body['payment-method'] ==='PAYPAL'){
-            console.log('vjhdbfjbfh');
-            userhelper.generatePayPal(orderId,totalPrice).then((response)=>{
-                response.payPal = true;
-                res.json(response)
-            })
-        }
+        // console.log("call reached");
+        // let totalAmount = (1 - couponVerify.couponDet.couponper / 100) * totalPrice
 
 
-    })
+        await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
 
-    console.log(req.body);
+            if (req.body['payment-method'] === 'COD') {
+                res.json({ codSuccess: true })
 
+            } else if (req.body['payment-method'] === 'RAZORPAY') {
+                userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
+                    response.razorPay = true;
+                    res.json(response)
+                })
+            }
+
+            else if (req.body['payment-method'] === 'PAYPAL') {
+                console.log('vjhdbfjbfh');
+                userhelper.generatePayPal(orderId, totalPrice).then((response) => {
+                    response.payPal = true;
+                    res.json(response)
+                })
+            }
+
+
+        })
+    
+
+
+    // else {
+
+    //     await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+
+    //         if (req.body['payment-method'] === 'COD') {
+    //             let resp = userhelper.cartClear(req.session.user._id)
+    //             res.json({ codSuccess: true })
+
+    //         } else if (req.body['payment-method'] === 'RAZORPAY') {
+    //             userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
+    //                 response.razorPay = true;
+    //                 res.json(response)
+    //             })
+    //         }
+
+    //         else if (req.body['payment-method'] === 'PAYPAL') {
+    //             console.log('vjhdbfjbfh');
+    //             userhelper.generatePayPal(orderId, totalPrice).then((response) => {
+    //                 response.payPal = true;
+    //                 res.json(response)
+    //             })
+    //         }
+
+
+    //     })
+
+    // }
 }
+
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   GET OTP                                  */
@@ -290,24 +332,24 @@ const postconfirmOtp = (req, res) => {
 /*                         view   Orders in User Profile                      */
 /* -------------------------------------------------------------------------- */
 
-const getProfile = async(req, res) => {
-   let orders= await userhelper.getUserOrders(req.session.user._id)
-   let details= await userhelper.viewAddress(req.session.user._id)
-        res.render('user/userProfile',{orders,user,details})
+const getProfile = async (req, res) => {
+    let orders = await userhelper.getUserOrders(req.session.user._id)
+    let details = await userhelper.viewAddress(req.session.user._id)
+    res.render('user/userProfile', { orders, user, details })
 
-    }
-
-
-
- /* -------------------------------------------------------------------------- */
- /*                       View Ordered Products For user                       */
- /* -------------------------------------------------------------------------- */
+}
 
 
- const orderProducts=async(req,res)=>{
-    let products= await userhelper.getOrderProduct(req.params.id)
-    res.render('user/orderProducts',{products,user})
- }
+
+/* -------------------------------------------------------------------------- */
+/*                       View Ordered Products For user                       */
+/* -------------------------------------------------------------------------- */
+
+
+const orderProducts = async (req, res) => {
+    let products = await userhelper.getOrderProduct(req.params.id)
+    res.render('user/orderProducts', { products, user })
+}
 
 
 /* -------------------------------------------------------------------------- */
@@ -344,7 +386,9 @@ const vegetables = (req, res) => {
 
 
 
-const orderplaced=(req,res)=>{
+const orderplaced = (req, res) => {
+
+    let resp = userhelper.cartClear(req.session.user._id)
     res.render('user/orderplaced')
 }
 
@@ -355,16 +399,17 @@ const orderplaced=(req,res)=>{
 
 
 
-const verifyPayment=(req,res)=>{
+const verifyPayment = (req, res) => {
     console.log(req.body);
-    userhelper.verifyPayment(req.body).then(()=>{
-        userhelper.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+    userhelper.verifyPayment(req.body).then(() => {
+        userhelper.changePaymentStatus(req.body['order[receipt]']).then(() => {
+            let removeCart = userhelper.cartClear(req.session.user._id)
             console.log('payment success');
-            res.json({status:true})
+            res.json({ status: true })
         })
 
-    }).catch((err)=>{
-        res.json({status:false,errMsg:"Payment Failed"})
+    }).catch((err) => {
+        res.json({ status: false, errMsg: "Payment Failed" })
     })
 }
 
@@ -374,7 +419,7 @@ const verifyPayment=(req,res)=>{
 /*                                Address Page                                */
 /* -------------------------------------------------------------------------- */
 
-const addressPage = (req,res)=>{
+const addressPage = (req, res) => {
     res.render('user/AddUserAddress')
 }
 
@@ -383,7 +428,7 @@ const addressPage = (req,res)=>{
 /*                        get Checkout add address                            */
 /* -------------------------------------------------------------------------- */
 
-const getCheckoutAddress = (req,res)=>{
+const getCheckoutAddress = (req, res) => {
 
     res.render('user/postcheckadd')
 }
@@ -395,12 +440,12 @@ const getCheckoutAddress = (req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 
-const PostCheckoutAddress = (req,res)=>{
+const PostCheckoutAddress = (req, res) => {
 
-    userhelper.addAddress(req.session.user._id,req.body).then((data)=>{
+    userhelper.addAddress(req.session.user._id, req.body).then((data) => {
         res.redirect('/checkout')
     })
-    
+
 }
 
 
@@ -408,9 +453,9 @@ const PostCheckoutAddress = (req,res)=>{
 /*                               Post  Add address                                */
 /* -------------------------------------------------------------------------- */
 
-const postAddressAdd=(req,res)=>{
+const postAddressAdd = (req, res) => {
 
-    userhelper.addAddress(req.session.user._id,req.body).then((data)=>{
+    userhelper.addAddress(req.session.user._id, req.body).then((data) => {
         res.redirect('/profile')
     })
 }
@@ -419,13 +464,13 @@ const postAddressAdd=(req,res)=>{
 /*                                Edit Address                                */
 /* -------------------------------------------------------------------------- */
 
-const getEditAddress=(req,res)=>{
+const getEditAddress = (req, res) => {
 
-    let id= req.params.id
-    
-    userhelper.getAddressEdit(id,req.session.user._id).then((data)=>{
+    let id = req.params.id
 
-        res.render('user/editAddress',{data})
+    userhelper.getAddressEdit(id, req.session.user._id).then((data) => {
+
+        res.render('user/editAddress', { data })
     })
 }
 
@@ -434,16 +479,16 @@ const getEditAddress=(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 
-const postEditAddress=(req,res)=>{
+const postEditAddress = (req, res) => {
 
-    let userId=req.body.user;
+    let userId = req.body.user;
 
-    let Id= req.body.id
+    let Id = req.body.id
 
-    userhelper.postAddressEdit(req.body,userId,Id).then((response)=>{
+    userhelper.postAddressEdit(req.body, userId, Id).then((response) => {
 
         res.redirect('/profile')
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
     })
 }
@@ -453,27 +498,155 @@ const postEditAddress=(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 
-const addressdelete=(req,res)=>{
+const addressdelete = (req, res) => {
 
-    let id= req.params.id
+    let id = req.params.id
 
-    userhelper.deleteAddress(req.session.user._id,id).then((response)=>{
+    userhelper.deleteAddress(req.session.user._id, id).then((response) => {
 
         res.redirect('/profile')
     })
 }
 
 
-const orderCancel=(req,res)=>{
-    userhelper.cancelOrder(req.params.id).then((response)=>{
+/* -------------------------------------------------------------------------- */
+/*                                Order Cancel                                */
+/* -------------------------------------------------------------------------- */
+
+const orderCancel = (req, res) => {
+    userhelper.cancelOrder(req.params.id).then((response) => {
 
         res.json(response)
+    })
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Apply Coupon                                */
+/* -------------------------------------------------------------------------- */
+
+const PostapplyCoupon = async (req, res) => {
+    let user= req.session.user._id
+
+
+    console.log("fcghvjbknlm");
+    console.log(req.body);
+
+    const date = new Date()
+
+    let totalAmount = await userhelper.getTotalAmount(user)
+
+    req.body.total = totalAmount;
+
+    console.log(req.body,"ghjkl;");
+
+    if (req.body.coupon == '') {
+        res.json({ noCoupon: true })
+    } else {
+        let couponResponse = await adminhelper.applyCoupon(req.body, user, date)
+          console.log(couponResponse,"dfghjk");
+        if (couponResponse.verify) {
+            let discountAmount = (req.body.total * parseInt(couponResponse.couponData.value)) / 100
+            let amount = req.body.total - discountAmount
+            couponResponse.discountAmount = Math.round(discountAmount)
+            couponResponse.amount = Math.round(amount)
+            res.json(couponResponse)
+            console.log(couponResponse,"DFGHJKL");
+        } else {
+            res.json(couponResponse)
+        }
+    }
+}
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Remove Coupon                               */
+/* -------------------------------------------------------------------------- */
+
+const PostremoveCoupon = async (req, res) => {
+
+    let user = req.session.user._id
+    await adminhelper.removeCoupon(req.session.user._id).then(async (response) => {
+
+        response.totalAmount = await userhelper.getTotalAmount(user)
+
+        res.json(response)
+
+
     })
 }
 
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
-    changeproductquantity, vegetables, postcheckout, deleteCart,orderplaced,verifyPayment,orderProducts,
-    addressPage,postAddressAdd, getEditAddress,postEditAddress,addressdelete,PostCheckoutAddress,getCheckoutAddress,orderCancel
+    changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, PostremoveCoupon, PostapplyCoupon,
+    addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// try {
+//     couponCode = req.body.coupenCode;
+//     if (req.body.coupenCode == '') {
+//       res.json({ noCoupen: true });
+//     } else {
+//       sumOfCartProducts = await userhelper.getTotalAmount(
+//         user
+//       );
+//       if (500 < sumOfCartProducts) {
+//         console.log('req.body.coupenCode', req.body.coupenCode);
+//         coupenData = await adminhelper.applyCoupon(
+//           req.body.coupenCode,
+//           user
+//         );
+//         // console.log(user,"userrrrrrrrrrrrrrrrrrrr");
+//         if (coupenData.coupenExp) {
+//           res.json({ coupenExp: true });
+//         }
+//         if (coupenData.coupenUsed) {
+//           res.json({ coupenUsed: true });
+//         }
+//         if (coupenData.coupen) {
+//           console.log('coupenData', coupenData);
+//           console.log('sumOfCartProducts', sumOfCartProducts);
+//           DiscAmount = (coupenData.discount * sumOfCartProducts) / 100;
+//           totalDiscount = sumOfCartProducts - DiscAmount;
+//           coupenDis = {
+//             DiscAmount: DiscAmount,
+//             totalDiscount: totalDiscount,
+//             total: sumOfCartProducts,
+//           };
+//           console.log('coupenDis', coupenDis);
+//           res.json({ coupenDis });
+//         }
+//         if (coupenData.invalidCoupen) {
+//           res.json({ invalidCoupen: true });
+//         }
+//       } else {
+//         res.json({ lessAmount: true });
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.send('Oops');
+//   }
+// }

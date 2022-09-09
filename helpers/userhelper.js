@@ -332,6 +332,11 @@ module.exports = {
 
 
     },
+
+/* -------------------------------------------------------------------------- */
+/*                         change quantity of products                        */
+/* -------------------------------------------------------------------------- */
+
     changeProductQuantity: (details) => {
         details.count = parseInt(details.count)
         details.quantity = parseInt(details.quantity)
@@ -374,6 +379,10 @@ module.exports = {
         })
 
     },
+
+/* -------------------------------------------------------------------------- */
+/*                        total Amount of the Products                        */
+/* -------------------------------------------------------------------------- */
 
     getTotalAmount: (userId) => {
         console.log('userId');
@@ -441,6 +450,10 @@ module.exports = {
 
     },
 
+    /* -------------------------------------------------------------------------- */
+    /*                             checkout after Cart                            */
+    /* -------------------------------------------------------------------------- */
+
     placeOrder: (order, products, total) => {
         return new Promise((resolve, reject) => {
             // console.log(order,products,total);
@@ -457,13 +470,17 @@ module.exports = {
             }
 
             db.get().collection(collection.ORDERCOLLECTION).insertOne(orderObj).then((response) => {
-                db.get().collection(collection.CARTCOLLECTION).deleteOne({ user: objectId(order.userId) })
+                // db.get().collection(collection.CARTCOLLECTION).deleteOne({ user: objectId(order.userId) })
                 console.log(response);
                 resolve(response.insertedId)
             })
         })
 
     },
+
+    /* -------------------------------------------------------------------------- */
+    /*                              products in Cart                              */
+    /* -------------------------------------------------------------------------- */
 
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
@@ -760,6 +777,20 @@ module.exports = {
         )
     },
 
+    /* -------------------------------------------------------------------------- */
+    /*                                 Cart clear                                 */
+    /* -------------------------------------------------------------------------- */
+
+    cartClear: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderDelete = await db.get().collection(collection.CARTCOLLECTION).deleteOne({ user: objectId(userId) })
+            resolve(orderDelete)
+        })
+
+
+
+    },
+
 
 
     /* -------------------------------------------------------------------------- */
@@ -872,6 +903,11 @@ module.exports = {
                 },
                 {
                     $unwind:'$address'
+                },
+                {
+                    $project:{
+                        date: { $dateToString: { format: "%d-%m-%Y", date: "$date" } },totalAmount:1,products:1,paymentMethod:1,address:1,status:1
+                    }
                 }
             ]).toArray()
 
