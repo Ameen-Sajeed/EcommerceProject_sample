@@ -14,13 +14,13 @@
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
     <!-- Responsive and DataTables -->
-    <link href="/admin/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    {{!-- <link href="/admin/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="/admin/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="/admin/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> --}}
 
 
     <!-- Theme Css -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    {{!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> --}}
     <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="/admin/css/slidebars.min.css" rel="stylesheet">
     <link href="/admin/css/icons.css" rel="stylesheet">
@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="/stylesheets/stylePage.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://kit.fontawesome.com/dd7cba467d.js" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
 
 
 </head>
@@ -203,7 +205,7 @@
 
                                             </select>
                                         </div> --}}
-                                   <table id="example" class="display" style="width:100%">
+                                   <table id="example"  class="table  table-bordered" style="width:100%">
                                             <thead>
 
                                                 <tr>
@@ -283,32 +285,30 @@
     <script src="/admin/js/jquery.slimscroll.min.js"></script>
     <script src="/admin/js/slidebars.min.js"></script>
     {{!-- <script src="/javascripts/pagination.js"></script> --}}
-  
- 
 
 
 
 
     <!-- Responsive and datatable js -->
-    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    {{!-- <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script> --}}
+    {{!-- <script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/admin/plugins/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="/admin/plugins/datatables/dataTables.responsive.min.js"></script>
-    <script src="/admin/plugins/datatables/responsive.bootstrap4.min.js"></script>
+    <script src="/admin/plugins/datatables/responsive.bootstrap4.min.js"></script> --}}
 
     <!--app js-->
     <script src="/admin/js/jquery.app.js"></script>
+ 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
- 
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
  
 
 </body>
-
-     <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function () {
     $('#example').DataTable();
-});
-    </script>
+})
+</script>
 
 </html>

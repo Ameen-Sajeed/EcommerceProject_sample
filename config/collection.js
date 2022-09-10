@@ -13,5 +13,8 @@ module.exports={
 
     ADDRESSCOLLECTION:"address",
 
-    COUPENCOLLECTION:"coupen"
+    COUPENCOLLECTION:"coupen",
+
+    WISHLISTCOLLECTION:"Wishlist"
+
 }

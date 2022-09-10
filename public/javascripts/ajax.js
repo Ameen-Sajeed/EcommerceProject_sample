@@ -427,13 +427,13 @@ function removeCoupon(event) {
                 icon: "success",
                 button: "OK!",
             }).then(() => {
-                document.getElementById("discountPer").innerHTML = "0"
-                document.getElementById("discountAmount").innerHTML = "₹"+ '0'
-                document.getElementById('couponName').value = ""
+                document.getElementById('percentage').innerHTML=0
+                document.getElementById('discount').innerHTML=0
+                // document.getElementById('couponName').value = ""
                 document.getElementById("applybutton").hidden = false
                 document.getElementById("deletebutton").hidden = true
                 document.getElementById("error").innerHTML = ""
-                document.getElementById("totalAmount").innerHTML = response.totalAmount
+                document.getElementById('totall').innerHTML=response.totalAmount
             })
         })
 })
@@ -454,17 +454,27 @@ function removeCoupon(event) {
             },
             method: 'post',
             success: (response) =>{
+                console.log(response,"ghbkjldfs");
              if(response.verify){
 
                 document.getElementById('discount').innerHTML=response.discountAmount
                 document.getElementById('totall').innerHTML=response.amount
                 document.getElementById('percentage').innerHTML=response.couponData.value
-
+                document.getElementById('error').innerHTML = ''
+                document.getElementById("applybutton").hidden = true
+                document.getElementById("deletebutton").hidden = false
+                
+                
     
                }else{
+
+                
+                document.getElementById('discount').innerHTML=0
+                document.getElementById('totall').innerHTML=response.Total
+                document.getElementById('percentage').innerHTML=0
     
                 if(response.used){
-                    document.getElementById('error').innerHTML = response.user
+                    document.getElementById('error').innerHTML = response.used
                    }else if(response.minAmount){
                     document.getElementById('error').innerHTML = response.minAmountMsg
                    }else if(response.maxAmount){
@@ -483,6 +493,60 @@ function removeCoupon(event) {
     
     }
     
+/* -------------------------------------------------------------------------- */
+/*                               ADD TO WISHLIST                              */
+/* -------------------------------------------------------------------------- */
+
+
+function addToWishlist(proId){
+
+    $.ajax({
+        url:'/wishlist/add-to-wishlist/'+proId,
+        method:'get',
+        success:(response)=>{
+            if(response.status){
+                swal({
+                    title: "Product added to Wishlist!",
+                    text: "You have added to you Wishlist !",
+                    icon: "success",
+                    button: "OK!",
+                });            }
+        }
+    })
+
+}
+ /* -------------------------------------------------------------------------- */
+ /*                        REMOVE PRODUCT FROM WISHLIST                        */
+ /* -------------------------------------------------------------------------- */
+
+function removeFromWishlist(wishlistId,proId){
+    console.log(wishlistId,proId,'data');
+
+    swal({
+        title:"Remove Product!",
+        text:'Press Ok to confirm',
+        icon:'warning',
+        buttons: ["Cancel", "Ok"],
+       dangerMode:'Ok'
+    }).then(
+    function(isConfirm){
+        if(isConfirm){
+    $.ajax({
+        url:'/wishlist/remove-product',
+        data:{
+            wishlist:wishlistId,
+            product:proId
+        },
+        method:'post',
+        success:(response)=>{
+            location.reload()
+        }
+    })
+}else{
+    swal("Your product not removed");
+}
+    })
+}
 
 
 

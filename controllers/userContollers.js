@@ -18,18 +18,23 @@ const homepage = async (req, res) => {
     if (req.session.user) {
         cartcount = await userhelper.getCartCount(req.session.user._id)
     }
+    // let wish = await userhelper.getWishlistProducts(user._id)
     adminhelper.viewProducts().then((product) => {
         adminhelper.viewCategory().then((category) => {
             adminhelper.viewBanner().then((banner) => {
-                res.render('user/index', { product, category, user, cartcount, banner });
+                    res.render('user/index', { product, category, user, cartcount, banner });
+
+                    // console.log(wish,"xgfhjkl");
+
+                })
 
             })
         })
 
-    })
+    }
 
 
-}
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  get login                                 */
@@ -213,16 +218,21 @@ const postcheckout = async (req, res) => {
     let totalPrice = await userhelper.getTotalAmount(req.body.userId)
     console.log(products);
 
-    // let couponVerify = await adminhelper.couponVerify(req.session.user._id)
+    console.log(req.body,"8888888888888888888888888");
+
+    let couponVerify = await adminhelper.couponVerify(req.session.user._id)
     // console.log("*****************************");
     // console.log(couponVerify.couponDet.couponid, "coupon verify");
-    // if (couponVerify.couponDet.couponid == req.body.couponcode) {
+    if (couponVerify.code == req.body.couponcode ) {
 
         // console.log("call reached");
         // let totalAmount = (1 - couponVerify.couponDet.couponper / 100) * totalPrice
 
+        let discountAmount = (totalPrice * parseInt(couponVerify.value)) / 100
+        let amount = totalPrice - discountAmount
+        // let totalAmount = Math.round(discountAmount)
 
-        await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+        await userhelper.placeOrder(req.body, products, amount).then((orderId) => {
 
             if (req.body['payment-method'] === 'COD') {
                 res.json({ codSuccess: true })
@@ -246,34 +256,34 @@ const postcheckout = async (req, res) => {
         })
     
 
+    }
+    else {
 
-    // else {
+        await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
 
-    //     await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+            if (req.body['payment-method'] === 'COD') {
+                let resp = userhelper.cartClear(req.session.user._id)
+                res.json({ codSuccess: true })
 
-    //         if (req.body['payment-method'] === 'COD') {
-    //             let resp = userhelper.cartClear(req.session.user._id)
-    //             res.json({ codSuccess: true })
+            } else if (req.body['payment-method'] === 'RAZORPAY') {
+                userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
+                    response.razorPay = true;
+                    res.json(response)
+                })
+            }
 
-    //         } else if (req.body['payment-method'] === 'RAZORPAY') {
-    //             userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
-    //                 response.razorPay = true;
-    //                 res.json(response)
-    //             })
-    //         }
-
-    //         else if (req.body['payment-method'] === 'PAYPAL') {
-    //             console.log('vjhdbfjbfh');
-    //             userhelper.generatePayPal(orderId, totalPrice).then((response) => {
-    //                 response.payPal = true;
-    //                 res.json(response)
-    //             })
-    //         }
+            else if (req.body['payment-method'] === 'PAYPAL') {
+                console.log('vjhdbfjbfh');
+                userhelper.generatePayPal(orderId, totalPrice).then((response) => {
+                    response.payPal = true;
+                    res.json(response)
+                })
+            }
 
 
-    //     })
+        })
 
-    // }
+    }
 }
 
 
@@ -553,6 +563,9 @@ const PostapplyCoupon = async (req, res) => {
             res.json(couponResponse)
             console.log(couponResponse,"DFGHJKL");
         } else {
+            couponResponse.Total = req.body.total
+
+            console.log( couponResponse.Total);
             res.json(couponResponse)
         }
     }
@@ -581,11 +594,47 @@ const PostremoveCoupon = async (req, res) => {
     })
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                                get Wishlist                                */
+/* -------------------------------------------------------------------------- */
+
+
+const getWishList = async(req,res)=>{
+
+    let products = await userhelper.getWishlistProducts(user._id)
+    res.render('user/wishList',{products})
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             GET ADD TO WISHLIST                            */
+/* -------------------------------------------------------------------------- */
+
+const getAddtoWishList=(req,res)=>{
+    userhelper.addToWishlist(req.params.id,user._id).then((response)=>{
+        res.json(response)
+    })
+}
+/* -------------------------------------------------------------------------- */
+/*                          POST REMOVE FROM WISHLIST                         */
+/* -------------------------------------------------------------------------- */
+
+const postRemoveWishProducts =(req,res)=>{
+
+    userhelper.removeFromWishlist(req.body).then((response)=>{
+        res.json(response)
+    })
+}
+
+
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
     changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, PostremoveCoupon, PostapplyCoupon,
-    addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel
+    addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete,
+     PostCheckoutAddress, getCheckoutAddress, orderCancel,getWishList,getAddtoWishList,
+     postRemoveWishProducts
 }
 
 

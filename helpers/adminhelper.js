@@ -765,15 +765,18 @@ module.exports = {
         if(coupon){
           const expDate = new Date(coupon.endingdate)
             response.couponData=coupon
-            let user = await db.get().collection(collection.COUPENCOLLECTION).findOne({users: objectId(userId)})
+            let user = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code:details.coupon,Users: objectId(userId)})
                 if(user){
-                    response.used = 'Coupon Already Used'
+                    response.used = "Coupon Already Used"
                     resolve(response)
                 }else{
                     
                 if(date<=expDate){
-                    dateValid=true
-                    // resolve(response)
+
+                    response.dateValid=true
+                    // response.Coupenused = false
+
+                    resolve(response)
                     let total = details.total
                     // let total = 24000;
                     console.log(total,'total');
@@ -782,49 +785,67 @@ module.exports = {
                                 
                     if(total>=coupon.minAmount ){ 
                         console.log('amount heloooo');
-                        minAmount = true
-                        // resolve(response)
+                        response.verifyminAmount = true
+                        // response.Coupenused = false
+
+                        resolve(response)
+
+                        if(total<=coupon.maxAmount ){ 
+                          console.log('amountmax heloooo');
+                         response.verifymaxAmount = true
+                        //  response.Coupenused = false
+
+                          resolve(response)
+                      }else{
+                          response.maxAmountMsg = 'Your maximum purchase should be' +coupon.maxAmount
+                          response.maxAmount = true
+                          // console.log(response.maxAmount,'resmaxamount');
+                          resolve(response)
+                      }
+                        
                     }else{
                         response.minAmountMsg = 'Your minimum purchase should be' +coupon.minAmount
                         response.minAmount = true
                         resolve(response)
                     }
 
-                    if(total<=coupon.maxAmount ){ 
-                        console.log('amountmax heloooo');
-                        maxAmount = true
-                        // resolve(response)
-                    }else{
-                        response.maxAmountMsg = 'Your maximum purchase should be' +coupon.maxAmount
-                        response.maxAmount = true
-                        // console.log(response.maxAmount,'resmaxamount');
-                        resolve(response)
-                    }
+                 
+
+                    
                 }else{
                     response.invalidDateMsg = 'Coupon Expired'
                     response.invalidDate = true
+                    response.Coupenused = false
+
                     resolve(response)
                     console.log('invalid date');
                 }
 
-                if(dateValid && maxAmount && minAmount ){
-                    response.verify = true
-                    // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponId:details.coupon},
-                    //     {
-                    //         $push:{users:objectId(userId)}
-                    //     })
-
-                        
-
-                    resolve(response)
-                    console.log('hi heloo'); 
-                }
+              
         }
     }else{
         response.invalidCoupon = true
         response.invalidCouponMsg =' Invalid Coupon '
         resolve(response)
     }
+
+    if(response.dateValid && response.verifymaxAmount && response.verifyminAmount  ){
+      response.verify = true
+      // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponId:details.coupon},
+      //     {
+      //         $push:{users:objectId(userId)}
+      //     })
+
+          db.get().collection(collection.CARTCOLLECTION).updateOne({user: objectId(userId)},{
+
+            $set:{
+              coupon: objectId(coupon._id)
+            }
+          })
+
+      resolve(response)
+      console.log('hi heloo'); 
+  }
     })
   },
 
@@ -837,14 +858,26 @@ module.exports = {
 
     return new Promise(async (resolve, reject) => {
 
-      await db.get().collection(collection.CARTCOLLECTION).findOne({ user: objectId(user) }).then((response) => {
+     let userCart= await db.get().collection(collection.CARTCOLLECTION).findOne({ user: objectId(user) })
 
-        resolve(response)
+
+     if(userCart.coupon){
+
+      let coupenData = await db.get().collection(collection.COUPENCOLLECTION).findOne({_id: objectId(userCart.coupon)})
+
+      resolve(coupenData)
+      console.log(coupenData);
+
+
+     }
+
+
+        resolve(userCart)
         console.log("iiiiiiiiiiiiiiiiiiiiiiiii");
-        console.log(response);
+        console.log(userCart);
       })
-    })
-  },
+    },
+  
 
 
   removeCoupon: (user) => {
@@ -854,7 +887,7 @@ module.exports = {
 
         $unset: {
 
-          couponDet: ""
+          coupon: ""
         }
 
       }).then((response) => {
@@ -863,324 +896,16 @@ module.exports = {
       })
 
     })
-  }
+  },
 
 
-} 
+addProductOffer:(data)=>{
 
+  return new Promise(async(resolve,reject)=>{
 
+    let product = await db.get().collection(collection.PRODUCTCOLLECTION).find({_id:objectId(data.prodoffer)}).toArray()
 
+  })
+}
 
-
-
-
-
-
-
-
-
-
-
-/* -------------------------------------------------------------------------- */
-/*                             bbbbbbbbbbbbbbbbbbb                            */
-/* -------------------------------------------------------------------------- */
-
-
-
-  // applyCoupon:(data, user)=>{
-
-  //   let date = new Date()
-  //   let couponId = data.coupon
-  //   console.log("jhgads");
-  //   console.log(couponId);
-  //   return new Promise(async(resolve,reject)=>{
-
-  //     let checkCoupon = await db.get().collection(collection.COUPENCOLLECTION).findOne({ couponid: couponId
-
-  //     });
-
-
-  //     // Coupon Check
-
-  //     if(checkCoupon){
-  //       let couponDetails ={
-
-  //         couponid: checkCoupon.couponid,
-  //         couponname: checkCoupon.couponname,
-  //         couponper: checkCoupon.couponper,
-  //         capamount: checkCoupon.capamount,
-  //         Expdate: checkCoupon.Expdate
-  //       }
-
-        // let expdate = new Date(checkCoupon.Expdate)
-  //       let checkUsed = await db.get().collection(collection.USERCOLLECTION).findOne({coupon: objectId(checkCoupon._id)})
-  //       // let userId = checkCoupon.user.includes(user)
-  //       if(checkUsed){
-  //         response.state = false
-  //         response.checkCoupon = false
-  //         response.couponDate = false
-  //         response.couponUsed = true
-  //         resolve(response)
-  //         console.log("ggggggggggggggggggggg");
-  //         console.log(response);
-  //       }
-  //       else {
-  //         if (date <= expdate){
-
-  //           await db.get().collection(collection.USERCOLLECTION).updateOne({_id:objectId(user) },
-  //           {
-
-  //             $push: { coupon: objectId(checkCoupon._id) }
-  //           })
-  //           let cartInsert = await db.get().collection(collection.CARTCOLLECTION).updateOne({user: objectId(user)},
-  //           {
-  //             $set:{couponDet: couponDetails}
-  //           })
-  //            let cartDetails = await db.get().collection(collection.CARTCOLLECTION).findOne({user: objectId(user)})
-
-  //            console.log(cartDetails);
-  //            response.cartClear = cartDetails
-
-  //            response.checkCoupon = false
-  //            response.couponDate = false
-  //            response.couponUsed = false
-  //            response.state = true
-  //            resolve(response)
-  //            console.log("jhbsnkdfjwa");
-  //            console.log(response);
-
-  //         }
-  //         else{
-
-  //           response.checkCoupon = false
-  //           response.couponDate = true
-  //           response.couponUsed = false
-  //           response.state = false
-  //           resolve(response)
-
-  //         }
-  //       }
-  //     }
-
-  //         else {
-
-
-  //           response.checkCoupon = true
-  //           response.couponDate = false
-  //           response.couponUsed = false
-  //           response.state = false
-  //           resolve(response)
-
-
-  //         }
-
-
-
-
-
-  //   })
-  // },
-
-
-
-//   applyCoupon: (coupon, userId) => {
-//     return new Promise(async (resolve, reject) => {
-//         let today = new Date()
-        
-//         let coupData = await db.get().collection(collection.COUPENCOLLECTION)
-//             .findOne({code:coupon.coupon,status:true})
-
-           
-//         let response = {}   
-//         // console.log(coupData, "okiuxsgdcvvc");
-//         // console.log(coupData.endingdate,"varum");
-//         if (coupData) {
-//             let userused = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code: coupon.coupon, User: { $in: [objectId(userId)] } })
-//             if (userused) {
-//                 response.used = true;
-//                 resolve(response)
-//             } else {
-//                 console.log(today ,"yes",coupData.endingdate);
-//                 if (today <= coupData.endingdate) {
-//                     db.get().collection(collection.COUPENCOLLECTION).updateOne({ code: coupon.coupon }, {
-//                         $push: { User: objectId(userId) }
-//                     }).then((response) => {
-//                         db.get().collection(collection.CARTCOLLECTION).updateOne({ user: objectId(userId) },
-//                             { $set: { code: coupon.coupon } })
-//                         response.a = coupData
-//                         resolve(response)
-//                     })
-
-//                 } else {
-//                     response.dateErr = true
-//                     resolve(response)
-//                 }
-//             }
-//         } else {
-//             response.invalid = true
-//             resolve(response)
-//         }
-
-//     })
-// },
-
-
-//   applyCoupon: (coupon, userId) => {
-//     return new Promise(async (resolve, reject) => {
-//         let today = new Date()
-        
-//         let coupData = await db.get().collection(collection.COUPON_COLLECTION)
-//             .findOne({code:coupon.coupon,status:true})
-    
-//         let response = {}   
-//         // console.log(coupData, "okiuxsgdcvvc");
-//         // console.log(coupData.endingdate,"varum");
-//         if (coupData) {
-//             let userused = await db.get().collection(collection.COUPON_COLLECTION).findOne({ code: coupon.coupon, User: { $in: [ObjectID(userId)] } })
-//             if (userused) {
-//                 response.used = true;
-//                 resolve(response)
-//             } else {
-//                 console.log(today ,"yes",coupData.endingdate);
-//                 if (today <= coupData.endingdate) {
-//                     db.get().collection(collection.COUPON_COLLECTION).updateOne({ code: coupon.coupon }, {
-//                         $push: { User: ObjectID(userId) }
-//                     }).then((response) => {
-//                         db.get().collection(collection.CART_COLLECTION).updateOne({ user: ObjectID(userId) },
-//                             { $set: { code: coupon.coupon } })
-//                         response.a = coupData
-//                         resolve(response)
-//                     })
-
-//                 } else {
-//                     response.dateErr = true
-//                     resolve(response)
-//                 }
-//             }
-//         } else {
-//             response.invalid = true
-//             resolve(response)
-//         }
-
-//     })
-// }
-
-
-  // applyCoupon: (data, user) => {
-  //   let date = new Date()
-  //   let couponId = data.coupon
-  //   console.log(couponId)
-  //   //   let date = formatDate(new Date()) 
-  //   return new Promise(async (resolve, reject) => {
-
-  //     let checkCoupon = await db.get().collection(collection.COUPENCOLLECTION).findOne({ couponid: couponId })
-  //     console.log(checkCoupon)
-
-  //     let expdate = new Date(checkCoupon.enddate)
-  //     console.log(expdate)
-  //     if (checkCoupon) {
-
-  //       let checkUsed = await db.get().collection(collection.USERCOLLECTION).findOne({ coupon: objectId(checkCoupon._id) })
-  //       console.log(checkUsed)
-  //       if (checkUsed) {
-  //         response.state = false
-  //         response.checkCoupon = false
-  //         response.couponDate = false
-  //         response.couponUsed = true
-  //         resolve(response)
-  //         console.log("ggggggggggggggggggggg");
-  //         console.log(response);
-  //       } else {
-
-  //         if (date <= expdate) {
-  //           let couponUpdate = await db.get().collection(collection.USERCOLLECTION).updateOne({ _id: objectId(user) },
-  //             {
-
-  //               $push: {
-
-  //                 coupon: objectId(checkCoupon._id)
-  //               }
-  //             })
-  //           response.couponDate = false
-  //           response.couponUpdate = false
-  //           response.checkCoupon = false
-  //           response.state = true
-  //           resolve(response)
-  //           console.log(response, " ,,,,,,,,,,,,,,,,,,,,,,,,,,")
-
-
-  //         } else {
-
-  //           response.state = false
-  //           response.checkUsed = false
-  //           response.couponUpdate = false
-  //           response.checkCoupon = true
-
-  //           resolve(response)
-  //         }
-  //       }
-
-  //     } else {
-  //       response.checkUsed = false
-  //       response.couponUpdate = false
-  //       response.checkCoupon = true
-  //       resolve(response)
-  //     }
-
-  //   })
-
-
-  // },
-
-
-
-
-
-
-
-
-
-
-  // applyCoupon:(coupenCode, userId) => {
-
-  //   console.log("lllllllllllllllllllllll");
-  //   console.log(userId);
-
-  //   return new Promise(async (resolve, reject) => {
-  //     let coupen = await db
-  //       .get()
-  //       .collection(collection.COUPENCOLLECTION)
-  //       .findOne({
-  //         coupenName: coupenCode,
-  //       });
-
-  //     if (coupen) {
-  //       let User = coupen.User?.includes(userId);
-  //       let date = new Date();
-
-
-  //       // console.log("hhhhhhhhhhhhhhhh");
-
-  //       // console.log(User);
-
-  //       let expairyDate = new Date(coupen.Expdate);
-  //       if (date > expairyDate) {
-  //         resolve({ couponDate: true });
-  //       } else {
-  //         console.log('coupen', coupen);
-  //         console.log('userrrrrrrrrrrrrrrrr', User);
-  //         if (User) {
-  //           resolve({ coupenUsed: true });
-  //           console.log("********************");
-  //           console.log(resolve);
-  //         } else {
-  //           coupen.coupen = true;
-  //           resolve(coupen);
-  //         }
-  //       }
-  //     } else {
-  //       resolve({ invalidCoupen: true });
-  //     }
-  //   });
-  // },
-
+}

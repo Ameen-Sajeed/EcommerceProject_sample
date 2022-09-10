@@ -456,7 +456,7 @@ module.exports = {
 
     placeOrder: (order, products, total) => {
         return new Promise((resolve, reject) => {
-            // console.log(order,products,total);
+            console.log(order,"55555555555555555555555");
             let status = order['payment-method'] == 'COD' ? 'placed' : 'pending'
             let orderObj = {
                 deliveryDetails: objectId(order['payment-address']),
@@ -467,6 +467,20 @@ module.exports = {
                 totalAmount: total,
                 date: new Date(),
                 status: status
+            }
+
+            if(order.couponcode){
+
+                db.get().collection(collection.COUPENCOLLECTION).updateOne({code: order.couponcode},
+                {
+                    $push:{
+                        Users: objectId(order.userId)
+
+                        
+                    }
+                }
+                
+                )
             }
 
             db.get().collection(collection.ORDERCOLLECTION).insertOne(orderObj).then((response) => {
@@ -1054,6 +1068,102 @@ deleteAddress:(userId,Id)=>{
 },
 
 
+
+/* -------------------------------------------------------------------------- */
+/*                               Add to Wishlist                              */
+/* -------------------------------------------------------------------------- */
+
+
+
+addToWishlist:(proId,userId)=>{
+    return new Promise(async(resolve,reject)=>{
+      let  response={}
+        let userWishlist = await db.get().collection(collection.WISHLISTCOLLECTION).findOne({user:objectId(userId)})
+        if(userWishlist){
+            console.log(userWishlist.products,'yu');
+            let proExist = userWishlist.products.findIndex(product=> product == proId)
+            console.log(proExist,'poexy');
+            if(proExist != -1){
+                response.status=false
+                resolve(response)
+            }else{
+                db.get().collection(collection.WISHLISTCOLLECTION).updateOne({user:objectId(userId)},
+                {
+                    $push:{products:objectId(proId)}
+                }).then((response)=>{
+                    response.status=true
+                    resolve(response)
+                })
+            }
+        }else{
+            let wishlistObj = {
+                user:objectId(userId),
+                products:[objectId(proId)],
+                state: true
+            }
+            db.get().collection(collection.WISHLISTCOLLECTION).insertOne(wishlistObj).then((response)=>{
+                response.status=true
+                resolve(response)
+            })
+        }
+    })
+},
+
+
+
+/* -------------------------- GET WISHLIST PRODUCTS ------------------------- */
+
+getWishlistProducts:(userId)=>{
+
+    return new Promise(async(resolve,reject)=>{
+      let products = await  db.get().collection(collection.WISHLISTCOLLECTION).aggregate([
+            {
+                $match:{user: objectId(userId)}
+            },
+            {
+                $unwind:'$products'
+            },
+            {
+                $lookup:{
+                    from:collection.PRODUCTCOLLECTION,
+                    localField:'products',
+                    foreignField:'_id',
+                    as:'product'
+                }
+            },
+            {
+                
+                    $project:{
+                        
+                        product:{$arrayElemAt:['$product',0]}
+                    }
+                
+            }
+        ]).toArray()
+        resolve(products)
+    })
+
+},
+
+
+
+/* ---------------------- REMOVE PRODUCT FROM WISHLIST ---------------------- */
+
+
+
+removeFromWishlist:(details)=>{
+    console.log(details,'dtls');
+return new Promise((resolve,reject)=>{
+
+    db.get().collection(collection.WISHLISTCOLLECTION).updateOne({_id:objectId(details.wishlist)},
+    {
+        $pull:{products: objectId(details.product)}
+    }).then((response)=>{
+        console.log(response,'hi');
+        resolve(response)
+    })
+})
+},
 
 
 
