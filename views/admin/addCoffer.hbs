@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,6 +14,9 @@
     <link rel="shortcut icon" href="/Admin/images/favicon.ico">
 
     <!-- Theme Css -->
+    <link type="text/css" href="@@path/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="/Admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="/Admin/css/slidebars.min.css" rel="stylesheet">
@@ -22,10 +25,12 @@
     <link href="/Admin/css/style.css" rel="stylesheet">
 </head>
 
+
+
 <body class="sticky-header">
     <section>
         <!-- sidebar left start-->
-      <div class="sidebar-left  md-6">
+        <div class="sidebar-left  md-6">
             <div class="sidebar-left-info">
 
                 <div class="user-box">
@@ -90,128 +95,125 @@
         </div><!-- sidebar left end-->
 
         <!-- body content start-->
-        <div class="body-content">
+        <div class="body-content ">
             <!-- header section start-->
-          <div class="header-section">
+            <div class="header-section">
                 <!--logo and logo icon start-->
-                
-                <div class="logo bg-light">
+                <div class="logo bg-dark">
                     <a href="index.html">
-                        <span class="logo-img" style="padding-bottom: 50px;">
-                            <img src="/User/images/logo/looo-removebg-preview.png" style="padding-bottom: 14px";
-                                alt="" height="100px">
+                        <span class="logo-img">
+                            {{!-- <img src="/Admin/images/c8192ec97097433bac582406af5cb088__1_-removebg-preview.png"
+                                alt="" --}} {{!-- height="66"> --}}
                         </span>
-                      
                         <!--<i class="fa fa-maxcdn"></i>-->
-                     {{!-- <h3> <span class="brand-name" style="font-family: cursive;">Harvest </span>  </h1>    --}}
+                        <span class="brand-name">Harvest</span>
                     </a>
                 </div>
 
                 <!--toggle button start-->
-                {{!-- <a class="toggle-btn"><i class="ti ti-menu"></i></a> --}}
+                <a class="toggle-btn"><i class="ti ti-menu"></i></a>
                 <!--toggle button end-->
 
-                {{!-- <!--mega menu start-->
+                <!--mega menu start-->
                 <div id="navbar-collapse-1" class="navbar-collapse collapse mega-menu">
-                    <ul class="nav navbar-nav">
-                        <!-- Classic dropdown -->
-                    
-                        <!-- Classic list -->
-                        <li>
-                            <form class="search-content" action="index.html" method="post">
-                                <input type="text" class="form-control mt-3" name="keyword" placeholder="Search...">
-                                <span class="search-button"><i class="ti ti-search"></i></span>
-                            </form>
-                        </li>
-                    </ul>
-                </div> --}}
-                <!--mega menu end-->
 
-              
+                </div>
+
             </div>
             <!-- header section end-->
 
             <div class="container-fluid">
                 <div class="page-head">
-                    <h4 class="my-2">Add a Category</h4>
-                    <form class="form-horizontal " method="post" action="/admin-category">
+                    <h4 class="my-2">CATEGORY OFFER</h4>
+                    <form class="form-horizontal " method="post" action="/admin-addCatOffer">
+                        
                         <fieldset>
 
                             <!-- Form Name -->
                             <!-- <legend>PRODUCTS</legend> -->
 
                             <!-- Text input-->
-
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_description">CATEGORY NAME</label>
+                                <label class="col-md-4 control-label" name="product" for="product_id">OFFER ID</label>
                                 <div class="col-md-4">
-                                    <textarea class="form-control" id="product_description" name="category" required=""></textarea>
-                                </div>
+                                    <input id="product_id" name="categoryofferid" placeholder="COUPON ID"
+                                        class="form-control input-md" required="" type="text">
 
+                                </div>
                             </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="product_name">OFFER NAME</label>
+                                <div class="col-md-4">
+                                    <input id="product_name" name="categoryoffername" placeholder="COUPON NAME"
+                                        class="form-control input-md" required="" type="text">
+
+                                </div>
+                            </div>
+
+                                           <div class="form-group">
+                                <label class="col-md-4 control-label" for="product_name">OFFER PERCENTAGE</label>
+                                <div class="col-md-4">
+                                    <input id="product_name" name="categoryofferper" placeholder="COUPON NAME"
+                                        class="form-control input-md" required="" type="number">
+
+                                </div>
+                            </div>
+
+                           
+
+
+      
+
+                             <!-- Textarea -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="product_description">PRODUCTS
+                                    </label>
+                                <div class="col-md-4">
+                                   <select name="category" id="">
+                                {{#each data}}
+                                   <option value="{{this._id}}" nam="category">{{this.category}}</option>
+                                                                   {{/each}}
+</select>
+                                </div>
+                            </div>
+
+                         
 
                             <!-- Button -->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="singlebutton">Add Category</label>
+                                <label class="col-md-4 control-label" for="singlebutton">Add offer</label>
                                 <div class="col-md-4">
-                                    <button id="singlebutton" type="submit"
-                                        class="btn btn-dark btn-rounded" >Add</button>
+                                    <button id="submit" class="btn btn-dark btn-rounded">Add
+                                        Coupon</button>
                                 </div>
                             </div>
 
+                        </fieldset>
                     </form>
-                    <div class="container-fluid">
-                        <div class="page-head">
-                            <h4 class="my-2">Category Details </h4>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-12">
-                                <div class="card m-b-30">
-                                    <div class="card-body">
-                                        <h5 class="header-title1">Manage Your Categories Here </h5>
-                                        {{!-- <p>Use contextual classes to color table rows or individual cells. </p> --}}
-                                        <div class="table-responsive-sm">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">No:</th>
-                                                        <th scope="col">Category Name</th>
-                                                        <th scope="col">Delete Category</th>
-                                                    </tr>
-                                                </thead>
-                                                {{#each category}}
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{ inc @index}}</td>
-                                                        <td>{{this.category}}</td>
-                                                        <td>
-                                                            <a href="/admin-deletecategory/{{this._id}}"
-                                                                class="btn btn-dark btn-rounded">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                {{/each}}
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end row-->
-
-                    </div>
-                    <!--end container-->
 
                 </div>
 
             </div>
-            <!--end container-->
+
+            <!--end Right Slidebar-->
         </div>
         <!--end body content-->
     </section>
 
-    <!-- jQuery -->
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="/Admin/js/jquery-3.2.1.min.js"></script>
@@ -223,8 +225,11 @@
     <script src="/Admin/js/slidebars.min.js"></script>
 
 
+
     <!--app js-->
     <script src="/Admin/js/jquery.app.js"></script>
 </body>
 
-</html>
+</html> 
+
+

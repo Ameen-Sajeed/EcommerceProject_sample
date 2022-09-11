@@ -1,7 +1,7 @@
 var db = require('../config/connection')
 var collection = require('../config/collection')
 var bcrypt = require('bcrypt')
-const { ObjectId } = require('mongodb')
+const { ObjectId, Collection } = require('mongodb')
 const { response } = require('express')
 var objectId = require('mongodb').ObjectId
 var includes = require('includes')
@@ -71,18 +71,61 @@ module.exports = {
     })
   },
 
+/* -------------------------------------------------------------------------- */
+/*                    View Products after Category Setting                    */
+/* -------------------------------------------------------------------------- */
 
+
+
+ViewProduct:()=>{
+
+  return new Promise(async(resolve,reject)=>{
+  
+   let categoryName = await db.get().collection(collection.PRODUCTCOLLECTION).aggregate([
+
+    {
+      $lookup:{
+
+        from:collection.CATEGORYCOLLECTION,
+        localField:'category',
+        foreignField:'_id',
+        as:'category'
+      }
+    },
+    {
+      $project:{
+        category:{$arrayElemAt:['$category',0]},
+        name:1,
+        image:1,
+        price:1,
+        description:1,
+
+
+      }
+    }
+   ]).toArray()
+
+   console.log(categoryName,"2222222222222");
+   resolve(categoryName)
+
+    })
+  
+},
 
   /* -------------------------------------------------------------------------- */
   /*                                 Add Product                                */
   /* -------------------------------------------------------------------------- */
 
   addproduct: (productData) => {
-    console.log(productData);
+    // console.log(productData);
     return new Promise(async (resolve, reject) => {
-      let data = await db.get().collection(collection.PRODUCTCOLLECTION).insertOne(productData)
-      resolve(data)
-      // console.log(data)
+      productData.category = objectId(productData.category)
+      await db.get().collection(collection.PRODUCTCOLLECTION).insertOne(productData).then((data)=>{
+        console.log(data,"777777777777777777777")
+
+        resolve(data)
+      })
+
     })
   },
 
@@ -160,9 +203,22 @@ module.exports = {
 
   addcategory: (categoryData) => {
     return new Promise(async (resolve, reject) => {
-      let data = await db.get().collection(collection.CATEGORYCOLLECTION).insertOne(categoryData)
-      resolve(data)
-      console.log(data)
+
+      let cat = await db.get().collection(collection.CATEGORYCOLLECTION).findOne({ category: categoryData.category })
+      if (cat) {
+        response.status = false
+        resolve(response)
+      } else {
+
+      
+       await db.get().collection(collection.CATEGORYCOLLECTION).insertOne(categoryData).then((response)=>{
+       
+        response.status = true
+        resolve(response)
+        console.log(response)
+      })
+    }
+
     })
   },
   /* -------------------------------------------------------------------------- */
@@ -1081,6 +1137,109 @@ module.exports = {
       let product = await db.get().collection(collection.PRODUCTCOLLECTION).find({ _id: objectId(data.prodoffer) }).toArray()
 
     })
-  }
+  },
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                             ADD CATEGORY OFFER                             */
+/* -------------------------------------------------------------------------- */
+
+
+categoryOffer:(data)=>{
+return new Promise(async(resolve,reject)=>{
+
+  await db.get().collection(collection.CATEGORYOFFERCOLLECTION).insertOne(data).then((response)=>{
+
+    resolve(response)
+    console.log(response,"_________________");
+  })
+})
+
+},
+
+/* -------------------------------------------------------------------------- */
+/*                             VIEW CATEGORY OFFER                            */
+/* -------------------------------------------------------------------------- */
+
+viewCategoryOffer:()=>{
+  return new Promise(async(resolve,reject)=>{
+
+await db.get().collection(collection.CATEGORYOFFERCOLLECTION).find().toArray().then((response)=>{
+
+  resolve(response)
+  console.log(response,".......................");
+})
+
+  })
+},
+
+/* -------------------------------------------------------------------------- */
+/*                       FIND PRODUCT FOR CATEGORY OFFER                      */
+/* -------------------------------------------------------------------------- */
+
+
+ViewcatOffProduct:(catId)=>{
+
+  return new Promise (async(resolve,reject)=>{
+   
+    await db.get().collection(collection.PRODUCTCOLLECTION).find({category:objectId(catId)}).toArray().then(async(response)=>{
+
+
+      for(i=0;i<response.length;i++){
+        let price = response[i].ogAmount
+
+
+      await db.get().collection(collection.PRODUCTCOLLECTION).updateOne({category:objectId(catId)},
+      {
+          
+         $set:{  
+
+          price:price
+         }
+         
+        },
+         {
+
+          $unset:{
+           offper:"",
+           ogAmount:"",
+           catOfferid:""
+
+          }
+         }
+
+      )
+
+      }
+      
+
+
+
+    })
+
+    resolve(response)
+    console.log(response,"7777777777777777777777");
+  
+})
+
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                            DELETE CATEGORY OFFER                           */
+/* -------------------------------------------------------------------------- */
+
+deleteCategoryOffer:(catId)=>{
+  return new Promise(async(resolve,reject)=>{
+
+    await db.get().collection(collection.CATEGORYOFFERCOLLECTION).deleteOne({_id:objectId(catId)}).then((response)=>{
+
+
+      resolve(response)
+    })
+  })
+}
 
 }

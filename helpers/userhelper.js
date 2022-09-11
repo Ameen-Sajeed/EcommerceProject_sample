@@ -127,12 +127,43 @@ module.exports = {
 
     Viewproductdetail: (proId) => {
         return new Promise(async (resolve, reject) => {
-            let data = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({ _id: objectId(proId) })
-            // console.log(data)
-            resolve(data)
+            let data = await db.get().collection(collection.PRODUCTCOLLECTION).aggregate([
 
-        })
-    },
+
+                {
+                    $match:{ _id: objectId(proId) }
+
+                },
+
+                {
+                  $lookup:{
+            
+                    from:collection.CATEGORYCOLLECTION,
+                    localField:'category',
+                    foreignField:'_id',
+                    as:'category'
+                  }
+                },
+                {
+                  $project:{
+                    category:{$arrayElemAt:['$category',0]},
+                    name:1,
+                    image:1,
+                    price:1,
+                    description:1,
+            
+            
+                  }
+                }
+               ]).toArray()
+            
+               console.log(data,"2222222222222");
+               resolve(data)
+            
+                })
+
+        },
+    
 
     /* -------------------------------------------------------------------------- */
     /*                                Generate OTP                                */

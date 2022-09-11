@@ -19,7 +19,7 @@ const homepage = async (req, res) => {
         cartcount = await userhelper.getCartCount(req.session.user._id)
     }
     // let wish = await userhelper.getWishlistProducts(user._id)
-    adminhelper.viewProducts().then((product) => {
+    adminhelper.ViewProduct().then((product) => {
         adminhelper.viewCategory().then((category) => {
             adminhelper.viewBanner().then((banner) => {
                     res.render('user/index', { product, category, user, cartcount, banner });
@@ -122,8 +122,12 @@ const postSignup = (req, res, next) => {
 const getproductsDetails = (req, res, next) => {
     let proId = req.params.id
     console.log(proId)
-    userhelper.Viewproductdetail(req.params.id).then((data) => {
-        res.render('user/productDetails', data)
+    userhelper.Viewproductdetail(proId).then((data) => {
+
+        console.log(data,"gfhjkl;");
+        res.render('user/productDetails', {data})
+
+
     })
 
 }

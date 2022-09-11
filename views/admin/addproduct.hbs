@@ -79,9 +79,8 @@
                          <ul class="child-list">
                                 <li><a href="/admin-addcoupen">Add Coupons</a></li>
                                 <li><a href="/admin-viewcoupen">View Coupons</a></li> 
-                                <li><a href="form-advanced.html">Add Category Offer</a></li>
-                                <li><a href="form-wizard.html">View Category Offers</a></li>
-                                 <li><a href="form-advanced.html">Add Product Offer</a></li>
+                              <li><a href="/admin-addCatOffer">Add Category Offer</a></li>
+                                <li><a href="/admin-ViewCatoffer">View Category Offers</a></li>                                 <li><a href="form-advanced.html">Add Product Offer</a></li>
                                 <li><a href="form-wizard.html">View Product Offers</a></li>
                               
                             </ul> 
@@ -145,16 +144,21 @@
                         enctype="multipart/form-data">
                         <fieldset>
 
-                            <!-- Form Name -->
-                            <!-- <legend>PRODUCTS</legend> -->
+                         
 
-                            <!-- Text input-->
+                                 <!-- Select Basic -->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" name="product" for="product_id">PRODUCT ID</label>
+                                <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
                                 <div class="col-md-4">
-                                    <input id="product_id" name="index" placeholder="PRODUCT ID"
-                                        class="form-control input-md" required="" type="text">
-
+                                    <select id="product_categorie" name="category" class="form-control">
+                                        {{#each category}}
+                                        <option name="category" value="{{this._id}}">{{this.category}}</option>
+                                        {{!-- <option value="Fruits">Fruits</option>
+                                        <option value="Diary-Products">Diary-Products</option>
+                                        <option value="Poultry&fish">Poultry&Fish</option>
+                                        <option value="Organic Products">Organic Products</option> --}}
+                                        {{/each}}
+                                    </select>
                                 </div>
                             </div>
 
@@ -169,23 +173,9 @@
                             </div>
 
 
-                            <!-- Select Basic -->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
-                                <div class="col-md-4">
-                                    <select id="product_categorie" name="category" class="form-control">
-                                        {{#each category}}
-                                        <option selected>{{this.name}}</option>
-                                        {{!-- <option value="Fruits">Fruits</option>
-                                        <option value="Diary-Products">Diary-Products</option>
-                                        <option value="Poultry&fish">Poultry&Fish</option>
-                                        <option value="Organic Products">Organic Products</option> --}}
-                                        {{/each}}
-                                    </select>
-                                </div>
-                            </div>
+                       
 
-                            <!-- Text input-->
+                            {{!-- <!-- Text input-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="available_quantity">INVENTORY</label>
                                 <div class="col-md-4">
@@ -193,9 +183,9 @@
                                         class="form-control input-md" required="" type="number">
 
                                 </div>
-                            </div>
+                            </div> --}}
 
-                              <!-- Text input-->
+                              {{!-- <!-- Text input-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="available_quantity">PRODUCT OFFER %</label>
                                 <div class="col-md-4">
@@ -203,7 +193,7 @@
                                         class="form-control input-md" required="" type="number">
 
                                 </div>
-                            </div>
+                            </div> --}}
 
                             
 
@@ -249,7 +239,7 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="singlebutton">Add Product</label>
                                 <div class="col-md-4">
-                                    <button id="submit" name="singlebutton" onclick="fireSweetAlert()"
+                                    <button id="submit" type="submit"
                                         class="btn btn-dark btn-rounded">Add
                                         Product</button>
                                 </div>

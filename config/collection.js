@@ -15,6 +15,8 @@ module.exports={
 
     COUPENCOLLECTION:"coupen",
 
-    WISHLISTCOLLECTION:"Wishlist"
+    WISHLISTCOLLECTION:"Wishlist",
+
+    CATEGORYOFFERCOLLECTION:"Categoryoffer"
 
 }

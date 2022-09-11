@@ -202,6 +202,7 @@
         <div class="product-details-area pb-100 pt-100">
             <div class="container">
                 <div class="row">
+                    {{#each data}}
                     <div class="col-lg-6">
                         <div class="product-details-img-wrap" data-aos="fade-up" data-aos-delay="200">
                             <div class="swiper-container product-details-big-img-slider-2 pd-big-img-style">
@@ -352,7 +353,7 @@
 
                                     <li><span class="title">Category:</span>
                                         <ul>
-                                            <li><a href="#">{{this.category}}</a></li>
+                                            <li><a href="#">{{this.category.category}}</a></li>
                                             <li><a href="#"></a></li>
                                         </ul>
                                     </li>
@@ -369,8 +370,10 @@
                         </div>
                     </div>
                 </div>
+                {{/each }}
             </div>
         </div>
+      
         <div class="description-review-area pb-85">
             <div class="container">
                 <div class="description-review-topbar nav" data-aos="fade-up" data-aos-delay="200">
@@ -381,7 +384,7 @@
                 <div class="tab-content">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-content text-center">
-                            <p data-aos="fade-up" data-aos-delay="200">{{this.description}} </p>
+                           {{#each data}} <p data-aos="fade-up" data-aos-delay="200">{{this.description}} </p>{{/each}}
                             <p data-aos="fade-up" data-aos-delay="400"></p>
                         </div>
                     </div>

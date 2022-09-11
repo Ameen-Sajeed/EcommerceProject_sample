@@ -73,9 +73,8 @@
                          <ul class="child-list">
                                 <li><a href="/admin-addcoupen">Add Coupons</a></li>
                                 <li><a href="/admin-viewcoupen">View Coupons</a></li> 
-                                <li><a href="form-advanced.html">Add Category Offer</a></li>
-                                <li><a href="form-wizard.html">View Category Offers</a></li>
-                                 <li><a href="form-advanced.html">Add Product Offer</a></li>
+                              <li><a href="/admin-addCatOffer">Add Category Offer</a></li>
+                                <li><a href="/admin-ViewCatoffer">View Category Offers</a></li>                                 <li><a href="form-advanced.html">Add Product Offer</a></li>
                                 <li><a href="form-wizard.html">View Product Offers</a></li>
                               
                             </ul> 
@@ -148,29 +147,25 @@
                                         <table class="table" id="my-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Product-ID</th>
+                                                    <th>S-no</th>
                                                     <th>Image</th>
                                                     <th>Productname</th>
                                                     <th>Category </th>
-                                                    <th>Inventory</th>
                                                     <th>Price</th>
-                                                    <th>Product Offer %</th>
                                                     <th>Description</th>
                                                     <th>Action </th>
 
                                                 </tr>
                                             </thead>
-                                            {{#each product}}
+                                            {{#each data}}
                                             <tbody>
                                                 <tr>
                                                     <td>{{ inc @index}}</td>
                                                     <td><img style="width:110px;height:130px"
                                                             src="/Admin/images/{{this.image.[0]}}" alt="pic"></td>
                                                     <td>{{this.name}}</td>
-                                                    <td>{{this.category}}</td>
-                                                    <td>{{this.inventory}}</td>
+                                                    <td>{{this.category.category}}</td>
                                                     <td>{{this.price}}</td>
-                                                    <td>{{this.prodoffer}}</td>
                                                     <td class="d-inline-block text-truncate" style="max-width: 150px;">{{this.description}}</td>
                                                     {{!-- <td>
                                                         <a href="/admin-deleteProduct/{{this._id}}"

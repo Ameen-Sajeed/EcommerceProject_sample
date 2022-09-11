@@ -149,9 +149,9 @@ const unblockUsers = (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const getproducts = (req, res) => {
-    adminhelper.viewProducts().then((product) => {
+    adminhelper.ViewProduct().then((data) => {
         // console.log(product)
-        res.render('admin/product', { product })
+        res.render('admin/product', { data })
     })
 }
 
@@ -163,7 +163,7 @@ const getproducts = (req, res) => {
 const getaddproducts = (req, res) => {
 
     adminhelper.viewCategory().then((category) => {
-        res.render('admin/addproduct', { category: category })
+        res.render('admin/addproduct', { category: category})
     })
 
 
@@ -179,15 +179,15 @@ const postaddproducts = (req, res) => {
         return file.filename
     })
     req.body.image = filename
-    adminhelper.addproduct(req.body).then((response) => {
-        if (response.status) {
-            res.redirect('/admin-addproduct')
-        } else {
-            // res.send('product added')
+    adminhelper.addproduct(req.body).then((data) => {
+        // if (response.status) {
             res.redirect('/admin-products')
+        // } else {
+        //     // res.send('product added')
+        //     res.redirect('/admin-products')
 
 
-        }
+        
 
     })
 }
@@ -260,9 +260,19 @@ const getCategory = (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const postCategory = (req, res) => {
-    adminhelper.addcategory(req.body).then((data) => {
-        console.log(data)
-        res.redirect('/admin-category')
+    adminhelper.addcategory(req.body).then((response) => {
+        console.log(response)
+        if(response.status){
+            res.redirect('/admin-category')
+
+
+        }
+        else{
+
+            req.session.catmsg = "Category Already Exist"
+            // res.redirect('/admin-category')
+            res.send("Category exists.....")
+        }
     })
 
 
@@ -530,6 +540,80 @@ const postAddCoupon = (req,res)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                           GET ADD CATEGORY OFFER                           */
+/* -------------------------------------------------------------------------- */
+
+const addCategoryOffer = (req,res)=>{
+
+    adminhelper.viewCategory().then((data)=>{
+        res.render('admin/addCoffer',{data})
+
+    
+    // res.send("jhakj")
+    })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           POST ADD CATEGORY OFFER                          */
+/* -------------------------------------------------------------------------- */
+
+const postAddcatOffer = async(req,res)=>{
+
+    console.log(req.body,"category det");
+
+
+    let catOff = await adminhelper.viewCategoryOffer(req.body)
+ 
+     console.log(catOff.insertedId)
+      let prodData = await adminhelper.ViewcatOffProduct(req.body,catOff.insertedId)
+      
+      console.log(prodData,"proddata")
+      console.log(catOff,"catoff")
+       
+      let prodprice=0
+      for(i=0;i<prodData.length;i++){
+      prodprice[i] =  (1- req.body.categoryofferper/100)*parseInt(prodData[i].price)
+       
+      }
+ 
+      res.redirect('/admin-ViewCatoffer')
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                           GET VIEW CATEGORY OFFER                          */
+/* -------------------------------------------------------------------------- */
+
+const ViewCategoryOffer = (req,res)=>{
+
+    adminhelper.viewCategoryOffer().then((data)=>{
+
+        res.render('admin/ViewCatoffer',{data})
+
+    })
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                            DELETE CATEGORY OFFER                           */
+/* -------------------------------------------------------------------------- */
+
+
+const delCategoryOffer = async(req,res)=>{
+
+    catOffId = req.params.id
+
+    let catOffData = await adminhelper.viewCategoryOffer(catOffId)
+
+    adminhelper.ViewcatOffProduct(catOffData.category).then(async(response)=>{
+
+        let deleteCatOFF = await adminhelper.deleteCategoryOffer(catOffId)
+
+        res.json(response)
+    })
+}
 
 
 module.exports = {
@@ -538,5 +622,7 @@ module.exports = {
     blockUsers, unblockUsers, deleteProducts, viewCategory, deletecategorys,
     getupdateproduct, postupdateproduct, postaddproducts, getBanner, addBanner,
      postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales,orderCanceladmin,orderDeliveradmin,
-     orderShipadmin,getCoupens,getAddCoupen,postAddCoupon
+     orderShipadmin,getCoupens,getAddCoupen,
+     postAddCoupon,
+     addCategoryOffer,ViewCategoryOffer,delCategoryOffer,postAddcatOffer
 };
