@@ -457,9 +457,9 @@ function removeCoupon(event) {
                 console.log(response,"ghbkjldfs");
              if(response.verify){
 
-                document.getElementById('discount').innerHTML=response.discountAmount
-                document.getElementById('totall').innerHTML=response.amount
-                document.getElementById('percentage').innerHTML=response.couponData.value
+                document.getElementById('discount').innerHTML="₹"+response.discountAmount
+                document.getElementById('totall').innerHTML= "₹"+response.amount
+                document.getElementById('percentage').innerHTML=response.couponData.value+'%'
                 document.getElementById('error').innerHTML = ''
                 document.getElementById("applybutton").hidden = true
                 document.getElementById("deletebutton").hidden = false
@@ -469,9 +469,9 @@ function removeCoupon(event) {
                }else{
 
                 
-                document.getElementById('discount').innerHTML=0
-                document.getElementById('totall').innerHTML=response.Total
-                document.getElementById('percentage').innerHTML=0
+                document.getElementById('discount').innerHTML= "₹" +0
+                document.getElementById('totall').innerHTML= "₹"+response.Total
+                document.getElementById('percentage').innerHTML= 0 + "%"
     
                 if(response.used){
                     document.getElementById('error').innerHTML = response.used

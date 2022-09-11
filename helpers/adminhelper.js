@@ -397,6 +397,68 @@ module.exports = {
   },
 
 
+  /* -------------------------------------------------------------------------- */
+  /*                             order status graph                             */
+  /* -------------------------------------------------------------------------- */
+
+  piechartData: () => {
+
+    return new Promise(async (resolve, reject) => {
+
+      let order = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+
+        {
+          $group: {
+            _id: "$status",
+            count: {
+              $sum: 1
+            }
+          }
+        },
+    
+      ]).toArray()
+      console.log(order,"**********************")
+      resolve(order)
+    })
+
+  },
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                           bar charts for paymenst                          */
+  /* -------------------------------------------------------------------------- */
+
+  barchartData: () => {
+
+    return new Promise(async (resolve, reject) => {
+
+      let order = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+
+      {
+        $match:{
+          "status": { $nin: ['Cancelled','pending'] }
+
+        }
+      },{
+        $group:{
+          _id:'$paymentMethod',
+          totalAmount:{
+            $sum:"$totalAmount"
+          }
+        }
+      }
+
+      ]).toArray()
+      console.log(order,"99999999999999999999999999")
+      resolve(order)
+    })
+
+  },
+
+
+/* -------------------------------------------------------------------------- */
+/*                            line Charts of sales                            */
+/* -------------------------------------------------------------------------- */
 
   yearlyChart: () => {
     return new Promise(async (resolve, reject) => {
@@ -443,13 +505,13 @@ module.exports = {
 
 
   /* -------------------------------------------------------------------------- */
-  /*                               get Daily Sales                              */
+  /*                               get Total Sales for dashboard                */
   /* -------------------------------------------------------------------------- */
 
 
 
 
-  getDailySales: (day) => {
+  getDailySales: () => {
     return new Promise(async (resolve, reject) => {
 
       let dailysales = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
@@ -460,23 +522,131 @@ module.exports = {
         },
         {
           $project: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: '$date' } }, _id: 1
+            date: { $dateToString: { format: "%Y-%m-%d", date: '$date' } }, _id: 1,totalAmount:1
+          }
+        },
+
+        {
+          $group: {
+            _id: "$date",
+            totalAmount: {
+              $sum: "$totalAmount"
+            }
           }
         },
         {
-          $match: {
-            date: day
-          }
-        }, {
-          $count: 'date'
+          $sort:{_id:1}
         }
+       
+        // {
+        //   $count: 'date'
+        // }
 
       ]).toArray()
       resolve(dailysales)
-      console.log(",akjs");
-      console.log(dailysales);
+      // console.log(",**************");
+      // console.log(dailysales);
     })
   },
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                       get total orders for dashboard                       */
+  /* -------------------------------------------------------------------------- */
+
+  getDailyOrders: () => {
+    return new Promise(async (resolve, reject) => {
+
+      let dailyorders = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+        {
+          $match: {
+            "status": { $nin: ['cancelled'] }
+          }
+        },
+        {
+          $project: {
+            torders: { $dateToString: { format: "%Y-%m-%d", date: '$date' } }, _id: 1
+          }
+        },
+
+      
+       
+        {
+          $count: 'torders'
+        }
+
+      ]).toArray()
+      resolve(dailyorders)
+      // console.log(",**************");
+      // console.log(dailyorders);
+    })
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                        get total users for dashboard                       */
+  /* -------------------------------------------------------------------------- */
+
+  getTotalUsers: () => {
+    return new Promise(async (resolve, reject) => {
+
+      let TotalUsers = await db.get().collection(collection.USERCOLLECTION).aggregate([
+        {
+          $match: {
+            "state": { $nin: [false] }
+          }
+        },
+        {
+          $project: {
+            user: { _id: 1  } 
+          }
+        },
+
+      
+       
+        {
+          $count: 'user'
+        }
+
+      ]).toArray()
+      resolve(TotalUsers)
+      // console.log(",**************");
+      // console.log(TotalUsers);
+    })
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                     get total block users for dashboard                    */
+  /* -------------------------------------------------------------------------- */
+
+  getTotalInactiveUsers: () => {
+    return new Promise(async (resolve, reject) => {
+
+      let TotalInactiveUsers = await db.get().collection(collection.USERCOLLECTION).aggregate([
+        {
+          $match: {
+            "state": { $nin: [true] }
+          }
+        },
+        {
+          $project: {
+            user: { _id: 1  } 
+          }
+        },
+
+      
+       
+        {
+          $count: 'user'
+        }
+
+      ]).toArray()
+      resolve(TotalInactiveUsers)
+      console.log(",**************");
+      console.log(TotalInactiveUsers);
+    })
+  },
+
+
 
 
   /* -------------------------------------------------------------------------- */
@@ -536,7 +706,7 @@ module.exports = {
         }
       ]).toArray()
       resolve(dailysales)
-      console.log(",akjs");
+      console.log(",akjs***********");
       console.log(dailysales);
     })
   },
@@ -710,25 +880,25 @@ module.exports = {
 
   addCoupon: (couponDetails) => {
     return new Promise(async (resolve, reject) => {
-        // couponDetails.endingdate = new Date(couponDetails.endingdate)
-        // console.log(couponDetails, "iahaka");
-        let response = {}
-        let couponExist = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code: couponDetails.code })
+      // couponDetails.endingdate = new Date(couponDetails.endingdate)
+      // console.log(couponDetails, "iahaka");
+      let response = {}
+      let couponExist = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code: couponDetails.code })
 
-        if (couponExist) {
-            response.status = true
-            response.message = "Coupon With this Code Already Exist"
-            resolve(response)
-        } else {
-            await db.get().collection(collection.COUPENCOLLECTION).insertOne({ name: couponDetails.name, code: couponDetails.code, endingdate: couponDetails.endingdate, value: couponDetails.value, minAmount:couponDetails.minAmount,maxAmount:couponDetails.maxAmount, status: true }).then((response) => {
-                response.message = 'Coupon Added successfully'
-                response.status = false
-                resolve(response)
-            })
-        }
+      if (couponExist) {
+        response.status = true
+        response.message = "Coupon With this Code Already Exist"
+        resolve(response)
+      } else {
+        await db.get().collection(collection.COUPENCOLLECTION).insertOne({ name: couponDetails.name, code: couponDetails.code, endingdate: couponDetails.endingdate, value: couponDetails.value, minAmount: couponDetails.minAmount, maxAmount: couponDetails.maxAmount, status: true }).then((response) => {
+          response.message = 'Coupon Added successfully'
+          response.status = false
+          resolve(response)
+        })
+      }
 
     })
-},
+  },
 
 
 
@@ -753,103 +923,106 @@ module.exports = {
   /* -------------------------------------------------------------------------- */
 
 
-  applyCoupon:(details,userId,date)=>{
-    return new Promise(async(resolve,reject)=>{
-        let response={}
-        // let coupon = await db.get().collection(collection.COUPON_COLLECTION).findOne({couponId:details.coupon})
-        let coupon = await db.get().collection(collection.COUPENCOLLECTION).findOne({code:details.coupon, status: true})
-        console.log(coupon,'couponpre');
-        // console.log(expDate);
-        // console.log(coupon.status);
+  applyCoupon: (details, userId, date) => {
+    return new Promise(async (resolve, reject) => {
+      let response = {}
+      // let coupon = await db.get().collection(collection.COUPON_COLLECTION).findOne({couponId:details.coupon})
+      let coupon = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code: details.coupon, status: true })
+      console.log(coupon, 'couponpre');
+      // console.log(expDate);
+      // console.log(coupon.status);
 
-        if(coupon){
-          const expDate = new Date(coupon.endingdate)
-            response.couponData=coupon
-            let user = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code:details.coupon,Users: objectId(userId)})
-                if(user){
-                    response.used = "Coupon Already Used"
-                    resolve(response)
-                }else{
-                    
-                if(date<=expDate){
+      if (coupon) {
+        const expDate = new Date(coupon.endingdate)
+        response.couponData = coupon
+        let user = await db.get().collection(collection.COUPENCOLLECTION).findOne({ code: details.coupon, Users: objectId(userId) })
+        if (user) {
+          response.used = "Coupon Already Used"
+          resolve(response)
+        } else {
 
-                    response.dateValid=true
-                    // response.Coupenused = false
+          if (date <= expDate) {
 
-                    resolve(response)
-                    let total = details.total
-                    // let total = 24000;
-                    console.log(total,'total');
-                    console.log(coupon.minAmount,'kkkkmin');
-                    console.log(coupon.maxAmount,'kkkkkmax');
-                                
-                    if(total>=coupon.minAmount ){ 
-                        console.log('amount heloooo');
-                        response.verifyminAmount = true
-                        // response.Coupenused = false
+            response.dateValid = true
+            // response.Coupenused = false
 
-                        resolve(response)
+            resolve(response)
+            let total = details.total
+            // let total = 24000;
+            console.log(total, 'total');
+            console.log(coupon.minAmount, 'kkkkmin');
+            console.log(coupon.maxAmount, 'kkkkkmax');
 
-                        if(total<=coupon.maxAmount ){ 
-                          console.log('amountmax heloooo');
-                         response.verifymaxAmount = true
-                        //  response.Coupenused = false
+            if (total >= coupon.minAmount) {
+              console.log('amount heloooo');
+              response.verifyminAmount = true
+              // response.Coupenused = false
 
-                          resolve(response)
-                      }else{
-                          response.maxAmountMsg = 'Your maximum purchase should be' +coupon.maxAmount
-                          response.maxAmount = true
-                          // console.log(response.maxAmount,'resmaxamount');
-                          resolve(response)
-                      }
-                        
-                    }else{
-                        response.minAmountMsg = 'Your minimum purchase should be' +coupon.minAmount
-                        response.minAmount = true
-                        resolve(response)
-                    }
+              resolve(response)
 
-                 
+              if (total <= coupon.maxAmount) {
+                console.log('amountmax heloooo');
+                response.verifymaxAmount = true
+                //  response.Coupenused = false
 
-                    
-                }else{
-                    response.invalidDateMsg = 'Coupon Expired'
-                    response.invalidDate = true
-                    response.Coupenused = false
+                resolve(response)
+              } else {
+                response.maxAmountMsg = 'Your maximum purchase should be' + coupon.maxAmount
+                response.maxAmount = true
+                // console.log(response.maxAmount,'resmaxamount');
+                resolve(response)
+              }
 
-                    resolve(response)
-                    console.log('invalid date');
-                }
-
-              
-        }
-    }else{
-        response.invalidCoupon = true
-        response.invalidCouponMsg =' Invalid Coupon '
-        resolve(response)
-    }
-
-    if(response.dateValid && response.verifymaxAmount && response.verifyminAmount  ){
-      response.verify = true
-      // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponId:details.coupon},
-      //     {
-      //         $push:{users:objectId(userId)}
-      //     })
-
-          db.get().collection(collection.CARTCOLLECTION).updateOne({user: objectId(userId)},{
-
-            $set:{
-              coupon: objectId(coupon._id)
+            } else {
+              response.minAmountMsg = 'Your minimum purchase should be' + coupon.minAmount
+              response.minAmount = true
+              resolve(response)
             }
-          })
 
-      resolve(response)
-      console.log('hi heloo'); 
-  }
+
+
+
+          } else {
+            response.invalidDateMsg = 'Coupon Expired'
+            response.invalidDate = true
+            response.Coupenused = false
+
+            resolve(response)
+            console.log('invalid date');
+          }
+
+
+        }
+      } else {
+        response.invalidCoupon = true
+        response.invalidCouponMsg = ' Invalid Coupon '
+        resolve(response)
+      }
+
+      if (response.dateValid && response.verifymaxAmount && response.verifyminAmount) {
+        response.verify = true
+        // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponId:details.coupon},
+        //     {
+        //         $push:{users:objectId(userId)}
+        //     })
+
+        db.get().collection(collection.CARTCOLLECTION).updateOne({ user: objectId(userId) }, {
+
+          $set: {
+            coupon: objectId(coupon._id)
+          }
+        })
+
+        resolve(response)
+        console.log('hi heloo');
+      }
     })
   },
 
 
+  /* -------------------------------------------------------------------------- */
+  /*                              Verifying Coupon                              */
+  /* -------------------------------------------------------------------------- */
 
   couponVerify: (user) => {
     console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
@@ -858,27 +1031,29 @@ module.exports = {
 
     return new Promise(async (resolve, reject) => {
 
-     let userCart= await db.get().collection(collection.CARTCOLLECTION).findOne({ user: objectId(user) })
+      let userCart = await db.get().collection(collection.CARTCOLLECTION).findOne({ user: objectId(user) })
 
 
-     if(userCart.coupon){
+      if (userCart.coupon) {
 
-      let coupenData = await db.get().collection(collection.COUPENCOLLECTION).findOne({_id: objectId(userCart.coupon)})
+        let coupenData = await db.get().collection(collection.COUPENCOLLECTION).findOne({ _id: objectId(userCart.coupon) })
 
-      resolve(coupenData)
-      console.log(coupenData);
-
-
-     }
+        resolve(coupenData)
+        console.log(coupenData);
 
 
-        resolve(userCart)
-        console.log("iiiiiiiiiiiiiiiiiiiiiiiii");
-        console.log(userCart);
-      })
-    },
-  
+      }
 
+
+      resolve(userCart)
+      console.log("iiiiiiiiiiiiiiiiiiiiiiiii");
+      console.log(userCart);
+    })
+  },
+
+/* -------------------------------------------------------------------------- */
+/*                                Remove Coupon                               */
+/* -------------------------------------------------------------------------- */
 
   removeCoupon: (user) => {
 
@@ -899,13 +1074,13 @@ module.exports = {
   },
 
 
-addProductOffer:(data)=>{
+  addProductOffer: (data) => {
 
-  return new Promise(async(resolve,reject)=>{
+    return new Promise(async (resolve, reject) => {
 
-    let product = await db.get().collection(collection.PRODUCTCOLLECTION).find({_id:objectId(data.prodoffer)}).toArray()
+      let product = await db.get().collection(collection.PRODUCTCOLLECTION).find({ _id: objectId(data.prodoffer) }).toArray()
 
-  })
-}
+    })
+  }
 
 }

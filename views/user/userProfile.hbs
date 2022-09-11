@@ -30,6 +30,7 @@
 
     <!-- All CSS is here
 	============================================ -->
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/user/css/vendor/bootstrap.min.css" />
     <link rel="stylesheet" href="/user/css/vendor/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="/user/css/vendor/themify-icons.css" />
@@ -45,7 +46,44 @@
     <link rel="stylesheet" href="/user/css/plugins/slinky.css" />
     <link rel="stylesheet" href="/user/css/style.css" />
 </head>
+<style>
+    .card {
+        width: 250px;
+        padding: 10px;
+        border-radius: 20px;
+        background: #ff8929;
+        border: none;
+        color: rgb(255, 255, 255);
+        height: 250px;
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center
+    }
 
+
+
+    .card h1 {
+        font-size: 28px;
+        margin-bottom: 0px
+    }
+
+    .card span {
+        font-size: 18px
+    }
+
+    .image {
+        position: absolute;
+        left: 0;
+        top: 0
+    }
+
+    .image2 {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+</style>
 
 
 
@@ -269,8 +307,8 @@
                                             <a href="#dashboad" data-bs-toggle="tab">Dashboard</a>
                                             <a href="#orders" class="active" data-bs-toggle="tab">Orders</a>
                                             <a href="#download" data-bs-toggle="tab">Address</a>
-                                            {{!-- <a href="#payment-method" data-bs-toggle="tab">Payment Method</a>
-                                            <a href="#address-edit" data-bs-toggle="tab">Address</a>
+                                            <a href="#payment-method" data-bs-toggle="tab">Coupons</a>
+                                            {{!-- <a href="#address-edit" data-bs-toggle="tab">Address</a>
                                             <a href="#account-info" data-bs-toggle="tab">Account Details</a> --}}
                                             <a href="login-register.html">Logout</a>
                                         </div>
@@ -320,14 +358,16 @@
                                                                     <td>{{this.address.name}}</td>
                                                                     <td class="d-inline-block text-truncate"
                                                                         style="max-width: 150px;">{{this.date}}</td>
-                                                                    <td><span id="{{this._id}}">{{this.status}}</span></td>
+                                                                    <td><span id="{{this._id}}">{{this.status}}</span>
+                                                                    </td>
                                                                     <td>{{this.totalAmount}}</td>
                                                                     <td>{{this.paymentMethod}}</td>
                                                                     <td><a href="/viewOrderProducts/{{this._id}}"
                                                                             class="check-btn sqr-btn ">View</a></td>
-                                                                            <td>
-                                                                                <button class="btn-sm  btn-danger" onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
-                                                                            </td>
+                                                                    <td>
+                                                                        <button class="btn-sm  btn-danger"
+                                                                            onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
+                                                                    </td>
                                                                 </tr>
                                                                 {{/each}}
 
@@ -363,11 +403,13 @@
                                                                         {{this.number}} <br>
                                                                     </td>
                                                                     <td><a href="/edit-address/{{this.id}}"
-                                                                     class="check-btn sqr-btn"><i class="fa fa-edit"> </i> Edit 
-                                                                                </a> <br><br>
+                                                                            class="check-btn sqr-btn"><i
+                                                                                class="fa fa-edit"> </i> Edit
+                                                                        </a> <br><br>
                                                                         {{!-- <a href="/delete-address/{{this.id}}"
                                                                             class="view"> --}}
-                                                                            <button type="button" class="btn btn-outline-danger"
+                                                                            <button type="button"
+                                                                                class="btn btn-outline-danger"
                                                                                 onclick="deleteAddress('{{this.id}}')">
                                                                                 delete</button></td>
                                                                 </tr>
@@ -386,13 +428,43 @@
 
                                             <!-- Single Tab Content End -->
                                             <!-- Single Tab Content Start -->
-                                            {{!-- <div class="tab-pane fade" id="payment-method" role="tabpanel">
+                                            <div class="tab-pane fade" id="payment-method" role="tabpanel">
                                                 <div class="myaccount-content">
-                                                    <h3>Payment Method</h3>
-                                                    <p class="saved-message">You Can't Saved Your Payment Method yet.
-                                                    </p>
+                                                    <h3>Available Coupons</h3>
+
+                                                
+
+                                                    <div class="d-flex  container gap-3">
+                                                            {{#each coupon}}
+
+                                                        <div class="d-flex card text-center">
+                                                            <div class="image"><img
+                                                                    src="/User/images/logo/sale_6172022_2_02-removebg-preview.png" width="90">
+                                                            </div>
+                                                            <div class="image2">
+                                                            </div>
+                                                            <h1 class="text-white">{{this.value}}% <span>off</span></h1> <p class="text-white"><span>On all products</span></p>
+                                                          <span class="d-block">{{this.name}}
+                                                                </span>
+                                                            <div class="mn"><small>With Code :
+                                                                    <span>  <b> <p class="text-white" id="p1">{{this.code}}</p></b></span> </small>
+                                                                <center>
+                                                                    <button class="btn-sm  btn-outline-dark" onclick="copyToClipboard('#p1','{{this._id}}')">Copy Coupon Code
+                                                                        </button>
+            
+
+
+                                                                </center>
+                                                            </div>
+                                                        </div>
+
+                                                         {{/each}}
+                                                    </div>
+                                                  
+                                                   
+
                                                 </div>
-                                            </div> --}}
+                                            </div>
                                             <!-- Single Tab Content End -->
                                             <!-- Single Tab Content Start -->
                                             {{!-- <div class="tab-pane fade" id="address-edit" role="tabpanel">
@@ -682,10 +754,23 @@
     <script src="/user/js/plugins/easyzoom.js"></script>
     <script src="/user/js/plugins/slinky.min.js"></script>
     <script src="/user/js/plugins/ajax-mail.js"></script>
-     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <!-- Main JS -->
     <script src="/user/js/main.js"></script>
 </body>
+<script>
+    function copyToClipboard(element,Id) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+
+</script>
 
 </html>
+
+   

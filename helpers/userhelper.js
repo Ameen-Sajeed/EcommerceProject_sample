@@ -919,10 +919,17 @@ module.exports = {
                     $unwind:'$address'
                 },
                 {
+                    $sort: {
+                        date:-1
+
+                }
+            },
+                {
                     $project:{
                         date: { $dateToString: { format: "%d-%m-%Y", date: "$date" } },totalAmount:1,products:1,paymentMethod:1,address:1,status:1
                     }
-                }
+                },
+              
             ]).toArray()
 
             console.log("bdcbhdsa");

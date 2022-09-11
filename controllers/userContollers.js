@@ -345,7 +345,10 @@ const postconfirmOtp = (req, res) => {
 const getProfile = async (req, res) => {
     let orders = await userhelper.getUserOrders(req.session.user._id)
     let details = await userhelper.viewAddress(req.session.user._id)
-    res.render('user/userProfile', { orders, user, details })
+    let Id=req.params.id
+    let coupon = await adminhelper.viewCoupens(Id)
+    console.log(coupon,"55555555555555555");
+    res.render('user/userProfile', { orders, user, details , coupon})
 
 }
 

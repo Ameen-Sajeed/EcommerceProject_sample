@@ -69,8 +69,32 @@ const admindashboard = async (req, res) => {
     let year = await adminhelper.yearlyChart()
 
 
+    
 
-res.render('admin/Admin-dashboard',{data,year})
+    let dailysales = await adminhelper.getDailySales()
+    let dailyorders = await adminhelper.getDailyOrders()
+    
+    let TotalUsers = await adminhelper.getTotalUsers()
+    let TotalInactiveUsers = await adminhelper.getTotalInactiveUsers()
+    
+    let status = await adminhelper.piechartData()
+
+    let payment = await adminhelper.barchartData()
+
+
+  let sum=0
+  for(var i=0;i<dailysales.length;i++){
+    sum=sum+dailysales[i].totalAmount
+  }
+  
+console.log(sum,"mmmmmmmmmmmmmmmmm");
+
+let sumFinal= Math.round(sum)
+console.log(sumFinal);
+    
+
+
+res.render('admin/Admin-dashboard',{data,year,dailysales,sumFinal,dailyorders,TotalUsers,TotalInactiveUsers,status,payment})
 
  }   
 
@@ -474,11 +498,18 @@ const getCoupens = (req, res) => {
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                               GET ADD COUPON                               */
+/* -------------------------------------------------------------------------- */
+
 const getAddCoupen = (req,res)=>{
 
     res.render('admin/addCoupens')
 }
 
+/* -------------------------------------------------------------------------- */
+/*                               POST ADD COUPON                              */
+/* -------------------------------------------------------------------------- */
 
 const postAddCoupon = (req,res)=>{
 
