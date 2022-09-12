@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -61,7 +61,7 @@
                             <span>Products</span></a>
                         <ul class="child-list">
                             <li><a href="/admin-addproducts"> Add a Product </a></li>
-                            <li><a href="/admin-products"> View Products</a></li> 
+                            <li><a href="/admin-products"> View Products</a></li>
                         </ul>
                     </li>
                     <li class="menu-list"><a href="javascript:;"><i class="mdi mdi-table"></i> <span>Banner</span></a>
@@ -124,8 +124,8 @@
 
             <div class="container-fluid">
                 <div class="page-head">
-                    <h4 class="my-2">Add a Coupon</h4>
-                    <form class="form-horizontal " method="post" action="/admin-addcoupen">
+                    <h4 class="my-2">PRODUCT OFFER</h4>
+                    <form class="form-horizontal " method="post" action="/admin-addProdOffer">
                         
                         <fieldset>
 
@@ -134,9 +134,9 @@
 
                             <!-- Text input-->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" name="product" for="product_id">COUPON ID</label>
+                                <label class="col-md-4 control-label" name="product" for="product_id">OFFER ID</label>
                                 <div class="col-md-4">
-                                    <input id="product_id" name="code" placeholder="COUPON ID"
+                                    <input id="product_id" name="productofferid" placeholder="COUPON ID"
                                         class="form-control input-md" required="" type="text">
 
                                 </div>
@@ -144,51 +144,38 @@
 
                             <!-- Text input-->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_name">COUPON NAME</label>
+                                <label class="col-md-4 control-label" for="product_name">OFFER NAME</label>
                                 <div class="col-md-4">
-                                    <input id="product_name" name="name" placeholder="COUPON NAME"
+                                    <input id="product_name" name="productoffername" placeholder="COUPON NAME"
                                         class="form-control input-md" required="" type="text">
 
                                 </div>
                             </div>
 
                                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_name">MAX AMOUNT</label>
+                                <label class="col-md-4 control-label" for="product_name">OFFER PERCENTAGE</label>
                                 <div class="col-md-4">
-                                    <input id="product_name" name="maxAmount" placeholder="COUPON NAME"
+                                    <input id="product_name" name="categoryofferper" placeholder="COUPON NAME"
                                         class="form-control input-md" required="" type="number">
 
                                 </div>
                             </div>
 
-                                           <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_name">MIN AMOUNT</label>
-                                <div class="col-md-4">
-                                    <input id="product_name" name="minAmount" placeholder="COUPON NAME"
-                                        class="form-control input-md" required="" type="number">
-
-                                </div>
-                            </div>
+                           
 
 
-
-                            <!-- Text input-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="available_quantity">EXPIRY DATE</label>
-                                <div class="col-md-4">
-                                    <input id="available_quantity" name="endingdate" class="form-control input-md"
-                                        required="" type="date">
-
-                                </div>
-                            </div>
+      
 
                              <!-- Textarea -->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="product_description">COUPON
-                                    PERCENTAGE</label>
+                                <label class="col-md-4 control-label" for="product_description">PRODUCTS
+                                    </label>
                                 <div class="col-md-4">
-                                    <input class="form-control" id="description" name="value"
-                                        required="" type="number">
+                                   <select name="category" id="">
+                                {{#each data}}
+                                   <option value="{{this._id}}" nam="category">{{this.name}}</option>
+                                                                   {{/each}}
+                                </select>
                                 </div>
                             </div>
 
@@ -196,10 +183,10 @@
 
                             <!-- Button -->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="singlebutton">Add Coupon</label>
+                                <label class="col-md-4 control-label" for="singlebutton">Add offer</label>
                                 <div class="col-md-4">
-                                    <button id="submit" class="btn btn-dark btn-rounded">Add
-                                        Coupon</button>
+                                    <button id="submit" type="submit" class="btn btn-dark btn-rounded">Add
+                                        Offer</button>
                                 </div>
                             </div>
 
@@ -243,4 +230,6 @@
     <script src="/Admin/js/jquery.app.js"></script>
 </body>
 
-</html>
+</html> 
+
+

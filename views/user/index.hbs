@@ -465,7 +465,7 @@
 
                                         </a>
                                         <div class="product-badge badge-top badge-right badge-pink">
-                                            <span>-10%</span>
+                                            <span>-{{this.offerPercentage}}%</span>
                                         </div>
                                         <div class="product-action-wrap">
                                             <button class="product-action-btn-1" title="Wishlist" id="wishlistbtn" onclick="addToWishlist('{{this._id}}')"><i
@@ -484,7 +484,7 @@
                                     <div class="product-content">
                                         <h3><a href="product-details.html">{{this.name}}</a></h3>
                                         <div class="product-price">
-                                            <span class="old-price">₹225.89</span>
+                                            <span class="old-price">₹{{this.originalPrice}}</span>
                                             <span class="new-price">₹{{this.price}}</span>
                                         </div>
                                     </div>

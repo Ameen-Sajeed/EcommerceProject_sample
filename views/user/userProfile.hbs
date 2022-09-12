@@ -443,17 +443,22 @@
                                                             </div>
                                                             <div class="image2">
                                                             </div>
-                                                            <h1 class="text-white">{{this.value}}% <span>off</span></h1> <p class="text-white"><span>On all products</span></p>
+                                                            <h1 class="text-white">{{this.value}}% <span>off</span></h1> <p class="text-white"></p>
                                                           <span class="d-block">{{this.name}}
                                                                 </span>
                                                                 <p>Valid till: {{this.endingdate}}</p>
                                                             <div class="mn"><small>With Code :
-                                                                    <span>  <b> <p class="text-white" id="p1">{{this.code}}</p></b></span> </small>
+                                                                    <span>  <b> <p class="text-white" id='p1{{this._id}}'>{{this.code}}</p></b></span> </small>
+
+                                                                    {{!-- <input type="text" value="{{this.code}}" id="token"hidden> --}}
                                                                 <center>
-                                                                    <button class="btn-sm  btn-outline-dark" onclick="copyToClipboard('#p1','{{this._id}}')">Copy Coupon Code
+                                                                    {{!-- {{#if data}} --}}
+                                                                    {{!-- <p>Already used</p> --}}
+                                                                    {{!-- {{else}} --}}
+                                                                    <button class="btn-sm  btn-outline-dark" onclick=" copyToClipboard('#p1{{this._id}}')">Copy Coupon Code
                                                                         </button>
             
-
+                                                                      {{!-- {{/if}} --}}
 
                                                                 </center>
                                                             </div>
@@ -771,6 +776,23 @@
     }
 
 </script>
+
+{{!-- <script>
+    
+let copybtn = document.querySelector(".copybtn");
+
+
+function copyIt(){
+
+  let copyInput = document.querySelector('#copyvalue');
+
+  copyInput.select();
+
+  document.execCommand("copy");
+
+  copybtn.textContent = "COPIED";
+}
+</script> --}}
 
 </html>
 

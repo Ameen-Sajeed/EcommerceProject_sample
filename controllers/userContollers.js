@@ -227,7 +227,8 @@ const postcheckout = async (req, res) => {
     let couponVerify = await adminhelper.couponVerify(req.session.user._id)
     // console.log("*****************************");
     // console.log(couponVerify.couponDet.couponid, "coupon verify");
-    if (couponVerify.code == req.body.couponcode ) {
+    console.log("logging req - body", req.body);
+    if (couponVerify.code == req.body.couponcode ) { 
 
         // console.log("call reached");
         // let totalAmount = (1 - couponVerify.couponDet.couponper / 100) * totalPrice
@@ -243,7 +244,7 @@ const postcheckout = async (req, res) => {
 
             } else if (req.body['payment-method'] === 'RAZORPAY') {
                 userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
-                    response.razorPay = true;
+                    response.razorPay = true;  
                     res.json(response)
                 })
             }
@@ -351,10 +352,23 @@ const getProfile = async (req, res) => {
     let details = await userhelper.viewAddress(req.session.user._id)
     let Id=req.params.id
     let coupon = await adminhelper.viewCoupens(Id)
-    console.log(coupon,"55555555555555555");
-    res.render('user/userProfile', { orders, user, details , coupon})
 
-}
+    // let data = await adminhelper.displayCoupon(req.session.user._id)
+
+        // if(response.status){
+            
+        //     data.state = true
+        // }
+
+        // console.log(data,"hhhhhhhhhhhhhhhhhh");
+        // console.log(coupon,"55555555555555555");
+        res.render('user/userProfile', { orders, user, details , coupon})
+    }
+
+    
+   
+
+
 
 
 
@@ -644,65 +658,3 @@ module.exports = {
      postRemoveWishProducts
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// try {
-//     couponCode = req.body.coupenCode;
-//     if (req.body.coupenCode == '') {
-//       res.json({ noCoupen: true });
-//     } else {
-//       sumOfCartProducts = await userhelper.getTotalAmount(
-//         user
-//       );
-//       if (500 < sumOfCartProducts) {
-//         console.log('req.body.coupenCode', req.body.coupenCode);
-//         coupenData = await adminhelper.applyCoupon(
-//           req.body.coupenCode,
-//           user
-//         );
-//         // console.log(user,"userrrrrrrrrrrrrrrrrrrr");
-//         if (coupenData.coupenExp) {
-//           res.json({ coupenExp: true });
-//         }
-//         if (coupenData.coupenUsed) {
-//           res.json({ coupenUsed: true });
-//         }
-//         if (coupenData.coupen) {
-//           console.log('coupenData', coupenData);
-//           console.log('sumOfCartProducts', sumOfCartProducts);
-//           DiscAmount = (coupenData.discount * sumOfCartProducts) / 100;
-//           totalDiscount = sumOfCartProducts - DiscAmount;
-//           coupenDis = {
-//             DiscAmount: DiscAmount,
-//             totalDiscount: totalDiscount,
-//             total: sumOfCartProducts,
-//           };
-//           console.log('coupenDis', coupenDis);
-//           res.json({ coupenDis });
-//         }
-//         if (coupenData.invalidCoupen) {
-//           res.json({ invalidCoupen: true });
-//         }
-//       } else {
-//         res.json({ lessAmount: true });
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.send('Oops');
-//   }
-// }

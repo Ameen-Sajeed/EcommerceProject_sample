@@ -560,24 +560,30 @@ const addCategoryOffer = (req,res)=>{
 
 const postAddcatOffer = async(req,res)=>{
 
-    console.log(req.body,"category det");
+    // console.log(req.body,"vvvvvvvvvvvvvvvvvv");
+
+    let offer = req.body.categoryofferper
+
+    if(req.body.category !=""){
+
+        
+    let products = await adminhelper.ViewcatOffProduct(req.body.category)
+
+    // console.log(offer,"ghjkl;");
+//    console.log(products,"66666666666");
+
+   for(var i=0;i<products.length;i++){
+
+    newprice = Math.round((products[i].price)*((100-offer)/100))
+    addoffer = await adminhelper.updateOffer(products[i]._id,newprice,offer)
 
 
-    let catOff = await adminhelper.viewCategoryOffer(req.body)
- 
-     console.log(catOff.insertedId)
-      let prodData = await adminhelper.ViewcatOffProduct(req.body,catOff.insertedId)
-      
-      console.log(prodData,"proddata")
-      console.log(catOff,"catoff")
-       
-      let prodprice=0
-      for(i=0;i<prodData.length;i++){
-      prodprice[i] =  (1- req.body.categoryofferper/100)*parseInt(prodData[i].price)
-       
-      }
- 
-      res.redirect('/admin-ViewCatoffer')
+   }
+
+    }
+
+    res.redirect('back')
+
 }
 
 
@@ -616,6 +622,38 @@ const delCategoryOffer = async(req,res)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                            GET ADD PRODUCT OFFER                           */
+/* -------------------------------------------------------------------------- */
+
+
+const addProdOffer =(req,res)=>{
+
+    adminhelper.ViewProduct().then((data)=>{
+  
+        res.render('admin/addProdOffer',{data})
+
+
+    })
+
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            POST ADDPRODUCT OFFER                           */
+/* -------------------------------------------------------------------------- */
+
+
+const postAddProdOffer =(req,res)=>{
+
+
+
+console.log(req.body,"gfffffffffffffffff");
+ 
+res.redirect('back')
+
+}
+
+
 module.exports = {
     admindashboard, getproducts, getUsers,
     getLogin, getaddproducts, postLogin, getlogout, getCategory, postCategory,
@@ -624,5 +662,6 @@ module.exports = {
      postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales,orderCanceladmin,orderDeliveradmin,
      orderShipadmin,getCoupens,getAddCoupen,
      postAddCoupon,
-     addCategoryOffer,ViewCategoryOffer,delCategoryOffer,postAddcatOffer
+     addCategoryOffer,ViewCategoryOffer,delCategoryOffer,
+     postAddcatOffer,addProdOffer,postAddProdOffer
 };
