@@ -369,12 +369,17 @@
                                                                     <td>
 
                                                                         {{#if_eq this.status "cancelled"}}
-                                                                        <p>Order Cancelled</p>
+                                                                        <p>Cancelled</p>
                                                                         {{else}}
                                                                         <button class="btn-sm  btn-danger"
                                                                             onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
                                                                            {{/if_eq}}
-                                                                         
+                                                                       {{#if_eq this.status "Delivered"}}
+
+                                                                               <button class="btn-sm  btn-info"
+                                                                            onclick="">Return</button>
+                                                                                           {{/if_eq}}
+  
                                                                     </td>
                                                                 </tr>
                                                                 {{/each}}

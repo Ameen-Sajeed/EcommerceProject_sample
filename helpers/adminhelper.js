@@ -205,18 +205,40 @@ module.exports = {
     }
     console.log(productDetails,'ppdetails');
 
+    let newprice;
+
     if(productDetails.offerPercentage){
-      let newprice=Math.round((productDetails.price)*((100-productDetails.offerPercentage)/100))
-      productDetails.orginalPrice = productDetails.price
-      productDetails.price = newprice
-       console.log(productDetails,'pppdataaaaaaa');
-       productDetails.category = objectId(productDetails.category)
-       db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
-       {
-        $set:productDetails
-       })
-       console.log("jhklljjk");
-       resolve(response)
+      if(productDetails.originalPrice){
+       newprice=Math.round((productDetails.originalPrice)*((100-productDetails.offerPercentage)/100))
+
+       productDetails.orginalPrice = productDetails.price
+       productDetails.price = newprice
+        console.log(productDetails,'pppdataaaaaaa');
+        productDetails.category = objectId(productDetails.category)
+        db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+        {
+         $set:productDetails
+        })
+        console.log("jhklljjk");
+        resolve(response)
+
+      }
+      else {
+
+       newprice=Math.round((productDetails.price)*((100-productDetails.offerPercentage)/100))
+       productDetails.originalPrice = productDetails.price
+       productDetails.price = newprice
+        console.log(productDetails,'pppdataaaaaaa');
+        productDetails.category = objectId(productDetails.category)
+        db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+        {
+         $set:productDetails
+        })
+        console.log("jhklljjk");
+        resolve(response)
+
+      }
+     
 
 
      }
