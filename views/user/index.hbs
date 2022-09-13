@@ -133,7 +133,7 @@
 
                                             <ul class="sub-menu-style">
                                                 {{#each category}}
-                                                <li><a href="about-us.html"> {{this.category}}</a></li>
+                                                <li><a href="/veg/{{this._id}}"> {{this.category}}</a></li>
                                                 <li><a href="cart.html"></a></li>
                                                 <li><a href="checkout.html"> </a></li>
                                                 <li><a href="my-account.html"></a></li>
@@ -188,8 +188,12 @@
                                 </div>
                                 <div class="header-action-style header-action-cart">
                                     <a class="cart-active" href="#"><i class="pe-7s-shopbag"></i>
+                                    {{#if user}}
                                         <span class="product-count bg-black" id="cart-count">{{cartcount}}</span>
                                     </a>
+                                    {{else}}
+                                <span class="product-count " id="cart-count"></span>
+{{/if}}
                                 </div>
                                 <div class="header-action-style d-block d-lg-none">
                                     <a class="mobile-menu-active-button" href="#"><i class="pe-7s-menu"></i></a>
@@ -470,9 +474,9 @@
                                         <div class="product-action-wrap">
                                             <button class="product-action-btn-1" title="Wishlist" id="wishlistbtn" onclick="addToWishlist('{{this._id}}')"><i
                                                     class="pe-7s-like"></i></button>
-                                            <button class="product-action-btn-1" title="Quick View"
+                                          <button class="product-action-btn-1" title="Quick View" 
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <i class="pe-7s-look"></i>
+                                                  <i class="pe-7s-look"></i>
                                             </button>
                                         </div>
                                         <div class="product-action-2-wrap">
@@ -1071,7 +1075,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close"><i
+                                <a href="" class="close" data-bs-dismiss="modal" aria-label="Close"><i
                                         class=" ti-close "></i></a>
                             </div>
                             {{#each product}}
@@ -1080,7 +1084,7 @@
                                 <div class="row gx-0">
                                     <div class="col-lg-5 col-md-5 col-12">
                                         <div class="modal-img-wrap">
-                                            <img src="/Admin/images/{{this.image.[0]}}" alt="">
+                                            <img src="/Admin/images/{{this.image.[0]}}" alt="" style="height: 150px; width: 200px;">
                                         </div>
                                     </div>
                                     <div class="col-lg-7 col-md-7 col-12">

@@ -574,8 +574,21 @@ const postAddcatOffer = async(req,res)=>{
 
    for(var i=0;i<products.length;i++){
 
-    newprice = Math.round((products[i].price)*((100-offer)/100))
+    if(products[i].originalPrice){
+        newprice = Math.round((products[i].originalPrice)*((100-offer)/100))
+
+    }
+    else {
+
+        newprice = Math.round((products[i].price)*((100-offer)/100))
+
+    
+
+    }
+
     addoffer = await adminhelper.updateOffer(products[i]._id,newprice,offer)
+
+
 
 
    }

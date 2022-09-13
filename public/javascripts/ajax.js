@@ -311,7 +311,7 @@ function cancelOrderUser(proId) {
                         document.getElementById(proId).innerHTML = "cancelled"
                         swal("order cancelled", "sucessfully", "success");
                       
-                        // location.reload()
+                        location.reload()
                     
                     }
                        
@@ -329,86 +329,6 @@ function cancelOrderUser(proId) {
 }
 
 
-
-
-// function removeCoupon(event) {
-//     event.preventDefault();
-//     swal({
-//         title: "Are you sure?",
-//         text: "Once deleted, you will not be able to recover this imaginary file!",
-//         icon: "warning",
-//         buttons: true,
-//         dangerMode: true,
-//       })
-   
-//     let coupon = document.getElementById('couponName').value
-//     console.log(coupon , "hvhv")
-//     .then((willDelete) => {
-//         if (willDelete) {   
-//        $.ajax({
-//         url: '/remove-coupon',
-//         data: {
-//             coupon
-//         },
-//         method: 'post',
-//         success: ((response) => {
-//             swal("Poof! Your imaginary file has been deleted!", {
-//                 icon: "success",
-//               }).then(() => {
-//                 document.getElementById("discountPer").innerHTML = "0"
-//                 document.getElementById("discountAmount").innerHTML = "0"
-//                 document.getElementById('couponName').value = ""
-//                 document.getElementById("applybutton").hidden = false
-//                 document.getElementById("deletebutton").hidden = true
-//                 document.getElementById("error").innerHTML = "Coupon Removed"
-//                 document.getElementById("totalAmount").innerHTML = response.totalAmount
-//             })
-//         })
-// })
-
-// }
-
-// else {
-//     swal("Your imaginary file is safe!");
-//   }
-// });
-
-//     }
-
-
-
-/* -------------------------------------------------------------------------- */
-/*                                Apply Coupon                                */
-/* -------------------------------------------------------------------------- */
-
-// function applyCoupon(event) {
-//     event.preventDefault();
-//     let coupon = document.getElementById('couponName').value
-//     console.log(coupon)
-//     $.ajax({
-//         url: '/apply-coupon',
-//         data: {
-//             coupon,
-//         },
-//         method: 'post',
-//         success: (response) => {
-//             if (response.couponUsed) {
-//                 document.getElementById("error").innerHTML = "Coupon Already Used "
-//             } else if (response.checkCoupon) {
-//                 document.getElementById("error").innerHTML = "Coupon Dosen't Exist "
-//             } else if (response.couponDate) {
-//                 document.getElementById("error").innerHTML = "Coupon Date Expired "
-//             } else if (response.state) {
-//                 document.getElementById("error").innerHTML = "Coupon Applied"
-//                 document.getElementById("discountPer").innerHTML = response.cartClear.couponDet.couponper
-//                 document.getElementById("discountAmount").innerHTML = response.discountAmount
-//                 document.getElementById("totalAmount").innerHTML = response.totalAmount
-//                 document.getElementById("applybutton").hidden = true
-//                 document.getElementById("deletebutton").hidden = false
-//             }
-//         }
-//     })
-// }
 
 function removeCoupon(event) {
     event.preventDefault();

@@ -196,7 +196,7 @@
                                     DESCRIPTION</label>
                                 <div class="col-md-4">
                                     <textarea class="form-control" id="description" name="description"
-                                        value="{{data.description}}"></textarea>
+                                        >{{data.description}}</textarea>
                                 </div>
                             </div>
 
@@ -205,10 +205,28 @@
 
                             <!-- Text input-->
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="percentage_discount">PRICE</label>
+                                <label class="col-md-4 control-label" for="percentage_discount"> OFFER PRICE</label>
                                 <div class="col-md-4">
                                     <input id="percentage_discount" name="price" placeholder="Price of Product"
-                                        value="{{data.price}}" class="form-control input-md" required="" type="number">
+                                        value="{{data.price}}" class="form-control input-md" required="" type="number"hidden>
+
+                                </div>
+                            </div>
+
+                              <div class="form-group">
+                                <label class="col-md-4 control-label" for="percentage_discount">Offer Percentage</label>
+                                <div class="col-md-4">
+                                    <input id="percentage_discount" name="offerPercentage" placeholder="Price of Product"
+                                        value="{{data.offerPercentage}}" class="form-control input-md" required="" type="number">
+
+                                </div>
+                            </div>
+
+                              <div class="form-group">
+                                <label class="col-md-4 control-label" for="percentage_discount">M.R.P</label>
+                                <div class="col-md-4">
+                                    <input id="percentage_discount" name="originalPrice" placeholder="Price of Product"
+                                        value="{{data.originalPrice}}" class="form-control input-md" required="" type="number">
 
                                 </div>
                             </div>

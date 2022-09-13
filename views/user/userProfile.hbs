@@ -30,6 +30,8 @@
 
     <!-- All CSS is here
 	============================================ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/user/css/vendor/bootstrap.min.css" />
     <link rel="stylesheet" href="/user/css/vendor/pe-icon-7-stroke.css" />
@@ -45,6 +47,7 @@
     <link rel="stylesheet" href="/user/css/plugins/easyzoom.css" />
     <link rel="stylesheet" href="/user/css/plugins/slinky.css" />
     <link rel="stylesheet" href="/user/css/style.css" />
+
 </head>
 <style>
     .card {
@@ -270,7 +273,7 @@
                             <a class="theme-color" href="cart.html">view cart</a>
                         </div>
                         <div class="checkout-btn btn-hover">
-                            <a class="theme-color" href="checkout.html">checkout</a>
+                            <a class="theme-color" href="#">checkout</a>
                         </div>
                     </div>
                 </div>
@@ -337,8 +340,7 @@
                                                 <div class="myaccount-content active">
                                                     <h3>Orders</h3>
                                                     <div class="myaccount-table table-responsive text-center">
-                                                        <table class="table table-bordered">
-                                                            <thead class="thead-light">
+                                                    <table id="example" class="table  table-bordered" style="width:100%">                                                            <thead class="thead-light">
 
                                                                 <tr>
                                                                     <th>Order</th>
@@ -365,8 +367,14 @@
                                                                     <td><a href="/viewOrderProducts/{{this._id}}"
                                                                             class="check-btn sqr-btn ">View</a></td>
                                                                     <td>
+
+                                                                        {{#if_eq this.status "cancelled"}}
+                                                                        <p>Order Cancelled</p>
+                                                                        {{else}}
                                                                         <button class="btn-sm  btn-danger"
                                                                             onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
+                                                                           {{/if_eq}}
+                                                                         
                                                                     </td>
                                                                 </tr>
                                                                 {{/each}}
@@ -439,7 +447,7 @@
 
                                                         <div class="d-flex card text-center">
                                                             <div class="image"><img
-                                                                    src="/User/images/logo/sale_6172022_2_02-removebg-preview.png" width="90">
+                                                                    src="/User/images/logo/sale_6172022_2_02-removebg-preview.png" width="40">
                                                             </div>
                                                             <div class="image2">
                                                             </div>
@@ -762,6 +770,9 @@
     <script src="/user/js/plugins/ajax-mail.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
 
     <!-- Main JS -->
     <script src="/user/js/main.js"></script>
@@ -774,25 +785,13 @@
         document.execCommand("copy");
         $temp.remove();
     }
-
 </script>
 
-{{!-- <script>
-    
-let copybtn = document.querySelector(".copybtn");
-
-
-function copyIt(){
-
-  let copyInput = document.querySelector('#copyvalue');
-
-  copyInput.select();
-
-  document.execCommand("copy");
-
-  copybtn.textContent = "COPIED";
-}
-</script> --}}
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable();
+});
+</script>
 
 </html>
 

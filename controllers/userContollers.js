@@ -120,16 +120,22 @@ const postSignup = (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 const getproductsDetails = (req, res, next) => {
-    let proId = req.params.id
-    console.log(proId)
-    userhelper.Viewproductdetail(proId).then((data) => {
 
-        console.log(data,"gfhjkl;");
-        res.render('user/productDetails', {data})
-
-
-    })
-
+   
+        let proId = req.params.id
+        console.log(proId)
+        userhelper.Viewproductdetail(proId).then((data) => {
+    
+            console.log(data,"gfhjkl;");
+            res.render('user/productDetails', {data})
+    
+    
+        })
+    
+        
+   
+   
+  
 }
 
 /* -------------------------------------------------------------------------- */
@@ -243,7 +249,7 @@ const postcheckout = async (req, res) => {
                 res.json({ codSuccess: true })
 
             } else if (req.body['payment-method'] === 'RAZORPAY') {
-                userhelper.generateRazorpay(orderId, totalPrice).then((response) => {
+                userhelper.generateRazorpay(orderId, amount).then((response) => {
                     response.razorPay = true;  
                     res.json(response)
                 })
@@ -251,7 +257,7 @@ const postcheckout = async (req, res) => {
 
             else if (req.body['payment-method'] === 'PAYPAL') {
                 console.log('vjhdbfjbfh');
-                userhelper.generatePayPal(orderId, totalPrice).then((response) => {
+                userhelper.generatePayPal(orderId, amount).then((response) => {
                     response.payPal = true;
                     res.json(response)
                 })
@@ -407,12 +413,23 @@ const changeproductquantity = (req, res, next) => {
 
 }
 
+/* -------------------------------------------------------------------------- */
+/*                           CATEGORY WISE PRODUCTS                           */
+/* -------------------------------------------------------------------------- */
 
+const vegetables = async(req, res) => {
 
-const vegetables = (req, res) => {
-    //  let subtotal= await userhelper.getSubTotalAmount(req.session.user._id)
+    let Id = req.params.id
 
-    res.render('user/veg')
+    console.log(Id);
+     await adminhelper.ViewcatOffProduct(Id).then((data)=>{
+        
+        
+            console.log(data,"8888888888");
+
+            res.render('user/veg',{data,user})
+    })
+
 }
 
 
@@ -567,24 +584,31 @@ const PostapplyCoupon = async (req, res) => {
 
     let totalAmount = await userhelper.getTotalAmount(user)
 
-    req.body.total = totalAmount;
+
+
+console.log(totalAmount,"666");
+
+
+let Total = totalAmount
 
     console.log(req.body,"ghjkl;");
 
     if (req.body.coupon == '') {
-        res.json({ noCoupon: true })
+        res.json({ noCoupon: true,Total })
     } else {
-        let couponResponse = await adminhelper.applyCoupon(req.body, user, date)
+        let couponResponse = await adminhelper. applyCoupon(req.body, user, date,totalAmount)
           console.log(couponResponse,"dfghjk");
         if (couponResponse.verify) {
-            let discountAmount = (req.body.total * parseInt(couponResponse.couponData.value)) / 100
-            let amount = req.body.total - discountAmount
+            let discountAmount = (totalAmount * parseInt(couponResponse.couponData.value)) / 100
+            let amount = totalAmount - discountAmount
             couponResponse.discountAmount = Math.round(discountAmount)
             couponResponse.amount = Math.round(amount)
             res.json(couponResponse)
             console.log(couponResponse,"DFGHJKL");
         } else {
-            couponResponse.Total = req.body.total
+            couponResponse.Total = totalAmount
+
+            // couponResponse.noCoupon = req.body.total
 
             console.log( couponResponse.Total);
             res.json(couponResponse)

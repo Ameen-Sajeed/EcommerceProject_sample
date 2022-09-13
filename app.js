@@ -18,6 +18,13 @@ const db = require('./config/connection')
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+var Hbs = hbs.create({});
+Hbs.handlebars.registerHelper('if_eq', function(a, b, opts) {
+  if(a == b) // Or === depending on your needs
+      return opts.fn(this);
+  else
+      return opts.inverse(this);
+});
 
 app.engine('hbs',hbs.engine({
   extname:'hbs',defaultLayout:false,layoutsDir:__dirname+'/views/layouts/',partialsDir:__dirname+'/views/partials/',helpers: {

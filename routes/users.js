@@ -50,11 +50,11 @@ router.get('/confirmotp', confirmOtp)
 
 router.post('/confirmotp', postconfirmOtp)
 
-router.get('/profile', getProfile)
+router.get('/profile',verifyLogin, getProfile)
 
 router.post('/change-product-quantity',changeproductquantity)
 
-router.get('/veg',vegetables)
+router.get('/veg/:id',vegetables)
 
 
 router.get('/ordersuccess',orderplaced)
@@ -87,7 +87,7 @@ router.post('/apply-coupon',PostapplyCoupon)
 router.post('/remove-coupon',PostremoveCoupon)
 
 
-router.get('/wishlist',getWishList)
+router.get('/wishlist',verifyLogin,getWishList)
 
 router.get('/wishlist/add-to-wishlist/:id',getAddtoWishList)
 

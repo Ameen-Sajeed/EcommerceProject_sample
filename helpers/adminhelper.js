@@ -176,26 +176,117 @@ module.exports = {
   /* -------------------------------------------------------------------------- */
   /*                               update Product                               */
   /* -------------------------------------------------------------------------- */
-  updateProduct: (Id, product) => {
+  updateProduct: (id, productDetails) => {
     // console.log(Id);
-    return new Promise(async (resolve, reject) => {
-      await db.get().collection(collection.PRODUCTCOLLECTION).updateOne({ _id: objectId(Id) }, {
-        $set: {
-          name: product.name,
-          index: product.index,
-          category: product.category,
-          price: product.price,
-          inventory: product.inventory,
-          description: product.description,
-          image: product.image
-        }
-      }).then((data) => {
-        // console.log(data);
-        resolve(data)
-      })
-    })
-  },
+  //   return new Promise(async (resolve, reject) => {
+  //     await db.get().collection(collection.PRODUCTCOLLECTION).updateOne({ _id: objectId(Id) }, {
+  //       $set: {
+  //         name: product.name,
+  //         index: product.index,
+  //         category: product.category,
+  //         price: product.price,
+  //         inventory: product.inventory,
+  //         description: product.description,
+  //         image: product.image
+  //       }
+  //     }).then((data) => {
+  //       // console.log(data);
+  //       resolve(data)
+  //     })
+  //   })
+  // },
 
+  console.log(productDetails,'pd');
+  return new Promise(async(resolve,reject)=>{
+    let img = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(id)})
+   
+    if(productDetails.image.length == 0){
+      productDetails.image = img.image
+    }
+    console.log(productDetails,'ppdetails');
+
+    if(productDetails.offerPercentage){
+      let newprice=Math.round((productDetails.price)*((100-productDetails.offerPercentage)/100))
+      productDetails.orginalPrice = productDetails.price
+      productDetails.price = newprice
+       console.log(productDetails,'pppdataaaaaaa');
+       productDetails.category = objectId(productDetails.category)
+       db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+       {
+        $set:productDetails
+       })
+       console.log("jhklljjk");
+       resolve(response)
+
+
+     }
+
+   else{
+    if(productDetails.orginalPrice > productDetails.price){
+      productDetails.price = productDetails.orginalPrice
+      productDetails.orginalPrice=''
+    }
+    productDetails.category = objectId(productDetails.category)
+     db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+     {
+      $set:productDetails
+     })
+     .then((data)=>{
+       response.data = data
+       response.status= true
+       resolve(response)
+     })
+   }
+  })
+},
+
+
+  
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    .....                                   */
+  /* -------------------------------------------------------------------------- */
+
+
+  // editProduct:(id,productDetails)=>{
+  //   console.log(productDetails,'pd');
+  //   return new Promise(async(resolve,reject)=>{
+  //     let img = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(id)})
+     
+  //     if(productDetails.images.length == 0){
+  //       productDetails.images = img.images
+  //     }
+  //     console.log(productDetails,'ppdetails');
+
+  //     if(productDetails.offerPercentage){
+  //       let newprice=Math.round((productDetails.price)*((100-productDetails.offerPercentage)/100))
+  //       productDetails.orginalPrice = productDetails.price
+  //       productDetails.price = newprice
+  //        console.log(productDetails,'pppdataaaaaaa');
+  //        productDetails.category = objectId(productDetails.category)
+  //        db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+  //        {
+  //         $set:productDetails
+  //        })
+  //      }
+  //    else{
+  //     if(productDetails.orginalPrice > productDetails.price){
+  //       productDetails.price = productDetails.orginalPrice
+  //       productDetails.orginalPrice=''
+  //     }
+  //     productDetails.category = objectId(productDetails.category)
+  //      db.get().collection(collection.PRODUCTCOLLECTION).updateOne({_id:objectId(id)},
+  //      {
+  //       $set:productDetails
+  //      })
+  //      .then((data)=>{
+  //        response.data = data
+  //        response.status= true
+  //        resolve(response)
+  //      })
+  //    }
+  //   })
+  // },
 
   /* -------------------------------------------------------------------------- */
   /*                              getUpdateProduct                              */
@@ -1006,7 +1097,7 @@ module.exports = {
   /* -------------------------------------------------------------------------- */
 
 
-  applyCoupon: (details, userId, date) => {
+  applyCoupon: (details, userId, date,totalAmount) => {
     return new Promise(async (resolve, reject) => {
       let response = {}
       // let coupon = await db.get().collection(collection.COUPON_COLLECTION).findOne({couponId:details.coupon})
@@ -1030,7 +1121,7 @@ module.exports = {
             // response.Coupenused = false
 
             resolve(response)
-            let total = details.total
+            let total = totalAmount
             // let total = 24000;
             console.log(total, 'total');
             console.log(coupon.minAmount, 'kkkkmin');
