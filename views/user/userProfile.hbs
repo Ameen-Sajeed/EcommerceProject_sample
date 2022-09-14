@@ -30,6 +30,10 @@
 
     <!-- All CSS is here
 	============================================ -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
@@ -300,12 +304,12 @@
             <div class="my-account-wrapper pb-100 pt-100">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12  ">
                             <!-- My Account Page Start -->
                             <div class="myaccount-page-wrapper">
                                 <!-- My Account Tab Menu Start -->
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4">
+                                    <div class="col-lg-3 col-md-4 col-4">
                                         <div class="myaccount-tab-menu nav" role="tablist">
                                             <a href="#dashboad" data-bs-toggle="tab">Dashboard</a>
                                             <a href="#orders" class="active" data-bs-toggle="tab">Orders</a>
@@ -323,15 +327,24 @@
                                             <!-- Single Tab Content Start -->
                                             <div class="tab-pane fade show " id="dashboad" role="tabpanel">
                                                 <div class="myaccount-content">
-                                                    <h3>Dashboard</h3>
-                                                    <div class="welcome">
-                                                        <p>Hello, <strong>Name: {{user.name}}</strong></strong><a
-                                                                href="login-register.html" class="logout"> Logout</a>
+                                                    <h3 class="text-warning">My Profile</h3>
+                                                    <div class="welcome ">
+                                                        <div class="col-12 col-sm-6 col-lg-3">
+                                                            <h1>Hello, <strong>Iam {{user.name}}</strong></strong> </h1>
+
+                                                            <p class="mb-0">Email: {{user.email}}</p>
+                                                            <p>Contact No: {{user.phone}} </p>
+                                                            <div>
+                                                            <button class="btn-success btn-lg" onclick="myFunction()">Wallet</button>
+                                                             <p >Remaining Balance <span id="myDIV" >₹{{user.wallet}}</span></p>
+                                                            </div>
+                                                        </div>
+
+
                                                         </p>
                                                     </div>
 
-                                                    <p class="mb-0">Email: {{user.email}}</p>
-                                                    <p>Contact No: {{user.phone}} </p>
+
                                                 </div>
                                             </div>
                                             <!-- Single Tab Content End -->
@@ -340,7 +353,9 @@
                                                 <div class="myaccount-content active">
                                                     <h3>Orders</h3>
                                                     <div class="myaccount-table table-responsive text-center">
-                                                    <table id="example" class="table  table-bordered" style="width:100%">                                                            <thead class="thead-light">
+                                                        <table id="example" class="table  table-bordered"
+                                                            style="width:100%">
+                                                            <thead class="thead-light">
 
                                                                 <tr>
                                                                     <th>Order</th>
@@ -369,17 +384,32 @@
                                                                     <td>
 
                                                                         {{#if_eq this.status "cancelled"}}
-                                                                        <p>Cancelled</p>
-                                                                        {{else}}
+                                                                        <p class="text-danger">Cancelled</p> 
+                                                                        {{/if_eq}}
+
+                                                                        {{#if_eq this.status "Delivered"}}
+                                                                        
+                                                                        <button class="btn-sm  btn-info"
+                                                                            onclick="returnOrder('{{this._id}}','{{this.totalAmount}}')">Return</button>
+                                                                             {{/if_eq}}
+                                                                            {{!-- {{else}} --}}
+
+                                                                             {{#if_eq this.status "placed"}}
                                                                         <button class="btn-sm  btn-danger"
                                                                             onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
-                                                                           {{/if_eq}}
-                                                                       {{#if_eq this.status "Delivered"}}
+                                                                       {{/if_eq}}
 
-                                                                               <button class="btn-sm  btn-info"
-                                                                            onclick="">Return</button>
-                                                                                           {{/if_eq}}
-  
+                                                                       
+                                                                             {{#if_eq this.status "Shipped"}}
+                                                                        <button class="btn-sm  btn-danger"
+                                                                            onclick="cancelOrderUser('{{this._id}}')">Cancel</button>
+                                                                       {{/if_eq}}
+
+                                                                       {{#if_eq this.status "Returned"}}
+                                                                        <p class="text-success">Returned</p> 
+                                                                        {{/if_eq}}
+
+
                                                                     </td>
                                                                 </tr>
                                                                 {{/each}}
@@ -441,46 +471,55 @@
 
                                             <!-- Single Tab Content End -->
                                             <!-- Single Tab Content Start -->
+
                                             <div class="tab-pane fade" id="payment-method" role="tabpanel">
-                                                <div class="myaccount-content">
+                                                <div class="myaccount-content col-12  col-md-12 col-sm-6">
                                                     <h3>Available Coupons</h3>
 
-                                                
 
-                                                    <div class="d-flex  container gap-3">
-                                                            {{#each coupon}}
+
+                                                    <div class="  container gap-1" style="display: flex; flex-wrap: wrap;">
+                                                        {{#each coupon}}
 
                                                         <div class="d-flex card text-center">
                                                             <div class="image"><img
-                                                                    src="/User/images/logo/sale_6172022_2_02-removebg-preview.png" width="40">
+                                                                    src="/User/images/logo/sale_6172022_2_02-removebg-preview.png"
+                                                                    width="40">
                                                             </div>
                                                             <div class="image2">
                                                             </div>
-                                                            <h1 class="text-white">{{this.value}}% <span>off</span></h1> <p class="text-white"></p>
-                                                          <span class="d-block">{{this.name}}
-                                                                </span>
-                                                                <p>Valid till: {{this.endingdate}}</p>
+                                                            <h1 class="text-white">{{this.value}}% <span>off</span></h1>
+                                                            <p class="text-white"></p>
+                                                            <span class="d-block">{{this.name}}
+                                                            </span>
+                                                            <p>Valid till: {{this.endingdate}}</p>
                                                             <div class="mn"><small>With Code :
-                                                                    <span>  <b> <p class="text-white" id='p1{{this._id}}'>{{this.code}}</p></b></span> </small>
+                                                                    <span> <b>
+                                                                            <p class="text-white" id='p1{{this._id}}'>
+                                                                                {{this.code}}</p>
+                                                                        </b></span> </small>
 
-                                                                    {{!-- <input type="text" value="{{this.code}}" id="token"hidden> --}}
+                                                                {{!-- <input type="text" value="{{this.code}}"
+                                                                    id="token" hidden> --}}
                                                                 <center>
                                                                     {{!-- {{#if data}} --}}
                                                                     {{!-- <p>Already used</p> --}}
                                                                     {{!-- {{else}} --}}
-                                                                    <button class="btn-sm  btn-outline-dark" onclick=" copyToClipboard('#p1{{this._id}}')">Copy Coupon Code
-                                                                        </button>
-            
-                                                                      {{!-- {{/if}} --}}
+                                                                    <button class="btn-sm  btn-outline-dark"
+                                                                        onclick=" copyToClipboard('#p1{{this._id}}')">Copy
+                                                                        Coupon Code
+                                                                    </button>
+
+                                                                    {{!-- {{/if}} --}}
 
                                                                 </center>
                                                             </div>
                                                         </div>
 
-                                                         {{/each}}
+                                                        {{/each}}
                                                     </div>
-                                                  
-                                                   
+
+
 
                                                 </div>
                                             </div>
@@ -747,6 +786,8 @@
                 </div>
             </div>
     </div>
+
+   
     <!-- All JS is here -->
     <script src="/javascripts/ajax.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -778,26 +819,43 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
 
     <!-- Main JS -->
     <script src="/user/js/main.js"></script>
 </body>
 <script>
-    function copyToClipboard(element,Id) {
+    function copyToClipboard(element, Id) {
         var $temp = $("<input>");
         $("body").append($temp);
         $temp.val($(element).text()).select();
         document.execCommand("copy");
         $temp.remove();
+        alertify.set('notifier','position', '');
+ alertify.success('Coupon copied to clipboard! : ' + alertify.get('notifier','position'));
+  
     }
 </script>
 
 <script>
     $(document).ready(function () {
-    $('#example').DataTable();
-});
+        $('#example').DataTable();
+    });
 </script>
 
-</html>
+ {{!-- <script>
+        function myFunction() {
+            console.log("jhgh")
+  var x = document.getElementById("myDIV");
+  if (x.style.display === "none") {
+      x.style.display = "none";
+  } else {
+        x.style.display = "block";
 
-   
+  }
+}
+    </script> --}}
+
+
+</html>

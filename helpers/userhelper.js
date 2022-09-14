@@ -50,6 +50,7 @@ module.exports = {
             else {
 
 
+                userData.wallet = 0;
                 userData.state = true;
                 userData.password = await bcrypt.hash(userData.password, 10)
                 db.get().collection(collection.USERCOLLECTION).insertOne(userData).then((data) => {
@@ -1205,5 +1206,32 @@ return new Promise((resolve,reject)=>{
 
 
 
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                    RETURN PRODUCT AFTER DELIVERY STATUS                    */
+/* -------------------------------------------------------------------------- */
+
+returnOrder:(order,user)=>{
+    return new Promise(async(resolve,reject)=>{
+
+     await  db.get().collection(collection.ORDERCOLLECTION).updateOne({_id:objectId(order.orderId)},
+        {
+            $set:{status:'Returned'}
+        }).then(async(response)=>{
+            console.log(user.wallet,"9999999");
+            console.log(order.amount,"888");
+            let amount = parseInt(order.amount)+user.wallet
+          let data =await  db.get().collection(collection.USERCOLLECTION).updateOne({_id:objectId(user._id)},
+            {
+                $set:{wallet:amount}
+            })
+        })
+        console.log('hhhhhhhhhhhhhh');
+        resolve({status:true})
+    })
+}
 
 }

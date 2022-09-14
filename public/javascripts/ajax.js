@@ -469,45 +469,32 @@ function removeFromWishlist(wishlistId,proId){
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                                RETURN ORDER                                */
+/* -------------------------------------------------------------------------- */
 
-// function applyCoupon(event){
-//      event.preventDefault
-//       let coupenCode = document.getElementById('coupen').value
-//         let total = document.getElementById('total').innerText
-//         console.log(total)
-//         $.ajax({
-//           url: '/apply-coupon',
-//           data: {
-//             coupenCode: coupenCode,
-//             total: total
-//           },
-//           method: 'post',
-//           success: (response) => {
-//             if (response.noCoupen) {
-//               console.log(response)
-//               swal("Sorry!", "Please Enter a coupon code", "warning");
-//             }
-//             if (response.lessAmount) {
-//               console.log(response.lessAmount)
-//               swal("Sorry!", "Please purchase above Rs500", "warning");
-//             }
-//             if (response.invalidCoupen) {
-//               swal("Sorry!", "Invalid coupon code", "warning");
-//             }
-//             if(response.coupenExp){
-//               swal("Sorry!", "Coupon code expired", "warning");
-//             }
-//             if(response.coupenUsed){
-//               swal("Sorry!", "Coupon alredy used", "warning");
-//             }
-//             if (response.coupenDis)
-//             swal("Congrats!", "You applied a coup0n", "success");
-//             document.getElementById('Discount').innerHTML = "₹" + response.coupenDis.DiscAmount;
-//             document.getElementById('AfterDiscount').innerHTML = response.coupenDis.totalDiscount;
-//           }
-//         })
 
-// }
+function returnOrder(orderId,amount){
+
+    $.ajax({
+        url:'/returnproduct ',
+        method:'post',
+        data:{
+            orderId,
+            amount
+
+        },
+        success:(response)=>{
+
+
+
+            alertify.set('notifier','position', '');
+            alertify.success('Products returned successfully...!!! : ' + alertify.get('notifier','position'));
+            // location.reload()
+
+        }
+    })
+}
 
 
 

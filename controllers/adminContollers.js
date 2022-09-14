@@ -67,34 +67,26 @@ const getlogout = (req, res) => {
 const admindashboard = async (req, res) => {
   let data= await adminhelper.doNutchartData()
     let year = await adminhelper.yearlyChart()
-
-
-    
-
+    let month = await adminhelper.salesMonthlyGraph()
+    let daily = await adminhelper.salesGraph()
+    // for(var i=0;i<7;i++){
+        
+    // }
     let dailysales = await adminhelper.getDailySales()
     let dailyorders = await adminhelper.getDailyOrders()
-    
     let TotalUsers = await adminhelper.getTotalUsers()
     let TotalInactiveUsers = await adminhelper.getTotalInactiveUsers()
-    
     let status = await adminhelper.piechartData()
-
     let payment = await adminhelper.barchartData()
-
-
-  let sum=0
-  for(var i=0;i<dailysales.length;i++){
+    let sum=0
+    for(var i=0;i<dailysales.length;i++){
     sum=sum+dailysales[i].totalAmount
-  }
-  
-console.log(sum,"mmmmmmmmmmmmmmmmm");
-
-let sumFinal= Math.round(sum)
-console.log(sumFinal);
-    
-
-
-res.render('admin/Admin-dashboard',{data,year,dailysales,sumFinal,dailyorders,TotalUsers,TotalInactiveUsers,status,payment})
+    }
+   console.log(sum,"mmmmmmmmmmmmmmmmm");
+    let sumFinal= Math.round(sum)
+    console.log(sumFinal);
+    res.render('admin/Admin-dashboard',{data,year,dailysales,sumFinal,dailyorders,
+        TotalUsers,TotalInactiveUsers,status,payment,month,daily})
 
  }   
 
@@ -605,14 +597,14 @@ const postAddcatOffer = async(req,res)=>{
 /*                           GET VIEW CATEGORY OFFER                          */
 /* -------------------------------------------------------------------------- */
 
-const ViewCategoryOffer = (req,res)=>{
+// const ViewCategoryOffer = (req,res)=>{
 
-    adminhelper.viewCategoryOffer().then((data)=>{
+//     adminhelper.viewCategoryOffer().then((data)=>{
 
-        res.render('admin/ViewCatoffer',{data})
+//         res.render('admin/ViewCatoffer',{data})
 
-    })
-}
+//     })
+// }
 
 
 /* -------------------------------------------------------------------------- */
@@ -620,19 +612,19 @@ const ViewCategoryOffer = (req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 
-const delCategoryOffer = async(req,res)=>{
+// const delCategoryOffer = async(req,res)=>{
 
-    catOffId = req.params.id
+//     catOffId = req.params.id
 
-    let catOffData = await adminhelper.viewCategoryOffer(catOffId)
+//     let catOffData = await adminhelper.viewCategoryOffer(catOffId)
 
-    adminhelper.ViewcatOffProduct(catOffData.category).then(async(response)=>{
+//     adminhelper.ViewcatOffProduct(catOffData.category).then(async(response)=>{
 
-        let deleteCatOFF = await adminhelper.deleteCategoryOffer(catOffId)
+//         let deleteCatOFF = await adminhelper.deleteCategoryOffer(catOffId)
 
-        res.json(response)
-    })
-}
+//         res.json(response)
+//     })
+// }
 
 
 /* -------------------------------------------------------------------------- */
@@ -640,31 +632,31 @@ const delCategoryOffer = async(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 
-const addProdOffer =(req,res)=>{
+// const addProdOffer =(req,res)=>{
 
-    adminhelper.ViewProduct().then((data)=>{
+//     adminhelper.ViewProduct().then((data)=>{
   
-        res.render('admin/addProdOffer',{data})
+//         res.render('admin/addProdOffer',{data})
 
 
-    })
+//     })
 
-}
+// }
 
 /* -------------------------------------------------------------------------- */
 /*                            POST ADDPRODUCT OFFER                           */
 /* -------------------------------------------------------------------------- */
 
 
-const postAddProdOffer =(req,res)=>{
+// const postAddProdOffer =(req,res)=>{
 
 
 
-console.log(req.body,"gfffffffffffffffff");
+// console.log(req.body,"gfffffffffffffffff");
  
-res.redirect('back')
+// res.redirect('back')
 
-}
+// }
 
 
 module.exports = {
@@ -675,6 +667,6 @@ module.exports = {
      postaddBanner, deleteBanner,viewOrders,donutChartData,getSalesReport,dailysales,monthlysales,yearlysales,orderCanceladmin,orderDeliveradmin,
      orderShipadmin,getCoupens,getAddCoupen,
      postAddCoupon,
-     addCategoryOffer,ViewCategoryOffer,delCategoryOffer,
-     postAddcatOffer,addProdOffer,postAddProdOffer
+     addCategoryOffer,
+     postAddcatOffer
 };

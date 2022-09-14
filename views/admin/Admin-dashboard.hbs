@@ -210,7 +210,12 @@
                         <div class="col-lg-12 col-sm-12">
                             <div class="card m-b-30">
                                 <div class="card-body">
-                                    <h5 class="header-title pb-3">Sales Report Graph</h5>           
+                                    <h5 class="header-title pb-3">Sales Report Graph</h5> 
+                                    <button class="btn-info" onclick="daily()">Daily</button>     
+                                    <button class="btn-primary " onclick="Monthly()">Monthly</button>          
+                                    <button class="btn-success" onclick="Yearly()">Yearly</button>          
+                                         
+
                                     {{!-- <div id="morris-line-chart" style="height: 360px;"></div>              --}}
                                     <canvas id="myChart1" ></canvas>
                                 </div>
@@ -371,9 +376,9 @@
     labels: labels,
     datasets: [{
       label: 'Payment Methods',
-      backgroundColor: ['aqua','blue', 'purple'
+      backgroundColor: ['orange','#d8db7d', 'purple'
       ],
-      borderColor: ['black','white','green'],
+      borderColor: 'white',
 
 
       data: [{{#each data}} {{count}},{{/each}}]
@@ -412,7 +417,7 @@
       label: 'Order Status',
       backgroundColor: ['orange','red', 'yellow','green',
       ],
-      borderColor: ['black','white','green'],
+      borderColor: 'white',
 
 
       data: [{{#each status}} {{count}},{{/each}}]
@@ -449,9 +454,9 @@
     labels: labels3,
     datasets: [{
       label: 'Payment Method Sales',
-      backgroundColor: ['aqua','blue', 'purple'
+      backgroundColor: ['cyan','green', '#7bc26e'
       ],
-      borderColor: ['black','white','green'],
+      borderColor: 'white',
 
 
       data: [{{#each payment}}{{totalAmount}},{{/each}}]
@@ -494,8 +499,8 @@
     labels: labels1,
     datasets: [{
       label: 'Sales Report',
-      backgroundColor: ['aqua','magenta', 'coral'
-      ],
+      backgroundColor: ['#32a871','#325ba8','#db5c71']
+      ,
       borderColor: 'red',
 
 
@@ -515,6 +520,127 @@
     document.getElementById('myChart1'),
     config1
   );
+</script>
+
+
+<script>
+
+    function Yearly(){
+
+  const labels1 = [
+  {{#each year}}'{{_id}}',{{/each}}
+   
+
+  ];
+
+  const data1 = {
+    labels: labels1,
+    datasets: [{
+      label: 'Sales Report',
+      backgroundColor: '#2cb2c7'
+      ,
+      borderColor: '#2cb2c7',
+
+
+      data: [{{#each year}}{{totalAmount}},{{/each}}]
+    }]
+  };
+
+  const config1 = {
+    type: 'line',
+    data: data1,
+    options: {}
+  };
+
+
+  const myChart1 = new Chart(
+    document.getElementById('myChart1'),
+    config1
+  );
+
+
+
+
+    }
+
+      function Monthly(){
+
+  const labels1 = [
+  {{#each month}}'{{_id}}',{{/each}}
+   
+
+  ];
+
+  const data1 = {
+    labels: labels1,
+    datasets: [{
+      label: 'Sales Report',
+      backgroundColor: '#E1AA9E'
+      ,
+      borderColor: '#E1AA9E',
+
+
+      data: [{{#each month}} {{totalAmount}},{{/each}}]
+    }]
+  };
+
+  const config1 = {
+    type: 'line',
+    data: data1,
+    options: {}
+  };
+
+
+  const myChart1 = new Chart(
+    document.getElementById('myChart1'),
+    config1
+  );
+
+
+
+
+    }
+
+
+      function daily(){
+
+  const labels1 = [
+  {{#each daily}}'{{_id}}',{{/each}}
+   
+
+  ];
+
+  const data1 = {
+    labels: labels1,
+    datasets: [{
+      label: 'Sales Report',
+      backgroundColor: '#409456'
+      ,
+      borderColor: '#409456',
+
+
+      data: [{{#each daily}} {{totalAmount}},{{/each}}]
+    }]
+  };
+
+  const config1 = {
+    type: 'line',
+    data: data1,
+    options: {}
+  };
+
+
+  const myChart1 = new Chart(
+    document.getElementById('myChart1'),
+    config1
+  );
+
+
+
+
+    }
+
+
 </script>
 
         <!-- jQuery -->

@@ -359,6 +359,8 @@ const getProfile = async (req, res) => {
     let Id=req.params.id
     let coupon = await adminhelper.viewCoupens(Id)
 
+    console.log(details,"hkkadj00000000000000000000000000000000");
+
     // let data = await adminhelper.displayCoupon(req.session.user._id)
 
         // if(response.status){
@@ -673,12 +675,31 @@ const postRemoveWishProducts =(req,res)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                                RETURN ORDER                                */
+/* -------------------------------------------------------------------------- */
+
+const ReturnOrder = (req,res)=>{
+
+    let user = req.session.user
+
+    console.log(req.body);
+
+    userhelper.returnOrder(req.body,user).then((response)=>{
+
+        res.json(response)
+
+
+    })
+}
+
+
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
     changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, PostremoveCoupon, PostapplyCoupon,
     addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete,
      PostCheckoutAddress, getCheckoutAddress, orderCancel,getWishList,getAddtoWishList,
-     postRemoveWishProducts
+     postRemoveWishProducts,ReturnOrder
 }
 

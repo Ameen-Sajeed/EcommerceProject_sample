@@ -119,7 +119,7 @@ module.exports = {
   /* -------------------------------------------------------------------------- */
 
   addproduct: (productData) => {
-    // console.log(productData);
+    console.log(productData,"wwwwwwwwwwwwwwwwwwwwwwwwwww");
     return new Promise(async (resolve, reject) => {
 
       if(productData.offerPercentage){
@@ -133,8 +133,10 @@ module.exports = {
         productData.price = newprice
 
         productData.category = objectId(productData.category)
+        console.log( productData.category,"111111111111");
+
         await db.get().collection(collection.PRODUCTCOLLECTION).insertOne(productData).then((data) => {
-          console.log(data, "777777777777777777777")
+          console.log(data, "777777777777777777777 with offer")
           resolve(data)
 
 
@@ -142,8 +144,9 @@ module.exports = {
     }  else {
 
         productData.category = objectId(productData.category)
+        console.log( productData.category,"0000000000");
         await db.get().collection(collection.PRODUCTCOLLECTION).insertOne(productData).then((data) => {
-          console.log(data, "777777777777777777777")
+          console.log(data, "777777777777777777777 without offer")
           resolve(data)
 
 
@@ -211,7 +214,7 @@ module.exports = {
       if(productDetails.originalPrice){
        newprice=Math.round((productDetails.originalPrice)*((100-productDetails.offerPercentage)/100))
 
-       productDetails.orginalPrice = productDetails.price
+      //  productDetails.orginalPrice = productDetails.price
        productDetails.price = newprice
         console.log(productDetails,'pppdataaaaaaa');
         productDetails.category = objectId(productDetails.category)
@@ -950,6 +953,65 @@ module.exports = {
   },
 
 
+  /* ------------------------------- daily sales graph  ------------------------------ */
+  salesGraph: () => {
+    return new Promise(async (resolve, reject) => {
+        let sales = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+            // {
+            //     $match:{
+            //         status:'placed'
+            //     }
+            // },
+            {
+                $project: { date: 1, totalAmount: 1 }
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+                    totalAmount: { $sum: '$totalAmount' },
+
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: -1 } },
+            {
+              $limit: 7
+            }
+
+        ]).toArray()
+        // console.log(sales);
+        resolve(sales)
+    })
+},
+
+/* ------------------------------ monthly sales graph ------------------------------ */
+salesMonthlyGraph: () => {
+    return new Promise(async (resolve, reject) => {
+        let sales = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+            // {
+            //     $match:{
+            //         status:'placed'
+            //     }
+            // },
+            {
+                $project: { date: 1, totalAmount: 1 }
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m", date: "$date" } },
+                    totalAmount: { $sum: '$totalAmount' },
+
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+
+        ]).toArray()
+        // console.log(sales);
+        resolve(sales)
+    })
+},
+
 
 
   /* -------------------------------------------------------------------------- */
@@ -1418,15 +1480,17 @@ module.exports = {
   /*                            DELETE CATEGORY OFFER                           */
   /* -------------------------------------------------------------------------- */
 
-  deleteCategoryOffer: (catId) => {
-    return new Promise(async (resolve, reject) => {
+//   deleteCategoryOffer: (catId) => {
+//     return new Promise(async (resolve, reject) => {
 
-      await db.get().collection(collection.CATEGORYOFFERCOLLECTION).deleteOne({ _id: objectId(catId) }).then((response) => {
+//       await db.get().collection(collection.CATEGORYOFFERCOLLECTION).deleteOne({ _id: objectId(catId) }).then((response) => {
 
 
-        resolve(response)
-      })
-    })
-  }
+//         resolve(response)
+//       })
+//     })
+//   }
+
+// }
 
 }

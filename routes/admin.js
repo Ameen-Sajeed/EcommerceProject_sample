@@ -110,11 +110,11 @@ router.post('/admin-addCatOffer',postAddcatOffer)
 // router.post('/admin-ViewCatoffer',ViewCategoryOffer)
 
 
-router.get('/delete-category-offer/:id',delCategoryOffer)
+// router.get('/delete-category-offer/:id',delCategoryOffer)
 
-router.get('/admin-addProdOffer',addProdOffer)
+// router.get('/admin-addProdOffer',addProdOffer)
 
-router.post('/admin-addProdOffer',addProdOffer)
+// router.post('/admin-addProdOffer',addProdOffer)
 
 
 // router.get('/admin-ViewProdoffer',ViewCategoryOffer)
