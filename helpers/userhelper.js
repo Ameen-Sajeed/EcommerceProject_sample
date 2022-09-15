@@ -630,7 +630,7 @@ module.exports = {
 
             ]).toArray()
 
-            console.log(subtotal);
+            // console.log(subtotal);
             resolve(subtotal)
         })
 
@@ -745,7 +745,7 @@ module.exports = {
                 }
                 else {
 
-                    console.log("new order:", order);
+                    // console.log("new order:", order);
                     resolve(order)
                 }
 
@@ -799,7 +799,7 @@ module.exports = {
                     throw error;
 
                 } else {
-                    console.log(payment, "********a");
+                    // console.log(payment, "********a");
                     resolve(payment);
                 }
             });
@@ -929,7 +929,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let order = await db.get().collection(collection.ORDERCOLLECTION).find({ userId: objectId(userId) }).toArray()
             resolve(order)
-            console.log(order)
+            // console.log(order)
         })
     },
 
@@ -995,9 +995,9 @@ module.exports = {
               
             ]).toArray()
 
-            console.log("bdcbhdsa");
+            // console.log("bdcbhdsa");
 
-            console.log(orders);
+            // console.log(orders);
 
             resolve(orders)
         })
@@ -1114,7 +1114,7 @@ postAddressEdit:(details,userId,id)=>{
         resolve(data)
 
      } catch(error){
-            console.log(error);
+            // console.log(error);
         }
     })
 },
@@ -1260,8 +1260,68 @@ returnOrder:(order,user)=>{
                 $set:{wallet:amount}
             })
         })
-        console.log('hhhhhhhhhhhhhh');
+        // console.log('hhhhhhhhhhhhhh');
         resolve({status:true})
+    })
+},
+
+
+/* -------------------------------------------------------------------------- */
+/*                               UPDATE PASSWORD                              */
+/* -------------------------------------------------------------------------- */
+
+
+updatePassword:(data)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+        let user = await db.get().collection(collection.USERCOLLECTION).findOne({email:data.email})
+        let response ={}
+
+        if(user && user.state == true){
+
+            response = user
+
+            bcrypt.compare(data.password, user.password).then(async(stat)=>{
+
+                if(stat){
+                    let det = await bcrypt.hash(data.newPassword,10)
+
+                    console.log("Password matched....");
+
+                    await db.get().collection(collection.USERCOLLECTION).updateOne({email:data.email},{
+
+                    
+                        $set:{
+                            password:det
+                        }
+                    }).then((data)=>{
+
+                        console.log('\nPassword data at helper : '+JSON.stringify(data));
+                                      
+                    })
+
+                    response.status = true
+                    response.msg ="Password Changed"
+                    resolve(response)
+                }
+                else {
+                    console.log("Password Miss Match");
+                    response.status = false
+                    response.msg = "Password MissMatch"
+                    resolve(response)
+                }
+            })
+        }
+        else {
+            console.log("email is not valid");
+            response.status = false
+
+            response.msg = "Email Missmatch"
+
+            resolve(response)
+        }
+
     })
 }
 

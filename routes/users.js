@@ -1,6 +1,6 @@
 var express = require('express');
 const { getlogout } = require('../controllers/adminContollers');
-const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel, PostapplyCoupon, PostremoveCoupon, getWishList, getAddtoWishList, postRemoveWishProducts, ReturnOrder, getallProducts, postCartclear, getEmptyCart } = require('../controllers/userContollers');
+const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel, PostapplyCoupon, PostremoveCoupon, getWishList, getAddtoWishList, postRemoveWishProducts, ReturnOrder, getallProducts, postCartclear, getEmptyCart, getResetPassword, PostResetPassword } = require('../controllers/userContollers');
 const { addAddress } = require('../helpers/userhelper');
 const { verifyLogin } = require('../middlewares/verify');
 const verify = require('../middlewares/verify');
@@ -100,5 +100,9 @@ router.get('/allproducts',getallProducts)
 router.post('/clearcarts',postCartclear)
 
 router.get('/emptycart',getEmptyCart)
+
+router.get('/changepassword',getResetPassword)
+
+router.post('/changepassword',PostResetPassword)
 
 module.exports = router;

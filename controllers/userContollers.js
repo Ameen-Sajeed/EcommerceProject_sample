@@ -132,7 +132,7 @@ const getproductsDetails = async(req, res, next) => {
     let user = req.session.user
    
         let proId = req.params.id
-        console.log(proId)
+        // console.log(proId)
         var cartcount
         if (req.session.user) {
             cartcount = await userhelper.getCartCount(req.session.user._id)
@@ -177,16 +177,16 @@ const getcart = async (req, res, next) => {
         totalValue = await userhelper.getTotalAmount(req.session.user._id)
 
     }
-    console.log("hjjhdsgjgf");
-    console.log(products);
+    // console.log("hjjhdsgjgf");
+    // console.log(products);
 
     subtotal = await userhelper.getSubTotalAmount(req.session.user._id)
     for (var i = 0; i < products.length; i++) {
         products[i].subTotal = subtotal[i].suBtotal
     }
 
-    console.log(subtotal);
-    console.log(user)
+    // console.log(subtotal);
+    // console.log(user)
 
     if(totalValue  == 0){
         res.redirect('/emptycart')
@@ -210,8 +210,7 @@ const addtocart = (req, res) => {
 
 
         res.json({ status: true })
-        // res.redirect('/')
-        // res.send('hai cart')
+   
     })
 
 }
@@ -260,8 +259,7 @@ console.log(products,"hjkl");
     user = req.session.user
 
     console.log(total,'fghjkl');
- 
-    
+
  
     res.render('user/checkout', { total, user, address,subtotal,products,category,cartcount })
     }
@@ -276,26 +274,17 @@ const postcheckout = async (req, res) => {
     let products = await userhelper.getCartProductList(req.body.userId)
     let totalPrice = await userhelper.getTotalAmount(req.body.userId)
     let subtotal = await userhelper.getSubTotalAmount(req.session.user._id)
-    // let Id = req.params.id
-  
-    
 
-    console.log(products);
-
-    console.log(req.body,"8888888888888888888888888");
 
     let couponVerify = await adminhelper.couponVerify(req.session.user._id)
-    // console.log("*****************************");
-    // console.log(couponVerify.couponDet.couponid, "coupon verify");
+
     console.log("logging req - body", req.body);
     if (couponVerify.code == req.body.couponcode ) { 
 
-        // console.log("call reached");
-        // let totalAmount = (1 - couponVerify.couponDet.couponper / 100) * totalPrice
+      
 
         let discountAmount = (totalPrice * parseInt(couponVerify.value)) / 100
         let amount = totalPrice - discountAmount
-        // let totalAmount = Math.round(discountAmount)
 
         await userhelper.placeOrder(req.body, products, amount,subtotal).then((orderId) => {
 
@@ -338,7 +327,7 @@ const postcheckout = async (req, res) => {
             }
 
             else if (req.body['payment-method'] === 'PAYPAL') {
-                console.log('vjhdbfjbfh');
+                // console.log('vjhdbfjbfh');
                 userhelper.generatePayPal(orderId, totalPrice).then((response) => {
                     response.payPal = true;
                     res.json(response)
@@ -415,17 +404,7 @@ const getProfile = async (req, res) => {
     let Id=req.params.id
     let coupon = await adminhelper.viewCoupens(Id)
 
-    console.log(details,"hkkadj00000000000000000000000000000000");
-
-    // let data = await adminhelper.displayCoupon(req.session.user._id)
-
-        // if(response.status){
-            
-        //     data.state = true
-        // }
-
-        // console.log(data,"hhhhhhhhhhhhhhhhhh");
-        // console.log(coupon,"55555555555555555");
+    
         res.render('user/userProfile', { orders, user, details , coupon})
     }
 
@@ -488,7 +467,7 @@ const vegetables = async(req, res) => {
      await adminhelper.ViewcatOffProduct(Id).then((data)=>{
         
         
-            console.log(data,"8888888888");
+            // console.log(data,"8888888888");
 
             res.render('user/veg',{data,user,cartcount})
     })
@@ -642,8 +621,8 @@ const PostapplyCoupon = async (req, res) => {
     let user= req.session.user._id
 
 
-    console.log("fcghvjbknlm");
-    console.log(req.body);
+    // console.log("fcghvjbknlm");
+    // console.log(req.body);
 
     const date = new Date()
 
@@ -651,12 +630,12 @@ const PostapplyCoupon = async (req, res) => {
 
 
 
-console.log(totalAmount,"666");
+// console.log(totalAmount,"666");
 
 
 let Total = totalAmount
 
-    console.log(req.body,"ghjkl;");
+    // console.log(req.body,"ghjkl;");
 
     if (req.body.coupon == '') {
         res.json({ noCoupon: true,Total })
@@ -675,7 +654,7 @@ let Total = totalAmount
 
             // couponResponse.noCoupon = req.body.total
 
-            console.log( couponResponse.Total);
+            // console.log( couponResponse.Total);
             res.json(couponResponse)
         }
     }
@@ -754,7 +733,7 @@ const ReturnOrder = (req,res)=>{
 
     let user = req.session.user
 
-    console.log(req.body);
+    // console.log(req.body);
 
     userhelper.returnOrder(req.body,user).then((response)=>{
 
@@ -815,12 +794,53 @@ const getEmptyCart =(req,res)=>{
 }
 
 
+const getResetPassword =(req,res)=>{
+    let user = req.session.user
+    let chpsd = null;
+    let notchpsd = null;
+    if (req.session.psdCh) {
+      chpsd = true;
+      req.session.psdCh = null;
+    }
+    if (req.session.notpsdCh) {
+      notchpsd = true;
+      req.session.notpsdCh = null;
+    }
+    res.render('user/changePassword',{user,
+        chpsd,
+        notchpsd})
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               CHANGE PASSWORD                              */
+/* -------------------------------------------------------------------------- */
+
+const PostResetPassword = async(req,res)=>{
+
+await userhelper.updatePassword(req.body).then((response)=>{
+
+    if(response.status){
+    
+        req.session.psdCh = true;
+        res.redirect('/profile')
+
+    }
+    else {
+        req.session.notpsdCh = true;
+        alert("error")
+        res.redirect('/changepassword')
+    }
+}) .catch((err) => {
+    res.send("error......");
+  });
+}
+
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
     getcheckout, getOtp, confirmOtp, postOtp, postconfirmOtp, getSignUp, addtocart, logout, getProfile,
     changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, PostremoveCoupon, PostapplyCoupon,
     addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete,
      PostCheckoutAddress, getCheckoutAddress, orderCancel,getWishList,getAddtoWishList,
-     postRemoveWishProducts,ReturnOrder,getallProducts,postCartclear,getEmptyCart
+     postRemoveWishProducts,ReturnOrder,getallProducts,postCartclear,getEmptyCart,getResetPassword,PostResetPassword
 }
 

@@ -149,10 +149,10 @@ function validatePass1(){
         password1Error.innerHTML ="Fill the password please!"
         return false;
     }
-    if(password.length < 8){
-        password1Error.innerHTML =  "Password length must be atleast 8 characters";
-        return false;
-    }
+    // if(password.length < 8){
+    //     password1Error.innerHTML =  "Password length must be atleast 8 characters";
+    //     return false;
+    // }
   
    
     if(password.length > 15){
