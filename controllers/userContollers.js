@@ -19,12 +19,20 @@ const homepage = async (req, res) => {
         cartcount = await userhelper.getCartCount(req.session.user._id)
     }
     // let wish = await userhelper.getWishlistProducts(user._id)
-    adminhelper.ViewProduct().then((product) => {
+
+
+   
+    adminhelper.ViewProduct().then((products) => {
+        var product =[]
+        for(var i=0;i<4;i++){
+           product[i]= products[i]
+
+        }
+
         adminhelper.viewCategory().then((category) => {
             adminhelper.viewBanner().then((banner) => {
                     res.render('user/index', { product, category, user, cartcount, banner });
 
-                    // console.log(wish,"xgfhjkl");
 
                 })
 
@@ -119,15 +127,22 @@ const postSignup = (req, res, next) => {
 /*                              getProductDetails                             */
 /* -------------------------------------------------------------------------- */
 
-const getproductsDetails = (req, res, next) => {
+const getproductsDetails = async(req, res, next) => {
 
+    let user = req.session.user
    
         let proId = req.params.id
         console.log(proId)
-        userhelper.Viewproductdetail(proId).then((data) => {
-    
+        var cartcount
+        if (req.session.user) {
+            cartcount = await userhelper.getCartCount(req.session.user._id)
+        }
+        await userhelper.Viewproductdetail(proId).then(async(data) => {
+       let category = await adminhelper.ViewcatOffProduct(data.category)
+       let categorydet= await adminhelper.viewCategory()
+       console.log(category,"777777777");
             console.log(data,"gfhjkl;");
-            res.render('user/productDetails', {data})
+            res.render('user/productDetails', {data,category,categorydet,user,cartcount})
     
     
         })
@@ -151,7 +166,12 @@ const nodata = (req, res) => {
 /* -------------------------------------------------------------------------- */
 const getcart = async (req, res, next) => {
     let subtotal;
+    var cartcount
+    if (req.session.user) {
+        cartcount = await userhelper.getCartCount(req.session.user._id)
+    }
     let products = await userhelper.viewCartProducts(req.session.user._id)
+    let category = await adminhelper.viewCategory()
     let totalValue = 0;
     if (products.length > 0) {
         totalValue = await userhelper.getTotalAmount(req.session.user._id)
@@ -167,9 +187,16 @@ const getcart = async (req, res, next) => {
 
     console.log(subtotal);
     console.log(user)
-    res.render('user/cart', { products, user, totalValue })
+
+    if(totalValue  == 0){
+        res.redirect('/emptycart')
+    }
+    else {
+
+    res.render('user/cart', { products, user, totalValue,category,cartcount })
 
 
+}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -207,16 +234,38 @@ const deleteCart = (req, res) => {
 
 const getcheckout = async (req, res) => {
 
+    let products = await userhelper.getCartProductList(req.session.user._id)
+
+
+    let category = await adminhelper.viewCategory()
+
+    var cartcount
+    if (req.session.user) {
+        cartcount = await userhelper.getCartCount(req.session.user._id)
+    }
+
     let total = await userhelper.getTotalAmount(req.session.user._id)
 
     let address = await userhelper.viewAddress(req.session.user._id)
 
+    let subtotal ;
+
+    
+    subtotal = await userhelper.getSubTotalAmount(req.session.user._id)
+    for (var i = 0; i < products.length; i++) {
+        products[i].subTotal = subtotal[i].suBtotal
+    }
+
+console.log(products,"hjkl");
     user = req.session.user
 
     console.log(total,'fghjkl');
+ 
+    
+ 
+    res.render('user/checkout', { total, user, address,subtotal,products,category,cartcount })
+    }
 
-    res.render('user/checkout', { total, user, address })
-}
 
 
 /* -------------------------------------------------------------------------- */
@@ -226,6 +275,11 @@ const getcheckout = async (req, res) => {
 const postcheckout = async (req, res) => {
     let products = await userhelper.getCartProductList(req.body.userId)
     let totalPrice = await userhelper.getTotalAmount(req.body.userId)
+    let subtotal = await userhelper.getSubTotalAmount(req.session.user._id)
+    // let Id = req.params.id
+  
+    
+
     console.log(products);
 
     console.log(req.body,"8888888888888888888888888");
@@ -243,7 +297,7 @@ const postcheckout = async (req, res) => {
         let amount = totalPrice - discountAmount
         // let totalAmount = Math.round(discountAmount)
 
-        await userhelper.placeOrder(req.body, products, amount).then((orderId) => {
+        await userhelper.placeOrder(req.body, products, amount,subtotal).then((orderId) => {
 
             if (req.body['payment-method'] === 'COD') {
                 res.json({ codSuccess: true })
@@ -270,7 +324,7 @@ const postcheckout = async (req, res) => {
     }
     else {
 
-        await userhelper.placeOrder(req.body, products, totalPrice).then((orderId) => {
+        await userhelper.placeOrder(req.body, products, totalPrice,subtotal).then((orderId) => {
 
             if (req.body['payment-method'] === 'COD') {
                 let resp = userhelper.cartClear(req.session.user._id)
@@ -295,7 +349,9 @@ const postcheckout = async (req, res) => {
         })
 
     }
+
 }
+
 
 
 
@@ -422,6 +478,11 @@ const changeproductquantity = (req, res, next) => {
 const vegetables = async(req, res) => {
 
     let Id = req.params.id
+    let user = req.session.user
+    var cartcount
+    if (req.session.user) {
+        cartcount = await userhelper.getCartCount(req.session.user._id)
+    }
 
     console.log(Id);
      await adminhelper.ViewcatOffProduct(Id).then((data)=>{
@@ -429,12 +490,14 @@ const vegetables = async(req, res) => {
         
             console.log(data,"8888888888");
 
-            res.render('user/veg',{data,user})
+            res.render('user/veg',{data,user,cartcount})
     })
 
 }
 
-
+/* -------------------------------------------------------------------------- */
+/*                              ORDER SUCCES PAGE                             */
+/* -------------------------------------------------------------------------- */
 
 const orderplaced = (req, res) => {
 
@@ -650,8 +713,16 @@ const PostremoveCoupon = async (req, res) => {
 
 const getWishList = async(req,res)=>{
 
+
+
+    let category = await adminhelper.viewCategory()
+    var cartcount
+    if (req.session.user) {
+        cartcount = await userhelper.getCartCount(req.session.user._id)
+    }
+
     let products = await userhelper.getWishlistProducts(user._id)
-    res.render('user/wishList',{products})
+    res.render('user/wishList',{products,category,cartcount,user})
 }
 
 /* -------------------------------------------------------------------------- */
@@ -693,6 +764,56 @@ const ReturnOrder = (req,res)=>{
     })
 }
 
+/* -------------------------------------------------------------------------- */
+/*                              VIEW ALL PRODUCTS                             */
+/* -------------------------------------------------------------------------- */
+
+
+const getallProducts = async(req,res)=>{
+
+    let user = req.session.user
+    var cartcount
+    if (req.session.user) {
+        cartcount = await userhelper.getCartCount(req.session.user._id)
+    }
+
+    await adminhelper.ViewProduct().then(async(product) => {
+        await adminhelper.viewCategory().then((category) => {
+
+                    // console.log(wish,"xgfhjkl");
+                    res.render('user/allproducts', { product, category, user,cartcount })
+
+                })
+
+            })
+        
+
+
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 CLEAR CART                                 */
+/* -------------------------------------------------------------------------- */
+
+const postCartclear = async(req,res)=>{
+
+    let user = req.session.user._id
+    await userhelper.cartClear(user).then((response)=>{
+
+        res.json(response)
+    })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               EMPTY CART PAGE                              */
+/* -------------------------------------------------------------------------- */
+
+
+const getEmptyCart =(req,res)=>{
+
+    res.render('user/emptycart')
+}
+
 
 module.exports = {
     getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart,
@@ -700,6 +821,6 @@ module.exports = {
     changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, PostremoveCoupon, PostapplyCoupon,
     addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete,
      PostCheckoutAddress, getCheckoutAddress, orderCancel,getWishList,getAddtoWishList,
-     postRemoveWishProducts,ReturnOrder
+     postRemoveWishProducts,ReturnOrder,getallProducts,postCartclear,getEmptyCart
 }
 

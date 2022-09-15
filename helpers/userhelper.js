@@ -128,35 +128,37 @@ module.exports = {
 
     Viewproductdetail: (proId) => {
         return new Promise(async (resolve, reject) => {
-            let data = await db.get().collection(collection.PRODUCTCOLLECTION).aggregate([
+
+            let data = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(proId)})
+            // let data = await db.get().collection(collection.PRODUCTCOLLECTION).aggregate([
 
 
-                {
-                    $match:{ _id: objectId(proId) }
+            //     {
+            //         $match:{ _id: objectId(proId) }
 
-                },
+            //     },
 
-                {
-                  $lookup:{
+            //     {
+            //       $lookup:{
             
-                    from:collection.CATEGORYCOLLECTION,
-                    localField:'category',
-                    foreignField:'_id',
-                    as:'category'
-                  }
-                },
-                {
-                  $project:{
-                    category:{$arrayElemAt:['$category',0]},
-                    name:1,
-                    image:1,
-                    price:1,
-                    description:1,
+            //         from:collection.CATEGORYCOLLECTION,
+            //         localField:'category',
+            //         foreignField:'_id',
+            //         as:'category'
+            //       }
+            //     },
+            //     {
+            //       $project:{
+            //         category:{$arrayElemAt:['$category',0]},
+            //         name:1,
+            //         image:1,
+            //         price:1,
+            //         description:1,
             
             
-                  }
-                }
-               ]).toArray()
+            //       }
+            //     }
+            //    ]).toArray()
             
                console.log(data,"2222222222222");
                resolve(data)
@@ -486,7 +488,7 @@ module.exports = {
     /*                             checkout after Cart                            */
     /* -------------------------------------------------------------------------- */
 
-    placeOrder: (order, products, total) => {
+    placeOrder: (order, products, total,subtotal) => {
         return new Promise((resolve, reject) => {
             console.log(order,"55555555555555555555555");
             let status = order['payment-method'] == 'COD' ? 'placed' : 'pending'
@@ -498,6 +500,7 @@ module.exports = {
                 products: products,
                 totalAmount: total,
                 date: new Date(),
+                SubTotalAmount:subtotal,
                 status: status
             }
 
@@ -530,10 +533,38 @@ module.exports = {
 
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
-            let cart = await db.get().collection(collection.CARTCOLLECTION).findOne({ user: objectId(userId) })
-            console.log('ammm');
-            console.log(cart.products);
-            resolve(cart.products)
+            let cartItems = await db.get().collection(collection.CARTCOLLECTION).aggregate([
+                {
+                    $match: { user: objectId(userId) }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity',
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCTCOLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] },
+                    }
+                },
+
+            ]).toArray()
+            resolve(cartItems)
+
         })
     },
 

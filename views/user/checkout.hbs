@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <header class="header-area header-responsive-padding header-height-1">
+        <header class="header-area header-responsive-padding header-height-1" style="min-height: 110px; margin-top: 20px;">
             <div class="header-top d-none d-lg-block bg-gray-5">
                 <div class="container">
                     <div class="row align-items-center">
@@ -102,13 +102,13 @@
                     </div>
                 </div>
             </div>
-            <div class="header-bottom sticky-bar bg-light ">
+            <div class="header-bottom sticky-bar bg-light text-white " style="min-height: 130px;">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-6 col-6">
                             <div class="logo">
                                 <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"
-                                        alt="logo" height="170"></a>
+                                        alt="logo" style="margin-top: 15px;" ></a>
                             </div>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
@@ -125,21 +125,14 @@
 
                                             <ul class="sub-menu-style">
                                                 {{#each category}}
-                                                <li><a href="about-us.html"> {{this.name}}</a></li>
-                                                <li><a href="cart.html"></a></li>
-                                                <li><a href="checkout.html"> </a></li>
-                                                <li><a href="my-account.html"></a></li>
-                                                <li><a href="wishlist.html"></a></li>
-                                                {{!-- <li><a href="compare.html"></a></li>
-                                                <li><a href="contact-us.html">contact us </a></li>
-                                                <li><a href="login-register.html">login / register </a></li> --}}
+                                                <li><a href="/veg/{{this._id}}"> {{this.category}}</a></li>
                                                 {{/each}}
                                             </ul>
 
                                         </li>
 
 
-                                        <li><a href="about-us.html">OFFERS</a></li>
+                                        <li class="" style="font-size: 15px;"><a href="/allproducts">ALL PRODUCTS</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -160,22 +153,32 @@
                                 </div>
                                 <div class="header-action-style d-flex gap-3 dropdown">
 
+                                    {{#if user}}
 
-                                    <a title="Login Register" href="/login-register"><i class="pe-7s-user"></i></a>
+
+
+                                    <a title="Login Register" href="/profile"><i class="pe-7s-user"></i></a>
+                                    {{else}}
+                                    <a title="Login Register" href="/login"><i class="pe-7s-user"></i></a>
+
                                 </div>
 
-
+                                {{/if}}
 
 
 
 
                                 <div class="header-action-style">
-                                    <a title="Wishlist" href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                    <a title="Wishlist" href="/wishlist"><i class="pe-7s-like"></i></a>
                                 </div>
                                 <div class="header-action-style header-action-cart">
                                     <a class="cart-active" href="#"><i class="pe-7s-shopbag"></i>
+                                    {{#if user}}
                                         <span class="product-count bg-black" id="cart-count">{{cartcount}}</span>
                                     </a>
+                                    {{else}}
+                                <span class="product-count " id="cart-count"></span>
+                         {{/if}}
                                 </div>
                                 <div class="header-action-style d-block d-lg-none">
                                     <a class="mobile-menu-active-button" href="#"><i class="pe-7s-menu"></i></a>
@@ -232,9 +235,9 @@
                 </div>
             </div>
         </div>
-        <div class="breadcrumb-area bg-gray-4 breadcrumb-padding-1">
+        <div class="breadcrumb-area bg-gray-4 breadcrumb-padding-1 bg-transparent" style="background-image: url(/User/images/banner/flat-lay-green-fruits-vegetables-frame\ \(1\).jpg);background-size: cover;">
             <div class="container">
-                <div class="breadcrumb-content text-center">
+                <div class="breadcrumb-content text-center ">
                     <h2>Checkout </h2>
                     <ul>
                         <li><a href="/">Home</a></li>
@@ -251,7 +254,7 @@
             </div>
         </div>
 
-        <div class="checkout-main-area pb-100 pt-100">
+        <div class="checkout-main-area pb-100 pt-100 " style="background-image: url(/User/images/banner/vegetables-fruits-with-copy-space\ \(1\).jpg);background-size: cover;">
             <div class="container ">
                 <form method="" id="checkout-form">
 
@@ -259,7 +262,7 @@
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="billing-info-wrap">
-                                    <h3>Delivery Address</h3>
+                                    <h3 class="text-dark" style="font-weight: 600; font-size: 30px;">Delivery Address</h3>
                                     <div class="row">
                                         <div class="accordion" id="accordionPanelsStayOpenExample">
                                             <div class="accordion-item">
@@ -342,49 +345,48 @@
 
                                             <divclass="Place-order btn-hover text-center">
                                                 <a href="/addcheck-address" class="btn-sm btn-outline-dark mb-3"
-                                                    style="float:center;">Add Address</a><br><br>
+                                                    style="float:center; font-size: 15px; ;">Add Address</a><br><br><br><br>
                                         </div>
 
-                                        <input type="text" name="userId" value="{{user._id}}" hidden>
+                                        <input type="text" name="userId" value="{{user._id}}" hidden><br>
 
 <div>
-                  <h3>Select Your Payment Method</h3> <br>
+                  <h3 class="text-dark"style="font-weight: 600; font-size: 30px; ">Select Your Payment Method</h3> <br>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment-method" id="COD" value="COD" checked/>
-                <label class="form-check-label" for="flexRadioDefault1"> Cash on Delivery</label>
+                <label class="form-check-label" for="flexRadioDefault1" style="font-size: 15px;"> Cash on Delivery </label>
             </div>
 
             <!-- Default checked radio -->
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment-method" id="RAZORPAY" value="RAZORPAY"
                      />
-                <label class="form-check-label" for="flexRadioDefault2"> RazorPay </label>
+                <label class="form-check-label" for="flexRadioDefault2" style="font-size: 15px;"> RazorPay </label>
             </div>
 
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment-method" id="PAYPAL" value="PAYPAL"  />
-                <label class="form-check-label" for="flexRadioDefault2"> PayPal </label>
+                <label class="form-check-label" for="flexRadioDefault2" style="font-size: 15px;"> PayPal </label>
             </div>
 
 
                <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment-method" id="PAYPAL" value="PAYPAL"  />
-                <label class="form-check-label" for="flexRadioDefault2"> Use Wallet Balance </label>
+                <label class="form-check-label" for="flexRadioDefault2" style="font-size: 15px;"> Use Wallet Balance </label>
             </div><br>
 
 </div>
                               
 
 
-
-                                        {{!-- <div class="Place-order btn-hover text-center">
-                                            <button type="submit " class="btn"> Place Order </button>
-                                        </div> --}}
-                
+   <div class="Place-order btn-hover text-center">
+                                            <button type="submit " class="btn  border border-success bg-success " style="font-size: 20px; "> <strong> Place Order</strong>  </button>
+                                        </div>
             </div>
 
         </div>
     </div>
+    
 
     <div class="col-lg-5">
         <div class="your-order-area">
@@ -416,7 +418,7 @@
 
             <div class="col-lg-12 col-md-12 col-12 mt-4">
                 <div class="cart-calculate-discount-wrap mb-40">
-                    <h4>Coupon Discount </h6>
+                    <h4 class="" style="font-size: 20px;">Coupon Discount </h6>
 
                         {{!-- error --}}
                         <p id="error" value="" style="color:red;"></p>
@@ -429,28 +431,38 @@
                                 <input type="text" id="couponName" placeholder="Coupon code" name="couponcode">
                             </div>
                             <div class="Place-order btn-hover text-center">
-                                <button  onclick="applyCoupon(event)" class="btn " id="applybutton" >Apply
-                                    Coupon</button>
-                                <button class="btn " id="deletebutton" onclick="removeCoupon(event)"
-                                    hidden="true">Remove
+                                <button  onclick="applyCoupon(event)" class="btn border border-success bg-success " id="applybutton"  style="font-size: 15px;"> <strong> Apply Coupon</strong></button>
+                                <button class="btn border border-success bg-success " id="deletebutton" onclick="removeCoupon(event)" style="font-size: 15px;"
+                                    hidden="true"> <strong> Remove Coupon</strong>
                                 </button>
                             </div>
 
                         </div>
                 </div>
             </div>
-            <h3>Your order</h3>
+            <h3 class="" style="font-size: 30px; font-weight: 600;">Your order</h3>
             <div class="your-order-wrap gray-bg-4 ">
                 <div class="your-order-info-wrap">
-                    <div class="your-order-info">
-                        <ul>
-                            <li>Product <span>Total</span></li>
-                        </ul>
-                    </div>
+                     <div class="your-order-info">
+                                            <ul>
+                                                <li>Products <span>Subtotal</span></li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="your-order-middle">
+                                            {{#each products}}
+                                            <ul>
+                                                <li class="text-success"> {{this.product.name}}<span>₹{{this.subTotal}}</span> X {{this.quantity}}</li>
+                                                    <span class="text-danger" style=" "> (M.R.P)₹ {{this.product.price}}</span></li>
+                                            </ul>
+                                            {{/each}}
+                                        </div>
+                                       
                
                     <div class="your-order-info order-total">
                         <ul>
-                            <li>SubTotal <span >₹{{total}}</span></li>
+
+                            <li>Products-total <span >₹{{total}}</span></li>
                         </ul>
                         {{!-- <div class="your-order-info order-subtotal">
                             <ul>
@@ -470,7 +482,15 @@
 
                         <div class="your-order-info order-total">
                             <ul>
-                                <li>Total <span id="totall">₹{{total}}</span></li>
+                                <li>
+                                                              <i><p  id="error2" value="" style="color:rgb(0, 90, 36); float:right;"></p></i></span>
+
+
+                                </li>
+                                <br>
+                                <br>
+
+                                <li class="text-danger" style="font-size: 30px;"> <strong>Total</strong> <span class="text-success" id="totall" style="font-size: 30px ; font-weight: 600;">₹{{total}}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -478,9 +498,7 @@
             </div>
         </div>
         <br>
-         <div class="Place-order btn-hover text-center">
-                                            <button type="submit " class="btn"> Place Order </button>
-                                        </div>
+      
 
         {{!-- <div class="customer-zone mb-20">
             <p class="cart-page-title"><a class="checkout-click3" href="#">Click here for your Coupon !</a></p>

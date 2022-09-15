@@ -1,6 +1,6 @@
 var express = require('express');
 const { getlogout } = require('../controllers/adminContollers');
-const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel, PostapplyCoupon, PostremoveCoupon, getWishList, getAddtoWishList, postRemoveWishProducts, ReturnOrder } = require('../controllers/userContollers');
+const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel, PostapplyCoupon, PostremoveCoupon, getWishList, getAddtoWishList, postRemoveWishProducts, ReturnOrder, getallProducts, postCartclear, getEmptyCart } = require('../controllers/userContollers');
 const { addAddress } = require('../helpers/userhelper');
 const { verifyLogin } = require('../middlewares/verify');
 const verify = require('../middlewares/verify');
@@ -23,7 +23,7 @@ router.post('/signup', postSignup)
 
 router.get('/user-logout', logout)
 
-router.get('/', homepage)
+router.get('/',homepage)
 
 router.get('/productdetails/:id', getproductsDetails)
 
@@ -94,5 +94,11 @@ router.get('/wishlist/add-to-wishlist/:id',getAddtoWishList)
 router.post('/wishlist/remove-product',postRemoveWishProducts)
 
 router.post('/returnproduct',ReturnOrder)
+
+router.get('/allproducts',getallProducts)
+
+router.post('/clearcarts',postCartclear)
+
+router.get('/emptycart',getEmptyCart)
 
 module.exports = router;

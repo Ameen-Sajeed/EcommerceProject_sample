@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="/User/css/plugins/easyzoom.css" />
     <link rel="stylesheet" href="/User/css/plugins/slinky.css" />
     <link rel="stylesheet" href="/User/css/style.css" />
+
 </head>
 
 
@@ -53,7 +54,8 @@
 
 
     </div>
-    <div class="header-bottom bg-light">
+    <div class="header-bottom bg-light" style="height: 98px;
+    margin-top: 21px;" >
         <div class="container">
             <div class="row" style=" justify-content: center">
                 <div class="col-lg-3 col-md-6 col-6">
@@ -66,18 +68,18 @@
         </div>
     </div>
     </header>
-    <div class="login-register-area pb-100 pt-100 bg-light">
+    <div class="login-register-area pb-100 pt-100 " style="background-image:url(/User/images/banner/84542.jpg);background-size: cover;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-12 offset-lg-2">
 
-                    <div class="login-register-wrapper bg-light">
+                    <div class="login-register-wrapper ">
                         <div class="login-register-tab-list nav  ">
                             <a class="active" data-bs-toggle="tab" href="#lg1">
-                                <h4> login </h4>
+                                <h4 class="" style="font-family:cursive;font-size: 40px;color: #32a852; font-weight: 900;"> login </h4>
                             </a>
                             <a data-bs-toggle="tab" href="#lg2">
-                                <h4> register </h4>
+                                <h4 class="" style="font-family:cursive;font-size: 40px;color: #32a852; font-weight: 900;"> register </h4>
                             </a>
                         </div>
                         <div class="tab-content">
@@ -116,8 +118,8 @@
                                             <span class="text-danger" id="password1-error"></span>
                                             <input type="password" name="Password" id="contact1-password"
                                                 placeholder="Password" onkeyup="validatePass1()">
-                                            <div class="button-box btn-hover text-center  ">
-                                                <button type="submit" onclick="return validateLogin()">Login</button>
+                                            <div class="button-box btn-hover1 text-center  ">
+                                                <button type="submit" onclick="return validateLogin()" style="background-color: #32a852;">Login</button>
                                                 <span class="text-danger" id="login-error"> </span>
 
                                             </div><br>
@@ -157,9 +159,9 @@
                                             <input type="password" id="contact-Confirmpassword" name=""
                                                 placeholder="Confirm-Password">
 
-                                            <div class="button-box btn-hover text-center">
+                                            <div class="button-box btn1 text-center">
                                                 <button type="submit" class="btn-success" onkeyup="validatePassword()"
-                                                    onclick="return validateSignup()">Register</button>
+                                                    onclick="return validateSignup()" style="background-color: #32a852;">Register</button>
                                                 <span class="text-danger" id="submit-error"> </span>
 
                                             </div>
@@ -182,7 +184,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                             <div class="footer-widget footer-about mb-40">
                                 <div class="footer-logo">
-                                    <a href="index.html"><img src="/User/images/logo/looo.jpeg" alt="logo"></a>
+                                    <a href="index.html"><img src="/User/images/logo/looo-removebg-preview.png" alt="logo"></a>
                                 </div>
                                 <p>Lorem ipsum dolor sit amet, cons adipi elit, sed do eiusmod tempor incididunt ut
                                     aliqua.</p>

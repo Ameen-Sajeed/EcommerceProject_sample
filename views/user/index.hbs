@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <header class="header-area header-responsive-padding header-height-1">
+        <header class="header-area header-responsive-padding header-height-1" style="min-height: 110px; margin-top: 20px;">
             <div class="header-top d-none d-lg-block bg-gray-5">
                 <div class="container">
                     <div class="row align-items-center">
@@ -110,20 +110,20 @@
                     </div>
                 </div>
             </div>
-            <div class="header-bottom sticky-bar bg-light text-white ">
+            <div class="header-bottom sticky-bar bg-light text-white " style="min-height: 130px;">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-6 col-6">
                             <div class="logo">
                                 <a href="/login-register"><img src="/User/images/logo/looo-removebg-preview.png"
-                                        alt="logo" height="170"></a>
+                                        alt="logo" style="margin-top: 15px;" ></a>
                             </div>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
                             <div class="main-menu text-center ">
                                 <nav>
                                     <ul>
-                                        <li><a href="index.html">HOME</a>
+                                        <li><a href="/">HOME</a>
 
                                         </li>
 
@@ -147,7 +147,7 @@
                                         </li>
 
 
-                                        <li><a href="about-us.html">OFFERS</a></li>
+                                        <li class="" style="font-size: 15px;"><a href="/allproducts">ALL PRODUCTS</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -193,7 +193,7 @@
                                     </a>
                                     {{else}}
                                 <span class="product-count " id="cart-count"></span>
-{{/if}}
+                         {{/if}}
                                 </div>
                                 <div class="header-action-style d-block d-lg-none">
                                     <a class="mobile-menu-active-button" href="#"><i class="pe-7s-menu"></i></a>
@@ -244,9 +244,9 @@
                     <div class="cart-btn btn-hover">
                         <a class="theme-color" href="/cart">View cart</a>
                     </div>
-                    <div class="checkout-btn btn-hover">
+                    {{!-- <div class="checkout-btn btn-hover">
                         <a class="theme-color" href="/checkout">Checkout</a>
-                    </div> <br>
+                    </div> <br> --}}
                      <div class="checkout-btn btn-hover">
                         <a class="theme-color" href="/wishlist">Wishlist</a>
                     </div>
@@ -276,7 +276,7 @@
                                                 <h1 class="animated text-success text-center">{{this.description3}}</h2>
 
                                                     <div class="slider-btn-2 btn-hover text-center ">
-                                                        <a href="product-details.html"
+                                                        <a href="/allproducts"
                                                             class="btn hover-border-radius theme-color animated text-danger ">
                                                             <center> Shop Now</center>
 
@@ -465,7 +465,7 @@
                                 <div class="product-wrap mb-35" data-aos="fade-up" data-aos-delay="200">
                                     <div class="product-img img-zoom mb-25">
                                         <a href="/productdetails/{{this._id}}">
-                                            <img src="/Admin/images/{{this.image.[1]}}" alt="">
+                                            <img src="/Admin/images/{{this.image.[0]}}" alt="">
 
                                         </a>
                                         <div class="product-badge badge-top badge-right badge-pink">
@@ -736,218 +736,57 @@
                         </div>
                     </div>
                 </div>
-                <div class="banner-area pb-70">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="banner-wrap mb-30" data-aos="fade-up" data-aos-delay="200">
-                                    <a href="product-details.html"><img src="assets/images/banner/banner-6.png"
-                                            alt=""></a>
-                                    <div class="banner-content-5">
-                                        <span>Up To 40% Off</span>
-                                        <h2>Dining Furniture</h2>
-                                        <div class="btn-style-3 btn-hover">
-                                            <a class="btn hover-border-radius" href="product-details.html">Shop Now</a>
-                                        </div>
-                                    </div>
-                                </div>
+               
+                 <div class="service-area padding-10-row-col pb-20">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="service-wrap service-padding service-bg-color-1 mb-8" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-img-3">
+                                <img src="user/images/icon-img/car.png" alt="">
                             </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="banner-wrap mb-30" data-aos="fade-up" data-aos-delay="400">
-                                    <a href="product-details.html"><img src="assets/images/banner/banner-7.png"
-                                            alt=""></a>
-                                    <div class="banner-content-5">
-                                        <span>Up To 40% Off</span>
-                                        <h2>Bed Furniture</h2>
-                                        <div class="btn-style-3 btn-hover">
-                                            <a class="btn hover-border-radius" href="product-details.html">Shop Now</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="service-content">
+                                <h3>Free Shipping</h3>
+                                <p>Free shipping on order</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="service-wrap service-padding service-bg-color-2 mb-10" data-aos="fade-up" data-aos-delay="400">
+                            <div class="service-img-3">
+                                <img src="user/images/icon-img/time.png" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3>Support 24/7</h3>
+                                <p>Support 24 hours a day</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="service-wrap service-padding service-bg-color-3 mb-10" data-aos="fade-up" data-aos-delay="600">
+                            <div class="service-img-3">
+                                <img src="user/images/icon-img/dollar.png" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3>Money Return</h3>
+                                <p>Back Guarantee Under </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="service-wrap service-padding service-bg-color-4 mb-10" data-aos="fade-up" data-aos-delay="800">
+                            <div class="service-img-3">
+                                <img src="user/images/icon-img/discount.png" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3>Order Discount</h3>
+                                <p>Onevery order over ₹150</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="product-area pb-95">
-                    <div class="container">
-                        <div class="section-border section-border-margin-1" data-aos="fade-up" data-aos-delay="200">
-                            <div class="section-title-timer-wrap bg-white">
-                                <div class="section-title-1">
-                                    <h2>Deal Of The Day</h2>
-                                </div>
-                                <div id="timer-1-active" class="timer-style-1">
-                                    <span>End In: </span>
-                                    <div data-countdown="2021/8/30"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-slider-active-1 swiper-container">
-
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="product-wrap">
-                                        <div class="product-img img-zoom mb-25">
-                                            <a href="product-details.html">
-                                                <img src="/User/images/category/fr3.jpg" alt="">
-                                            </a>
-                                            <div class="product-badge badge-top badge-right badge-pink">
-                                                {{!-- <span>-10%</span> --}}
-                                            </div>
-                                            <div class="product-action-wrap">
-                                                <button class="product-action-btn-1" title="Wishlist"><i
-                                                        class="pe-7s-like"></i></button>
-                                                <button class="product-action-btn-1" title="Quick View"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="pe-7s-look"></i>
-                                                </button>
-                                            </div>
-                                            <div class="product-action-2-wrap">
-                                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                                        class="pe-7s-cart"></i>
-                                                    Add to cart</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="product-content">
-                                            <h3><a href="product-details.html">Combo Pack</a></h3>
-                                            <div class="product-price">
-                                                {{!-- <span class="old-price">$25.89 </span> --}}
-                                                <span class="new-price">₹208.25 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-wrap">
-                                        <div class="product-img img-zoom mb-25">
-                                            <a href="product-details.html">
-                                                <img src="/User/images/category/fr4.jpg" alt="">
-                                            </a>
-                                            <div class="product-action-wrap">
-                                                <button class="product-action-btn-1" title="Wishlist"><i
-                                                        class="pe-7s-like"></i></button>
-                                                <button class="product-action-btn-1" title="Quick View"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="pe-7s-look"></i>
-                                                </button>
-                                            </div>
-                                            <div class="product-action-2-wrap">
-                                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                                        class="pe-7s-cart"></i>
-                                                    Add to cart</button>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <h3><a href="product-details.html">Blackberry</a></h3>
-                                            <div class="product-price">
-                                                <span class="new-price">₹50.25 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-wrap">
-                                        <div class="product-img img-zoom mb-25">
-                                            <a href="product-details.html">
-                                                <img src="/User/images/category/fr5.jpg" alt="">
-                                            </a>
-                                            <div class="product-badge badge-top badge-right badge-pink">
-                                                {{!-- <span>-10%</span> --}}
-                                            </div>
-                                            <div class="product-action-wrap">
-                                                <button class="product-action-btn-1" title="Wishlist"><i
-                                                        class="pe-7s-like"></i></button>
-                                                <button class="product-action-btn-1" title="Quick View"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="pe-7s-look"></i>
-                                                </button>
-                                            </div>
-                                            <div class="product-action-2-wrap">
-                                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                                        class="pe-7s-cart"></i>
-                                                    Add to cart</button>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <h3><a href="product-details.html">Stawberry italy</a></h3>
-                                            <div class="product-price">
-                                                {{!-- <span class="old-price">$45.00 </span> --}}
-                                                <span class="new-price">₹40.00 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-wrap">
-                                        <div class="product-img img-zoom mb-25">
-                                            <a href="product-details.html">
-                                                <img src="/User/images/category/fresh-honeycombs.jpg" alt="">
-                                            </a>
-                                            <div class="product-action-wrap">
-                                                <button class="product-action-btn-1" title="Wishlist"><i
-                                                        class="pe-7s-like"></i></button>
-                                                <button class="product-action-btn-1" title="Quick View"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="pe-7s-look"></i>
-                                                </button>
-                                            </div>
-                                            <div class="product-action-2-wrap">
-                                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                                        class="pe-7s-cart"></i>
-                                                    Add to cart</button>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <h3><a href="product-details.html">Organic Honey</a></h3>
-                                            <div class="product-price">
-                                                <span class="new-price">₹1250 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-wrap">
-                                        <div class="product-img img-zoom mb-25">
-                                            <a href="product-details.html">
-                                                <img src="assets/images/product/product-2.png" alt="">
-                                            </a>
-                                            <div class="product-badge badge-top badge-right badge-pink">
-                                                <span>-10%</span>
-                                            </div>
-                                            <div class="product-action-wrap">
-                                                <button class="product-action-btn-1" title="Wishlist"><i
-                                                        class="pe-7s-like"></i></button>
-                                                <button class="product-action-btn-1" title="Quick View"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="pe-7s-look"></i>
-                                                </button>
-                                            </div>
-                                            <div class="product-action-2-wrap">
-                                                <button class="product-action-btn-2" title="Add To Cart"><i
-                                                        class="pe-7s-cart"></i>
-                                                    Add to cart</button>
-                                            </div>
-                                        </div>
-                                        <div class="product-content">
-                                            <h3><a href="product-details.html">New Modern Sofa Set</a></h3>
-                                            <div class="product-price">
-                                                <span class="old-price">$80.50 </span>
-                                                <span class="new-price">$75.25 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{!-- {{/each}} --}}
-
-
-                            <div class="product-prev-1 product-nav-1" data-aos="fade-up" data-aos-delay="200"><i
-                                    class="fa fa-angle-left"></i></div>
-                            <div class="product-next-1 product-nav-1" data-aos="fade-up" data-aos-delay="200"><i
-                                    class="fa fa-angle-right"></i></div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
                 <div class="banner-area pb-100">
                     <div class="bg-img bg-padding-2"
                         style="background-image:url(/Admin/images/orgaic.jpg)">
@@ -956,7 +795,7 @@
                                 <span data-aos="fade-up" data-aos-delay="200">Up To 15% Off</span>
                                 <h1 data-aos="fade-up" data-aos-delay="400">ORGANIC <br>Products</h1>
                                 <div class="btn-style-3 btn-hover" data-aos="fade-up" data-aos-delay="600">
-                                    <a class="btn hover-border-radius" href="product-details.html">Shop Now</a>
+                                    <a class="btn hover-border-radius" href="/allproducts">Shop Now</a>
                                 </div>
                             </div>
                         </div>
@@ -1008,12 +847,10 @@
                                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                                         <div class="footer-widget footer-about mb-40">
                                             <div class="footer-logo">
-                                                <a href="index.html"><img src="User/images/logo/looo.jpeg" alt="logo"
-                                                        height="170"></a>
+                                                <a href="index.html"><img src="/User/images/logo/looo-removebg-preview.png" alt="logo"
+                                                        height=""></a>
                                             </div>
-                                            <p>Lorem ipsum dolor sit amet, cons adipi elit, sed do eiusmod tempor
-                                                incididunt ut
-                                                aliqua.</p>
+                                           
                                             <div class="payment-img">
                                                 <a href="#"><img src="user/images/icon-img/payment.png" alt="logo"></a>
                                             </div>

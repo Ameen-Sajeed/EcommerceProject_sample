@@ -349,6 +349,9 @@ function removeCoupon(event) {
             }).then(() => {
                 document.getElementById('percentage').innerHTML=0
                 document.getElementById('discount').innerHTML=0
+                document.getElementById('error2').innerHTML = ''
+                document.getElementById('couponName').value = ''
+
                 // document.getElementById('couponName').value = ""
                 document.getElementById("applybutton").hidden = false
                 document.getElementById("deletebutton").hidden = true
@@ -381,6 +384,7 @@ function removeCoupon(event) {
                 document.getElementById('totall').innerHTML= "₹"+response.amount
                 document.getElementById('percentage').innerHTML=response.couponData.value+'%'
                 document.getElementById('error').innerHTML = ''
+                document.getElementById('error2').innerHTML = '(Coupon has Applied)'
                 document.getElementById("applybutton").hidden = true
                 document.getElementById("deletebutton").hidden = false
                 
@@ -496,6 +500,27 @@ function returnOrder(orderId,amount){
     })
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                 CLEAR CART                                 */
+/* -------------------------------------------------------------------------- */
+
+function clearCart(userId){
+    console.log(userId);
+alert('hai')
+    $.ajax({
+
+        url:'/clearcarts',
+        method:'post',
+        data:{
+            user:userId
+        },
+        // console.log("bjhgbhjghj");
+        success:(response)=>{
+
+            location.reload()
+        }
+    })
+}
 
 
 
