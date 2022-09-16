@@ -129,6 +129,10 @@ const postSignup = (req, res, next) => {
 
 const getproductsDetails = async(req, res, next) => {
 
+
+    try{
+        
+    
     let user = req.session.user
    
         let proId = req.params.id
@@ -144,8 +148,12 @@ const getproductsDetails = async(req, res, next) => {
             console.log(data,"gfhjkl;");
             res.render('user/productDetails', {data,category,categorydet,user,cartcount})
     
-    
-        })
+        
+        }) 
+    }catch(error){
+              res.redirect('/error')
+
+        }
     
         
    
@@ -793,6 +801,9 @@ const getEmptyCart =(req,res)=>{
     res.render('user/emptycart')
 }
 
+/* -------------------------------------------------------------------------- */
+/*                             GET RESET PASSWORD                             */
+/* -------------------------------------------------------------------------- */
 
 const getResetPassword =(req,res)=>{
     let user = req.session.user

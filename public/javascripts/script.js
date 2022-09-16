@@ -75,10 +75,10 @@ function validateEmail(){
         emailError.innerHTML = 'Email Invalid'
         return false;
     }
-    // if(email=='ameenputhalath789@gmail.com'){
-    //     emailError.innerHTML = 'hey its my mail'
-    //     return false;
-    // }
+    if(email=='ameenputhalath789@gmail.com'){
+        emailError.innerHTML = 'hey its my mail'
+        return false;
+    }
 
     emailError.innerHTML = '';
     return true;

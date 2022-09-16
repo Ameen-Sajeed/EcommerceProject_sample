@@ -126,9 +126,9 @@ module.exports = {
     /*                               Product detail                               */
     /* -------------------------------------------------------------------------- */
 
-    Viewproductdetail: (proId) => {
+    Viewproductdetail: (proId,error) => {
         return new Promise(async (resolve, reject) => {
-
+        
             let data = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(proId)})
             // let data = await db.get().collection(collection.PRODUCTCOLLECTION).aggregate([
 
@@ -159,13 +159,21 @@ module.exports = {
             //       }
             //     }
             //    ]).toArray()
-            
+
+          
+                      
                console.log(data,"2222222222222");
                resolve(data)
-            
-                })
 
-        },
+            
+      
+        
+            })
+            
+                },
+   
+
+        
     
 
     /* -------------------------------------------------------------------------- */
