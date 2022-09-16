@@ -1,7 +1,7 @@
 var express = require('express');
-const { getlogout } = require('../controllers/adminContollers');
+// const { getlogout } = require('../controllers/adminContollers');
 const { getLogin, getLoginRegister, postSignup, postLogin, getproductsDetails, homepage, nodata, getcart, getcheckout, getOtp, confirmOtp, postOtp, getSignUp, postconfirmOtp, addtocart, logout, getProfile, changeproductquantity, vegetables, postcheckout, deleteCart, orderplaced, verifyPayment, orderProducts, addressPage, postAddressAdd, getEditAddress, postEditAddress, addressdelete, PostCheckoutAddress, getCheckoutAddress, orderCancel, PostapplyCoupon, PostremoveCoupon, getWishList, getAddtoWishList, postRemoveWishProducts, ReturnOrder, getallProducts, postCartclear, getEmptyCart, getResetPassword, PostResetPassword } = require('../controllers/userContollers');
-const { addAddress } = require('../helpers/userhelper');
+// const { addAddress } = require('../helpers/userhelper');
 const { verifyLogin } = require('../middlewares/verify');
 const verify = require('../middlewares/verify');
 var router = express.Router();
