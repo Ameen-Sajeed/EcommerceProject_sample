@@ -10,7 +10,6 @@ const client = require('twilio')(otp.accountSID, otp.authToken)
 const Razorpay = require('Razorpay')
 const paypal = require('paypal-rest-sdk')
 const moment = require("moment")
-const { resolve } = require('path')
 // const { resolve } = require('path')
 
 var instance = new Razorpay({
