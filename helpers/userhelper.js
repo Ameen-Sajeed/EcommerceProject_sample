@@ -7,7 +7,7 @@ const otp = require('../config/otp')
 // const { response } = require('../app')
 const { ObjectId } = require('mongodb')
 const client = require('twilio')(otp.accountSID, otp.authToken)
-const Razorpay = require('Razorpay')
+const Razorpay = require('razorpay')
 const paypal = require('paypal-rest-sdk')
 const moment = require("moment")
 // const { resolve } = require('path')
@@ -775,8 +775,8 @@ module.exports = {
                     "payment_method": "paypal"
                 },
                 "redirect_urls": {
-                    return_url: "http://localhost:3000/ordersuccess",
-                    cancel_url: "http://localhost:3000/cancel"
+                    // return_url: "http://localhost:3000/ordersuccess",
+                    // cancel_url: "http://localhost:3000/cancel"
                 },
                 "transactions": [
                     {
